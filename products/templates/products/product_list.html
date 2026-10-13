@@ -31,9 +31,11 @@
           <p>Age: {{ product.age }} years</p>
           <p>Price: £{{ product.price }}</p>
         </article>
-        {% empty %}
+        {% empty %} {% if request.GET.category %}
+        <p>No koi available in this category.</p>
+        {% else %}
         <p>No koi are currently available.</p>
-        {% endfor %}
+        {% endif %} {% endfor %}
       </section>
     </main>
   </body>

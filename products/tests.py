@@ -258,3 +258,17 @@ class ProductFilteringTests(TestCase):
             response,
             'href="/products/"',
         )
+
+    def test_empty_category_displays_message(self):
+        """Display a message when no available koi match the category."""
+
+        empty_category = Category.objects.create(name="Tancho")
+
+        response = self.client.get(
+            reverse("product_list"),
+            {"category": empty_category.pk},
+        )
+
+        self.assertContains(response, "No koi available in this category.")
+        self.assertNotContains(response, self.kohaku.name)
+        self.assertNotContains(response, self.showa.name)

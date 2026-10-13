@@ -85,3 +85,28 @@ class ProductCatalogueTests(TestCase):
             response,
             f'src="{secondary_image.image.url}"',
         )
+
+
+class ProductDetailTests(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.product = Product.objects.create(
+            name="Japanese Showa",
+            variety="Showa Sanshoku",
+            price=450.00,
+            size=40,
+            age=3,
+            description="Japanese koi with black, red and white patterns.",
+            status=Product.ProductStatus.AVAILABLE,
+        )
+
+    def test_product_detail_displays_product_information(self):
+        """The detail page displays information about a specific koi."""
+        response = self.client.get(
+            reverse("product_detail", args=[self.product.pk])
+        )
+        self.assertContains(response, self.product.name)
+        self.assertContains(response, self.product.variety)
+        self.assertContains(response, "450.00")
+        self.assertContains(response, self.product.description)

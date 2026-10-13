@@ -154,3 +154,15 @@ class ProductDetailTests(TestCase):
 
         self.assertContains(response, primary_image.image.url)
         self.assertContains(response, secondary_image.image.url)
+
+    def test_product_detail_displays_availability(self):
+        """The detail page displays the koi's availability status."""
+
+        response = self.client.get(
+            reverse("product_detail", args=[self.product.pk])
+        )
+
+        self.assertContains(
+            response,
+            self.product.get_status_display()
+        )

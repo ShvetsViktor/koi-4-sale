@@ -1,10 +1,11 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.views.generic import ListView
+from .models import Product
 
 # Create your views here.
 
-def index(request):
-    if request.method == "POST":
-        return HttpResponse("You must have POSTed something")
-    else:
-        return HttpResponse(request.method)
+
+class ProductList(ListView):
+    model = Product
+    queryset = Product.objects.filter(status=Product.ProductStatus.AVAILABLE)
+    template_name = "products/product_list.html"
+    context_object_name = "products"

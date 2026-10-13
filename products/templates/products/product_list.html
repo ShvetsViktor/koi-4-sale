@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Koi Catalogue | Koi4Sale</title>
+  </head>
+  <body>
+    <main>
+      <h1>Available Koi</h1>
+
+      <section>
+        {% for product in products %}
+        <article>
+          <h2>{{ product.name }}</h2>
+          <p>Variety: {{ product.variety }}</p>
+          <p>Size: {{ product.size }} cm</p>
+          <p>Age: {{ product.age }} years</p>
+          <p>Price: £{{ product.price }}</p>
+        </article>
+        {% empty %}
+        <p>No koi are currently available.</p>
+        {% endfor %}
+      </section>
+    </main>
+  </body>
+</html>

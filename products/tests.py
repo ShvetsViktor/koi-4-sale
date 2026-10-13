@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Product
+from .models import Product, ProductImage
 
 
 class ProductCatalogueTests(TestCase):
@@ -58,3 +58,19 @@ class ProductCatalogueTests(TestCase):
 
         self.assertContains(response, self.available_product.name)
         self.assertNotContains(response, self.unavailable_product.name)
+
+    def test_catalogue_displays_primary_image(self):
+        """AC2: The catalogue displays the primary product image."""
+
+        product_image = ProductImage.objects.create(
+            product=self.available_product,
+            image="products/kohaku.jpg",
+            is_primary=True,
+        )
+
+        response = self.client.get(reverse("product_list"))
+
+        self.assertContains(
+            response,
+            f'src="{product_image.image.url}"',
+        )

@@ -193,3 +193,48 @@ class CategoryModelTests(TestCase):
         )
 
         self.assertEqual(product.category, self.category)
+
+
+class ProductFilteringTests(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.kohaku_category = Category.objects.create(name="Kohaku")
+        cls.showa_category = Category.objects.create(name="Showa")
+
+        cls.kohaku = Product.objects.create(
+            name="Japanese Kohaku",
+            category=cls.kohaku_category,
+            price=250.00,
+            size=35,
+            age=2,
+            status=Product.ProductStatus.AVAILABLE,
+        )
+
+        cls.showa = Product.objects.create(
+            name="Japanese Showa",
+            category=cls.showa_category,
+            price=350.00,
+            size=40,
+            age=3,
+            status=Product.ProductStatus.AVAILABLE,
+        )
+
+    def test_catalogue_filters_products_by_category(self):
+        """Only products from the selected category are displayed."""
+
+        response = self.client.get(
+            reverse("product_list"),
+            {"category": self.kohaku_category.pk},
+        )
+
+        self.assertContains(response, self.kohaku.name)
+        self.assertNotContains(response, self.showa.name)
+
+    def test_catalogue_without_category_shows_all_available_products(self):
+        """All available products are displayed when no category is selected."""
+
+        response = self.client.get(reverse("product_list"))
+
+        self.assertContains(response, self.kohaku.name)
+        self.assertContains(response, self.showa.name)

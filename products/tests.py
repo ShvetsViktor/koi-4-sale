@@ -13,14 +13,20 @@ class ProductCatalogueTests(TestCase):
         """
         cls.available_product = Product.objects.create(
             name="Kohaku",
+            variety="Kohaku",
             price=250.00,
-            status="available",
+            size=35,
+            age=2,
+            status=Product.ProductStatus.AVAILABLE,
         )
 
         cls.unavailable_product = Product.objects.create(
             name="Unavailable Sanke",
+            variety="Sanke",
             price=300.00,
-            status="unavailable",
+            size=40,
+            age=3,
+            status=Product.ProductStatus.UNAVAILABLE,
         )
 
     def test_catalogue_displays_product_from_database(self):
@@ -29,7 +35,6 @@ class ProductCatalogueTests(TestCase):
         """
         response = self.client.get(reverse("product_list"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.available_product.name)
 
     def test_catalogue_displays_required_product_details(self):

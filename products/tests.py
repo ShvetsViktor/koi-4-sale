@@ -1,7 +1,79 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 from .models import Product, ProductImage, Category
+
+
+class ProductAdminTests(TestCase):
+    """Test product management through Django Admin."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.category = Category.objects.create(name="Kohaku")
+
+        cls.admin_user = get_user_model().objects.create_superuser(
+            username="admin",
+            email="admin@example.com",
+            password="testpassword123",
+        )
+
+        cls.product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=cls.category,
+            price=250.00,
+            size=35,
+            age=2,
+        )
+
+    def test_anonymous_user_cannot_access_product_admin(self):
+        """Anonymous visitors must be redirected to admin login."""
+
+        response = self.client.get(
+            reverse("admin:products_product_changelist")
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response.url)
+
+    def test_admin_can_view_product_list(self):
+        """Administrators can view existing product listings."""
+
+        self.client.force_login(self.admin_user)
+
+        response = self.client.get(
+            reverse("admin:products_product_changelist")
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.product.name)
+
+    def test_admin_can_create_product(self):
+        """Administrators can create new koi listings."""
+
+        self.client.force_login(self.admin_user)
+
+        response = self.client.post(
+            reverse("admin:products_product_add"),
+            {
+                "name": "Japanese Showa",
+                "category": self.category.pk,
+                "price": "350.00",
+                "size": 40,
+                "age": 3,
+                "status": Product.ProductStatus.AVAILABLE,
+                "_save": "Save",
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertTrue(
+            Product.objects.filter(
+                name="Japanese Showa",
+                category=self.category,
+            ).exists()
+        )
 
 
 class ProductCatalogueTests(TestCase):

@@ -110,3 +110,32 @@ class ProductDetailTests(TestCase):
         self.assertContains(response, self.product.variety)
         self.assertContains(response, "450.00")
         self.assertContains(response, self.product.description)
+
+    def test_nonexistent_product_returns_404(self):
+        """Requesting a nonexistent product returns HTTP 404."""
+        response = self.client.get(
+            reverse("product_detail", args=[99999])
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_product_detail_displays_images(self):
+        """The detail page displays all images belonging to the product."""
+
+        primary_image = ProductImage.objects.create(
+            product=self.product,
+            image="products/showa_primary.jpg",
+            is_primary=True,
+        )
+
+        secondary_image = ProductImage.objects.create(
+            product=self.product,
+            image="products/showa_secondary.jpg",
+            is_primary=False,
+        )
+
+        response = self.client.get(
+            reverse("product_detail", args=[self.product.pk])
+        )
+
+        self.assertContains(response, primary_image.image.url)
+        self.assertContains(response, secondary_image.image.url)

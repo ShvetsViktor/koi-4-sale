@@ -19,7 +19,7 @@
           <a href="{% url 'product_detail' product.pk %}">
             <h2>{{ product.name }}</h2>
           </a>
-          <p>Variety: {{ product.variety }}</p>
+          <p>Variety: {{ product.category.name }}</p>
           <p>Size: {{ product.size }} cm</p>
           <p>Age: {{ product.age }} years</p>
           <p>Price: £{{ product.price }}</p>

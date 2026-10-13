@@ -13,7 +13,7 @@
             {% endfor %}
         </div>
         <h1>{{ product.name }}</h1>
-        <p>Variety: {{ product.variety }}</p>
+        <p>Variety: {{ product.category.name }}</p>
         <p>Price: £{{ product.price }}</p>
         <p>Status: {{ product.get_status_display }}</p>
         <p>Size: {{ product.size }} cm</p>

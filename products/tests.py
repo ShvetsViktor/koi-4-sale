@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Product, ProductImage
+from .models import Product, ProductImage, Category
 
 
 class ProductCatalogueTests(TestCase):
@@ -9,11 +9,14 @@ class ProductCatalogueTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         """
-        Create test products once for the entire test class.
+        Create test categories and products once for the entire test class.
         """
+        cls.kohaku_category = Category.objects.create(name="Kohaku")
+        cls.sanke_category = Category.objects.create(name="Sanke")
+
         cls.available_product = Product.objects.create(
             name="Kohaku",
-            variety="Kohaku",
+            category=cls.kohaku_category,
             price=250.00,
             size=35,
             age=2,
@@ -22,7 +25,7 @@ class ProductCatalogueTests(TestCase):
 
         cls.unavailable_product = Product.objects.create(
             name="Unavailable Sanke",
-            variety="Sanke",
+            category=cls.sanke_category,
             price=300.00,
             size=40,
             age=3,
@@ -106,9 +109,11 @@ class ProductDetailTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        cls.showa_category = Category.objects.create(name="Showa Sanshoku")
+
         cls.product = Product.objects.create(
             name="Japanese Showa",
-            variety="Showa Sanshoku",
+            category=cls.showa_category,
             price=450.00,
             size=40,
             age=3,
@@ -122,7 +127,7 @@ class ProductDetailTests(TestCase):
             reverse("product_detail", args=[self.product.pk])
         )
         self.assertContains(response, self.product.name)
-        self.assertContains(response, self.product.variety)
+        self.assertContains(response, self.product.category.name)
         self.assertContains(response, "450.00")
         self.assertContains(response, self.product.description)
 
@@ -166,3 +171,25 @@ class ProductDetailTests(TestCase):
             response,
             self.product.get_status_display()
         )
+
+
+class CategoryModelTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.category = Category.objects.create(name="Kohaku")
+
+    def test_category_has_name(self):
+        """A category stores the koi variety name."""
+        self.assertEqual(self.category.name, "Kohaku")
+
+    def test_product_belongs_to_category(self):
+        """A product belongs to a category."""
+        product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=self.category,
+            price=450.00,
+            size=40,
+            age=3,
+        )
+
+        self.assertEqual(product.category, self.category)

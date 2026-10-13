@@ -12,6 +12,10 @@
       <section>
         {% for product in products %}
         <article>
+          {% for image in product.primary_images %}
+          <img src="{{ image.image.url }}" alt="{{ product.name }}" />
+          {% endfor %}
+
           <h2>{{ product.name }}</h2>
           <p>Variety: {{ product.variety }}</p>
           <p>Size: {{ product.size }} cm</p>

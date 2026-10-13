@@ -59,18 +59,29 @@ class ProductCatalogueTests(TestCase):
         self.assertContains(response, self.available_product.name)
         self.assertNotContains(response, self.unavailable_product.name)
 
-    def test_catalogue_displays_primary_image(self):
-        """AC2: The catalogue displays the primary product image."""
+    def test_catalogue_displays_only_primary_image(self):
+        """AC2: Only the primary product image appears in the catalogue."""
 
-        product_image = ProductImage.objects.create(
+        primary_image = ProductImage.objects.create(
             product=self.available_product,
-            image="products/kohaku.jpg",
+            image="products/kohaku_primary.jpg",
             is_primary=True,
+        )
+
+        secondary_image = ProductImage.objects.create(
+            product=self.available_product,
+            image="products/kohaku_secondary.jpg",
+            is_primary=False,
         )
 
         response = self.client.get(reverse("product_list"))
 
         self.assertContains(
             response,
-            f'src="{product_image.image.url}"',
+            f'src="{primary_image.image.url}"',
+        )
+
+        self.assertNotContains(
+            response,
+            f'src="{secondary_image.image.url}"',
         )

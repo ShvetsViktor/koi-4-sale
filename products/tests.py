@@ -238,3 +238,23 @@ class ProductFilteringTests(TestCase):
 
         self.assertContains(response, self.kohaku.name)
         self.assertContains(response, self.showa.name)
+
+    def test_catalogue_displays_category_filter_links(self):
+        """Catalogue provides category filters and a reset link."""
+
+        response = self.client.get(reverse("product_list"))
+
+        self.assertContains(
+            response,
+            f'href="?category={self.kohaku_category.pk}"',
+        )
+
+        self.assertContains(
+            response,
+            f'href="?category={self.showa_category.pk}"',
+        )
+
+        self.assertContains(
+            response,
+            'href="/products/"',
+        )

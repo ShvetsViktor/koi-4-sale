@@ -8,6 +8,13 @@
   <body>
     <main>
       <h1>Available Koi</h1>
+      <nav aria-label="Filter koi by variety">
+        <a href="{% url 'product_list' %}">All Koi</a>
+
+        {% for category in categories %}
+        <a href="?category={{ category.pk }}"> {{ category.name }} </a>
+        {% endfor %}
+      </nav>
 
       <section>
         {% for product in products %}

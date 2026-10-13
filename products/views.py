@@ -2,7 +2,7 @@ from django.db.models import Prefetch
 from django.views.generic import ListView
 from django.views.generic import DetailView
 
-from .models import Product, ProductImage
+from .models import Product, ProductImage, Category
 
 
 class ProductList(ListView):
@@ -26,6 +26,12 @@ class ProductList(ListView):
             queryset = queryset.filter(category_id=category_id)
 
         return queryset
+
+    def get_context_data(self, **kwargs):
+        # Extend the default template context with categories for filtering.
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
 
 
 class ProductDetail(DetailView):

@@ -75,6 +75,23 @@ class ProductAdminTests(TestCase):
             ).exists()
         )
 
+    def test_regular_user_cannot_access_product_admin(self):
+        """Regular users cannot access product management."""
+
+        regular_user = get_user_model().objects.create_user(
+            username="regular_user",
+            password="testpassword123",
+        )
+
+        self.client.force_login(regular_user)
+
+        response = self.client.get(
+            reverse("admin:products_product_changelist")
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response.url)
+
 
 class ProductCatalogueTests(TestCase):
 

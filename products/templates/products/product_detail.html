@@ -15,6 +15,7 @@
         <h1>{{ product.name }}</h1>
         <p>Variety: {{ product.variety }}</p>
         <p>Price: £{{ product.price }}</p>
+        <p>Status: {{ product.get_status_display }}</p>
         <p>Size: {{ product.size }} cm</p>
         <p>Age: {{ product.age }} years</p>
         <p>{{ product.description }}</p>

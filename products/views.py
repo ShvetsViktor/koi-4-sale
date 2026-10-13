@@ -1,5 +1,6 @@
 from django.db.models import Prefetch
 from django.views.generic import ListView
+from django.views.generic import DetailView
 
 from .models import Product, ProductImage
 
@@ -19,3 +20,9 @@ class ProductList(ListView):
 
     template_name = "products/product_list.html"
     context_object_name = "products"
+
+
+class ProductDetail(DetailView):
+    model = Product
+    template_name = "products/product_detail.html"
+    context_object_name = "product"

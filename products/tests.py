@@ -86,6 +86,21 @@ class ProductCatalogueTests(TestCase):
             f'src="{secondary_image.image.url}"',
         )
 
+    def test_catalogue_links_to_product_detail(self):
+        """Each product links to its detail page."""
+
+        response = self.client.get(reverse("product_list"))
+
+        product_url = reverse(
+            "product_detail",
+            args=[self.available_product.pk]
+        )
+
+        self.assertContains(
+            response,
+            f'href="{product_url}"'
+        )
+
 
 class ProductDetailTests(TestCase):
 

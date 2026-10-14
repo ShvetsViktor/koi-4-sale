@@ -114,6 +114,12 @@ async function initCartPage() {
   const products = await fetchCartProducts();
 
   renderCart(products);
+
+  const form = document.querySelector('#reservation-form');
+
+  if (form) {
+    form.addEventListener('submit', addCartItemsToForm);
+  }
 }
 
 /**

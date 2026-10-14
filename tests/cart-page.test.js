@@ -164,4 +164,35 @@ describe('Shopping Cart Page', () => {
     expect(inputs[0].value).toBe('5');
     expect(inputs[1].value).toBe('6');
   });
+
+  test('adds product IDs when the reservation form is submitted', () => {
+    document.body.innerHTML = `
+    <div id="cart-items"></div>
+    <form id="reservation-form"></form>
+  `;
+
+    localStorage.setItem('koi4sale_cart', '[5,6]');
+
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ products: [] }),
+    });
+
+    return initCartPage().then(() => {
+      const form = document.querySelector('#reservation-form');
+
+      form.dispatchEvent(
+        new Event('submit', {
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+
+      const inputs = form.querySelectorAll('input[name="product_ids"]');
+
+      expect(inputs).toHaveLength(2);
+      expect(inputs[0].value).toBe('5');
+      expect(inputs[1].value).toBe('6');
+    });
+  });
 });

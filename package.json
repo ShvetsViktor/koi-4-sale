@@ -1,0 +1,28 @@
+{
+  "name": "koi-4-sale",
+  "version": "1.0.0",
+  "description": "Koi4Sale is a full-stack web application for browsing and reserving individual Japanese koi.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShvetsViktor/koi-4-sale.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ShvetsViktor/koi-4-sale/issues"
+  },
+  "homepage": "https://github.com/ShvetsViktor/koi-4-sale#readme",
+  "devDependencies": {
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2"
+  }
+}

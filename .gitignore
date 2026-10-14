@@ -21,3 +21,6 @@ db.sqlite3
 
 # Collected static files
 staticfiles/
+
+# Node modules
+node_modules/

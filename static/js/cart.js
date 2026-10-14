@@ -56,6 +56,17 @@ function handleAddToCart(event) {
   saveCart(updatedCart);
 }
 
+/**
+ * Initialise Add to Cart buttons.
+ */
+function initCartButtons() {
+  const buttons = document.querySelectorAll('[data-product-id]');
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', handleAddToCart);
+  });
+}
+
 if (typeof module !== 'undefined') {
-  module.exports = { addToCart, removeFromCart, saveCart, getCart, handleAddToCart };
+  module.exports = { addToCart, removeFromCart, saveCart, getCart, handleAddToCart, initCartButtons };
 }

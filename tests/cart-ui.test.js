@@ -1,4 +1,4 @@
-const { addToCart, getCart, saveCart, handleAddToCart } = require('../static/js/cart');
+const { getCart, handleAddToCart, initCartButtons } = require('../static/js/cart');
 
 describe('Shopping Cart UI', () => {
   beforeEach(() => {
@@ -16,5 +16,19 @@ describe('Shopping Cart UI', () => {
     button.click();
 
     expect(getCart()).toEqual([1]);
+  });
+
+  test('initialises Add to Cart buttons', () => {
+    document.body.innerHTML = `
+    <button data-product-id="1">Add to Cart</button>
+    <button data-product-id="2">Add to Cart</button>
+  `;
+
+    initCartButtons();
+
+    document.querySelector('[data-product-id="1"]').click();
+    document.querySelector('[data-product-id="2"]').click();
+
+    expect(getCart()).toEqual([1, 2]);
   });
 });

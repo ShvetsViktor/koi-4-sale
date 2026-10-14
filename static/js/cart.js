@@ -62,8 +62,15 @@ function handleAddToCart(event) {
  */
 function initCartButtons() {
   const buttons = document.querySelectorAll('[data-product-id]');
+  const cart = getCart();
 
   buttons.forEach((button) => {
+    const productId = Number(button.dataset.productId);
+
+    if (cart.includes(productId)) {
+      button.textContent = 'Added to Cart';
+    }
+
     button.addEventListener('click', handleAddToCart);
   });
 }

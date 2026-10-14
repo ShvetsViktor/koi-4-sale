@@ -40,4 +40,14 @@ describe('Shopping Cart UI', () => {
 
     expect(button.textContent).toBe('Added to Cart');
   });
+
+  test('shows Added to Cart for products already in the cart', () => {
+    localStorage.setItem('koi4sale_cart', '[1]');
+
+    initCartButtons();
+
+    const button = document.querySelector('[data-product-id="1"]');
+
+    expect(button.textContent).toBe('Added to Cart');
+  });
 });

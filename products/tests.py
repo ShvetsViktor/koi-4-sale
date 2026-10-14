@@ -361,3 +361,86 @@ class ProductFilteringTests(TestCase):
         self.assertContains(response, "No koi available in this category.")
         self.assertNotContains(response, self.kohaku.name)
         self.assertNotContains(response, self.showa.name)
+
+
+class ProductSearchTests(TestCase):
+    """Tests for searching available koi by name or category."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.kohaku = Category.objects.create(name="Kohaku")
+        cls.showa = Category.objects.create(name="Showa")
+
+        cls.product_kohaku = Product.objects.create(
+            name="Japanese Kohaku",
+            category=cls.kohaku,
+            price=250.00,
+            size=35,
+            age=2,
+        )
+
+        cls.product_showa = Product.objects.create(
+            name="Japanese Showa",
+            category=cls.showa,
+            price=350.00,
+            size=40,
+            age=3,
+        )
+
+        cls.reserved_product = Product.objects.create(
+            name="Premium Kohaku",
+            category=cls.kohaku,
+            price=500.00,
+            size=45,
+            age=4,
+            status=Product.ProductStatus.RESERVED,
+        )
+
+    def test_search_by_product_name(self):
+        """Search returns available products matching their name."""
+        response = self.client.get(
+            reverse("product_list"),
+            {"q": "Japanese Showa"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerySetEqual(
+            response.context["products"],
+            [self.product_showa],
+        )
+
+    def test_search_by_category_name(self):
+        """Search returns available products matching their category."""
+        response = self.client.get(
+            reverse("product_list"),
+            {"q": "Kohaku"},
+        )
+
+        self.assertQuerySetEqual(
+            response.context["products"],
+            [self.product_kohaku],
+        )
+
+    def test_search_excludes_unavailable_products(self):
+        """Reserved products are excluded from search results."""
+        response = self.client.get(
+            reverse("product_list"),
+            {"q": "Premium Kohaku"},
+        )
+
+        self.assertQuerySetEqual(
+            response.context["products"],
+            [],
+        )
+
+    def test_search_no_results(self):
+        """Search displays a message when no products match."""
+        response = self.client.get(
+            reverse("product_list"),
+            {"q": "Nonexistent Koi"},
+        )
+
+        self.assertContains(
+            response,
+            "No koi found",
+        )

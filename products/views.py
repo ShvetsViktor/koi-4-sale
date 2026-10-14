@@ -1,4 +1,4 @@
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.views.generic import ListView
 from django.views.generic import DetailView
 
@@ -24,6 +24,14 @@ class ProductList(ListView):
 
         if category_id:
             queryset = queryset.filter(category_id=category_id)
+
+        query = self.request.GET.get("q", "").strip()
+
+        if query:
+            queryset = queryset.filter(
+                Q(name__icontains=query) |
+                Q(category__name__icontains=query)
+            )
 
         return queryset
 

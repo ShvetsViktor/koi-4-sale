@@ -8,6 +8,17 @@
   <body>
     <main>
       <h1>Available Koi</h1>
+      <form method="get" action="{% url 'product_list' %}" role="search">
+        <label for="search">Search koi</label>
+
+        <input type="search" id="search" name="q" value="{{ request.GET.q }}" placeholder="Search by name or variety" />
+
+        {% if request.GET.category %}
+        <input type="hidden" name="category" value="{{ request.GET.category }}" />
+        {% endif %}
+
+        <button type="submit">Search</button>
+      </form>
       <nav aria-label="Filter koi by variety">
         <a href="{% url 'product_list' %}">All Koi</a>
 
@@ -31,7 +42,9 @@
           <p>Age: {{ product.age }} years</p>
           <p>Price: £{{ product.price }}</p>
         </article>
-        {% empty %} {% if request.GET.category %}
+        {% empty %} {% if request.GET.q %}
+        <p>No koi found matching your search.</p>
+        {% elif request.GET.category %}
         <p>No koi available in this category.</p>
         {% else %}
         <p>No koi are currently available.</p>

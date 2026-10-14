@@ -1,3 +1,5 @@
+{% load static %}
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -10,5 +12,10 @@
       <h1>Shopping Cart</h1>
       <div id="cart-items"></div>
     </main>
+
+    <script src="{% static 'js/cart.js' %}"></script>
+    <script>
+      initCartPage();
+    </script>
   </body>
 </html>

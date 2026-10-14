@@ -210,3 +210,165 @@ class ReservationViewTests(TestCase):
             self.product_two.status,
             Product.ProductStatus.RESERVED,
         )
+
+    def test_cannot_reserve_unavailable_product(self):
+        """A reserved koi cannot be included in a new reservation."""
+
+        self.product_one.status = Product.ProductStatus.RESERVED
+        self.product_one.save()
+
+        response = self.client.post(
+            reverse("reservation_create"),
+            {
+                "customer_name": "John Smith",
+                "email": "john@example.com",
+                "phone": "07123456789",
+                "product_ids": [
+                    str(self.product_one.pk),
+                    str(self.product_two.pk),
+                ],
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+        # No order should be created.
+        self.assertEqual(Order.objects.count(), 0)
+
+        # The available product must remain available.
+        self.product_two.refresh_from_db()
+
+        self.assertEqual(
+            self.product_two.status,
+            Product.ProductStatus.AVAILABLE,
+        )
+
+    def test_cannot_reserve_same_product_twice(self):
+        """A koi cannot be reserved by two separate requests."""
+
+        reservation_data = {
+            "customer_name": "John Smith",
+            "email": "john@example.com",
+            "phone": "07123456789",
+            "product_ids": [str(self.product_one.pk)],
+        }
+
+        # First reservation should succeed.
+        first_response = self.client.post(
+            reverse("reservation_create"),
+            reservation_data,
+        )
+
+        self.assertEqual(first_response.status_code, 302)
+
+        # Second reservation should be rejected.
+        second_response = self.client.post(
+            reverse("reservation_create"),
+            {
+                **reservation_data,
+                "customer_name": "Jane Smith",
+                "email": "jane@example.com",
+            },
+        )
+
+        self.assertEqual(second_response.status_code, 400)
+
+        # Only the first reservation should exist.
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderItem.objects.count(), 1)
+
+        self.product_one.refresh_from_db()
+
+        self.assertEqual(
+            self.product_one.status,
+            Product.ProductStatus.RESERVED,
+        )
+
+    def test_reservation_rejects_invalid_product_ids(self):
+        """Invalid product IDs must not create a reservation."""
+
+        response = self.client.post(
+            reverse("reservation_create"),
+            {
+                "customer_name": "John Smith",
+                "email": "john@example.com",
+                "phone": "07123456789",
+                "product_ids": ["abc", str(self.product_one.pk)],
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Order.objects.count(), 0)
+        self.assertEqual(OrderItem.objects.count(), 0)
+
+        self.product_one.refresh_from_db()
+
+        self.assertEqual(
+            self.product_one.status,
+            Product.ProductStatus.AVAILABLE,
+        )
+
+    def test_reservation_rejects_empty_product_list(self):
+        """A reservation must contain at least one koi."""
+        response = self.client.post(
+            reverse("reservation_create"),
+            {
+                "customer_name": "John Smith",
+                "email": "john@example.com",
+                "phone": "07123456789",
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Order.objects.count(), 0)
+
+    def test_reservation_rejects_duplicate_product_ids(self):
+        """The same koi cannot appear twice in one request."""
+        response = self.client.post(
+            reverse("reservation_create"),
+            {
+                "customer_name": "John Smith",
+                "email": "john@example.com",
+                "phone": "07123456789",
+                "product_ids": [
+                    str(self.product_one.pk),
+                    str(self.product_one.pk),
+                ],
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Order.objects.count(), 0)
+
+    def test_reservation_rejects_nonexistent_product(self):
+        """A reservation cannot include a nonexistent koi."""
+        response = self.client.post(
+            reverse("reservation_create"),
+            {
+                "customer_name": "John Smith",
+                "email": "john@example.com",
+                "phone": "07123456789",
+                "product_ids": [
+                    str(self.product_one.pk),
+                    "999999",
+                ],
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Order.objects.count(), 0)
+
+    def test_reservation_rejects_invalid_contact_details(self):
+        """Invalid customer details must not create a reservation."""
+        response = self.client.post(
+            reverse("reservation_create"),
+            {
+                "customer_name": "",
+                "email": "invalid-email",
+                "phone": "",
+                "product_ids": [str(self.product_one.pk)],
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Order.objects.count(), 0)

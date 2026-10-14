@@ -1,3 +1,5 @@
+{% load static %}
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -41,6 +43,7 @@
           <p>Size: {{ product.size }} cm</p>
           <p>Age: {{ product.age }} years</p>
           <p>Price: £{{ product.price }}</p>
+          <button type="button" data-product-id="{{ product.pk }}">Add to Cart</button>
         </article>
         {% empty %} {% if request.GET.q %}
         <p>No koi found matching your search.</p>
@@ -51,5 +54,10 @@
         {% endif %} {% endfor %}
       </section>
     </main>
+    <script src="{% static 'js/cart.js' %}"></script>
+
+    <script>
+      initCartButtons();
+    </script>
   </body>
 </html>

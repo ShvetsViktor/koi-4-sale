@@ -72,6 +72,29 @@ async function fetchCartProducts() {
 }
 
 /**
+ * Render shopping cart products with their names and prices.
+ *
+ * @param {object[]} products - Product details returned by Django.
+ */
+function renderCart(products) {
+  const cartItems = document.querySelector('#cart-items');
+
+  cartItems.innerHTML = '';
+
+  products.forEach((product) => {
+    const item = document.createElement('div');
+    const name = document.createElement('h2');
+    const price = document.createElement('p');
+
+    name.textContent = product.name;
+    price.textContent = `£${product.price}`;
+
+    item.append(name, price);
+    cartItems.appendChild(item);
+  });
+}
+
+/**
  * Handle an Add to Cart button click.
  *
  * @param {MouseEvent} event - Button click event.
@@ -113,5 +136,6 @@ if (typeof module !== 'undefined') {
     handleAddToCart,
     initCartButtons,
     fetchCartProducts,
+    renderCart,
   };
 }

@@ -1,4 +1,4 @@
-const { fetchCartProducts } = require('../static/js/cart');
+const { fetchCartProducts, renderCart } = require('../static/js/cart');
 
 describe('Shopping Cart Page', () => {
   beforeEach(() => {
@@ -29,5 +29,33 @@ describe('Shopping Cart Page', () => {
 
     expect(products).toHaveLength(2);
     expect(products[0].name).toBe('Kohaku');
+  });
+
+  test('renders product names and prices in the cart', () => {
+    document.body.innerHTML = '<div id="cart-items"></div>';
+
+    const products = [
+      {
+        id: 5,
+        name: 'Japanese Kohaku',
+        price: '150.00',
+        status: 'available',
+      },
+      {
+        id: 6,
+        name: 'Japanese Showa',
+        price: '200.00',
+        status: 'available',
+      },
+    ];
+
+    renderCart(products);
+
+    const cartItems = document.querySelector('#cart-items');
+
+    expect(cartItems.textContent).toContain('Japanese Kohaku');
+    expect(cartItems.textContent).toContain('150.00');
+    expect(cartItems.textContent).toContain('Japanese Showa');
+    expect(cartItems.textContent).toContain('200.00');
   });
 });

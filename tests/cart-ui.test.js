@@ -31,4 +31,13 @@ describe('Shopping Cart UI', () => {
 
     expect(getCart()).toEqual([1, 2]);
   });
+
+  test('updates button text after adding a product to the cart', () => {
+    const button = document.querySelector('[data-product-id]');
+
+    initCartButtons();
+    button.click();
+
+    expect(button.textContent).toBe('Added to Cart');
+  });
 });

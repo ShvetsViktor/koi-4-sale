@@ -54,6 +54,7 @@ function handleAddToCart(event) {
   const updatedCart = addToCart(cart, productId);
 
   saveCart(updatedCart);
+  event.currentTarget.textContent = 'Added to Cart';
 }
 
 /**

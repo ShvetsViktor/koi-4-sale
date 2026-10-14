@@ -1,4 +1,4 @@
-const { addToCart, removeFromCart } = require('../static/js/cart');
+const { addToCart, removeFromCart, saveCart, getCart } = require('../static/js/cart');
 
 describe('Shopping Cart', () => {
   test('adds a product to an empty cart', () => {
@@ -32,5 +32,27 @@ describe('Shopping Cart', () => {
 
     // Assert: Only the selected product should be removed.
     expect(result).toEqual([1, 3]);
+  });
+
+  test('saves cart contents to localStorage', () => {
+    // Arrange: Create a cart containing two products.
+    const cart = [1, 2];
+
+    // Act: Save the cart to browser storage.
+    saveCart(cart);
+
+    // Assert: Verify that product IDs were saved.
+    expect(localStorage.getItem('koi4sale_cart')).toBe('[1,2]');
+  });
+
+  test('retrieves cart contents from localStorage', () => {
+    // Arrange: Store two product IDs in localStorage.
+    localStorage.setItem('koi4sale_cart', '[1,2]');
+
+    // Act: Retrieve the saved cart.
+    const result = getCart();
+
+    // Assert: The original array should be restored.
+    expect(result).toEqual([1, 2]);
   });
 });

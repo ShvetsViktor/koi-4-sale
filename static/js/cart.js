@@ -94,6 +94,14 @@ function renderCart(products) {
     removeButton.textContent = 'Remove';
     removeButton.dataset.removeId = product.id;
 
+    removeButton.addEventListener('click', () => {
+      const cart = getCart();
+      const updatedCart = removeFromCart(cart, product.id);
+
+      saveCart(updatedCart);
+      item.remove();
+    });
+
     item.append(name, price, removeButton);
     cartItems.appendChild(item);
   });

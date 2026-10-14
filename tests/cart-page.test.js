@@ -114,4 +114,38 @@ describe('Shopping Cart Page', () => {
     expect(cartItems.textContent).toContain('Japanese Kohaku');
     expect(cartItems.textContent).toContain('150.00');
   });
+
+  test('removes a product from the cart when Remove is clicked', () => {
+    document.body.innerHTML = '<div id="cart-items"></div>';
+
+    localStorage.setItem('koi4sale_cart', '[5,6]');
+
+    const products = [
+      {
+        id: 5,
+        name: 'Japanese Kohaku',
+        price: '150.00',
+        status: 'available',
+      },
+      {
+        id: 6,
+        name: 'Japanese Showa',
+        price: '200.00',
+        status: 'available',
+      },
+    ];
+
+    renderCart(products);
+
+    const removeButton = document.querySelector('[data-remove-id="5"]');
+
+    removeButton.click();
+
+    expect(JSON.parse(localStorage.getItem('koi4sale_cart'))).toEqual([6]);
+
+    const cartItems = document.querySelector('#cart-items');
+
+    expect(cartItems.textContent).not.toContain('Japanese Kohaku');
+    expect(cartItems.textContent).toContain('Japanese Showa');
+  });
 });

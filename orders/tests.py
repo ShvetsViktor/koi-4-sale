@@ -526,8 +526,38 @@ class OrderAdminTests(TestCase):
 
 
 class CartPageTests(TestCase):
+    """Tests for the shopping cart page."""
+
     def test_cart_page_renders(self):
+        """The cart page should render successfully."""
         response = self.client.get("/cart/")
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "orders/cart.html")
+
+
+class CartProductsTests(TestCase):
+    """Tests for retrieving product details for the shopping cart."""
+
+    def test_returns_requested_products(self):
+        """The endpoint should return details of requested products."""
+        category = Category.objects.create(name="Kohaku")
+
+        product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=category,
+            price=Decimal("150.00"),
+            size=30,
+            age=2,
+        )
+
+        response = self.client.get(
+            "/cart/products/",
+            {"ids": [product.pk]},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["products"][0]["name"],
+            "Japanese Kohaku",
+        )

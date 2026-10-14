@@ -1,5 +1,5 @@
 from django.db import transaction
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import DetailView, TemplateView
@@ -85,5 +85,28 @@ class ReservationConfirmation(DetailView):
 
 
 class CartView(TemplateView):
+    """Display the shopping cart page."""
 
     template_name = "orders/cart.html"
+
+
+class CartProductsView(View):
+    """Return product details for the shopping cart."""
+
+    def get(self, request):
+        """Retrieve products matching the requested IDs."""
+        product_ids = request.GET.getlist("ids")
+
+        products = Product.objects.filter(pk__in=product_ids)
+
+        product_data = [
+            {
+                "id": product.pk,
+                "name": product.name,
+                "price": str(product.price),
+                "status": product.status,
+            }
+            for product in products
+        ]
+
+        return JsonResponse({"products": product_data})

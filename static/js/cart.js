@@ -13,6 +13,17 @@ function addToCart(cart, productId) {
   return [...cart, productId];
 }
 
+/**
+ * Remove a product ID from the shopping cart.
+ *
+ * @param {number[]} cart - Current product IDs.
+ * @param {number} productId - Product ID to remove.
+ * @returns {number[]} Updated cart.
+ */
+function removeFromCart(cart, productId) {
+  return cart.filter((id) => id !== productId);
+}
+
 if (typeof module !== 'undefined') {
-  module.exports = { addToCart };
+  module.exports = { addToCart, removeFromCart };
 }

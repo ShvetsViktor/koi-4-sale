@@ -1,4 +1,4 @@
-const { addToCart } = require('../static/js/cart');
+const { addToCart, removeFromCart } = require('../static/js/cart');
 
 describe('Shopping Cart', () => {
   test('adds a product to an empty cart', () => {
@@ -21,5 +21,16 @@ describe('Shopping Cart', () => {
 
     // Assert: The cart must not contain duplicates.
     expect(result).toEqual([1, 2]);
+  });
+
+  test('removes a product from the cart', () => {
+    // Arrange: Create a cart containing three products.
+    const cart = [1, 2, 3];
+
+    // Act: Remove product with ID 2.
+    const result = removeFromCart(cart, 2);
+
+    // Assert: Only the selected product should be removed.
+    expect(result).toEqual([1, 3]);
   });
 });

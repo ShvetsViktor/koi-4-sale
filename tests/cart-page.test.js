@@ -1,4 +1,4 @@
-const { fetchCartProducts, renderCart } = require('../static/js/cart');
+const { fetchCartProducts, renderCart, initCartPage } = require('../static/js/cart');
 
 describe('Shopping Cart Page', () => {
   beforeEach(() => {
@@ -57,5 +57,34 @@ describe('Shopping Cart Page', () => {
     expect(cartItems.textContent).toContain('150.00');
     expect(cartItems.textContent).toContain('Japanese Showa');
     expect(cartItems.textContent).toContain('200.00');
+  });
+
+  test('loads and displays cart products', async () => {
+    document.body.innerHTML = '<div id="cart-items"></div>';
+
+    localStorage.setItem('koi4sale_cart', '[5]');
+
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        products: [
+          {
+            id: 5,
+            name: 'Japanese Kohaku',
+            price: '150.00',
+            status: 'available',
+          },
+        ],
+      }),
+    });
+
+    await initCartPage();
+
+    expect(global.fetch).toHaveBeenCalledWith('/cart/products/?ids=5');
+
+    const cartItems = document.querySelector('#cart-items');
+
+    expect(cartItems.textContent).toContain('Japanese Kohaku');
+    expect(cartItems.textContent).toContain('150.00');
   });
 });

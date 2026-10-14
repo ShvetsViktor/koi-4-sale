@@ -95,6 +95,15 @@ function renderCart(products) {
 }
 
 /**
+ * Initialise the shopping cart page.
+ */
+async function initCartPage() {
+  const products = await fetchCartProducts();
+
+  renderCart(products);
+}
+
+/**
  * Handle an Add to Cart button click.
  *
  * @param {MouseEvent} event - Button click event.
@@ -137,5 +146,6 @@ if (typeof module !== 'undefined') {
     initCartButtons,
     fetchCartProducts,
     renderCart,
+    initCartPage,
   };
 }

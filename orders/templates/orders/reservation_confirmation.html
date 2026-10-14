@@ -1,5 +1,9 @@
-{% extends "base.html" %} {% block title %}Reservation Confirmation | Koi4Sale{% endblock %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
 
+{% block title %}Reservation Confirmation | Koi4Sale{% endblock %}
+
+{% block content %}
 <main>
   <h1>Reservation #{{ order.pk }}</h1>
 
@@ -16,4 +20,8 @@
   <p><strong>Total: £{{ order.total_price }}</strong></p>
 </main>
 
+<script src="{% static 'js/cart.js' %}"></script>
+<script>
+  clearCart();
+</script>
 {% endblock %}

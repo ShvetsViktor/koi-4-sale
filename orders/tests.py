@@ -3,7 +3,9 @@ from decimal import Decimal
 from django.test import TestCase
 from .forms import ReservationForm
 from django.urls import reverse
+from django.contrib.admin.sites import AdminSite
 
+from .admin import OrderAdmin
 from products.models import Category, Product
 from .models import Order, OrderItem
 
@@ -438,3 +440,86 @@ class ReservationConfirmationTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+
+class OrderAdminTests(TestCase):
+    """Test reservation management in Django Admin."""
+
+    def setUp(self):
+        self.category = Category.objects.create(name="Kohaku")
+        self.product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=self.category,
+            price=Decimal("250.00"),
+            size=30,
+            age=2,
+            status=Product.ProductStatus.RESERVED,
+        )
+
+        self.order = Order.objects.create(
+            customer_name="Test Customer",
+            email="test@example.com",
+            phone="07123456789",
+            total_price=Decimal("250.00"),
+        )
+
+        OrderItem.objects.create(
+            order=self.order,
+            product=self.product,
+            price=self.product.price,
+        )
+
+    def test_cancelling_order_releases_product(self):
+        """Cancelling a reservation makes its koi available again."""
+        order_admin = OrderAdmin(Order, AdminSite())
+
+        self.order.status = Order.OrderStatus.CANCELLED
+        order_admin.save_model(
+            request=None,
+            obj=self.order,
+            form=None,
+            change=True,
+        )
+
+        self.product.refresh_from_db()
+
+        self.assertEqual(
+            self.product.status,
+            Product.ProductStatus.AVAILABLE,
+        )
+
+    def test_confirming_order_keeps_product_reserved(self):
+        """Confirming an order must not release its reserved koi."""
+        order_admin = OrderAdmin(Order, AdminSite())
+
+        self.order.status = Order.OrderStatus.CONFIRMED
+
+        order_admin.save_model(
+            request=None,
+            obj=self.order,
+            form=None,
+            change=True,
+        )
+
+        self.order.refresh_from_db()
+        self.product.refresh_from_db()
+
+        self.assertEqual(
+            self.order.status,
+            Order.OrderStatus.CONFIRMED,
+        )
+
+        self.assertEqual(
+            self.product.status,
+            Product.ProductStatus.RESERVED,
+        )
+
+    def test_anonymous_user_cannot_access_orders_admin(self):
+        """Anonymous users cannot access reservation management."""
+
+        response = self.client.get(
+            reverse("admin:orders_order_changelist")
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response.url)

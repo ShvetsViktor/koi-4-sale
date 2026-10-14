@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ReservationCreate, ReservationConfirmation
+from .views import ReservationCreate, ReservationConfirmation, CartView
 
 urlpatterns = [
     path(
@@ -12,4 +12,5 @@ urlpatterns = [
         ReservationConfirmation.as_view(),
         name="reservation_confirmation",
     ),
+    path("cart/", CartView.as_view(), name="cart"),
 ]

@@ -2,7 +2,7 @@ from django.db import transaction
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.views import View
-from django.views.generic import DetailView
+from django.views.generic import DetailView, TemplateView
 
 from products.models import Product
 
@@ -82,3 +82,8 @@ class ReservationConfirmation(DetailView):
     model = Order
     template_name = "orders/reservation_confirmation.html"
     context_object_name = "order"
+
+
+class CartView(TemplateView):
+
+    template_name = "orders/cart.html"

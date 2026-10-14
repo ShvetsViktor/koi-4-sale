@@ -523,3 +523,11 @@ class OrderAdminTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertIn("/admin/login/", response.url)
+
+
+class CartPageTests(TestCase):
+    def test_cart_page_renders(self):
+        response = self.client.get("/cart/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "orders/cart.html")

@@ -42,6 +42,20 @@ function getCart() {
   return JSON.parse(localStorage.getItem('koi4sale_cart') || '[]');
 }
 
+/**
+ * Handle an Add to Cart button click.
+ *
+ * @param {MouseEvent} event - Button click event.
+ */
+function handleAddToCart(event) {
+  const productId = Number(event.currentTarget.dataset.productId);
+
+  const cart = getCart();
+  const updatedCart = addToCart(cart, productId);
+
+  saveCart(updatedCart);
+}
+
 if (typeof module !== 'undefined') {
-  module.exports = { addToCart, removeFromCart, saveCart, getCart };
+  module.exports = { addToCart, removeFromCart, saveCart, getCart, handleAddToCart };
 }

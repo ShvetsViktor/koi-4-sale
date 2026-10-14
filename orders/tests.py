@@ -372,3 +372,69 @@ class ReservationViewTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Order.objects.count(), 0)
+
+    def test_successful_reservation_redirects_to_confirmation(self):
+        """A successful reservation redirects to its confirmation page."""
+
+        response = self.client.post(
+            reverse("reservation_create"),
+            {
+                "customer_name": "John Smith",
+                "email": "john@example.com",
+                "phone": "07123456789",
+                "product_ids": [str(self.product_one.pk)],
+            },
+        )
+
+        order = Order.objects.get()
+
+        self.assertRedirects(
+            response,
+            reverse("reservation_confirmation", args=[order.pk]),
+        )
+
+
+class ReservationConfirmationTests(TestCase):
+    """Tests for the reservation confirmation page."""
+
+    def setUp(self):
+        self.order = Order.objects.create(
+            customer_name="John Smith",
+            email="john@example.com",
+            phone="07123456789",
+            total_price=Decimal("600.00"),
+        )
+
+    def test_confirmation_page_returns_200(self):
+        """An existing reservation should have a confirmation page."""
+        response = self.client.get(
+            reverse(
+                "reservation_confirmation",
+                args=[self.order.pk],
+            )
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_confirmation_page_displays_order_details(self):
+        """The confirmation page should display reservation information."""
+        response = self.client.get(
+            reverse(
+                "reservation_confirmation",
+                args=[self.order.pk],
+            )
+        )
+
+        self.assertContains(response, f"Reservation #{self.order.pk}")
+        self.assertContains(response, "600.00")
+
+    def test_confirmation_page_returns_404_for_missing_order(self):
+        """A nonexistent reservation should return HTTP 404."""
+        response = self.client.get(
+            reverse(
+                "reservation_confirmation",
+                args=[999999],
+            )
+        )
+
+        self.assertEqual(response.status_code, 404)

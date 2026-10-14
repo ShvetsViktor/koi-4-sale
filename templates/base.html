@@ -1,0 +1,25 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{% block title %}Koi4Sale{% endblock %}</title>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <a href="{% url 'product_list' %}">Koi4Sale</a>
+      </nav>
+    </header>
+
+    {% block content %} {% endblock %}
+
+    <footer>
+      <p>&copy; Koi4Sale</p>
+    </footer>
+  </body>
+</html>

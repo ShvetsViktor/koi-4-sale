@@ -1,10 +1,13 @@
 from django.db import transaction
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect
 from django.views import View
+from django.views.generic import DetailView
 
 from products.models import Product
+
 from .forms import ReservationForm
-from .models import OrderItem
+from .models import Order, OrderItem
 
 
 class ReservationCreate(View):
@@ -70,4 +73,12 @@ class ReservationCreate(View):
                 status=Product.ProductStatus.RESERVED
             )
 
-        return HttpResponseRedirect("/reservation-confirmation/")
+        return redirect("reservation_confirmation", pk=order.pk)
+
+
+class ReservationConfirmation(DetailView):
+    """Display confirmation details for a submitted reservation."""
+
+    model = Order
+    template_name = "orders/reservation_confirmation.html"
+    context_object_name = "order"

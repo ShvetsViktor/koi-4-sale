@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.test import TestCase
 from .forms import ReservationForm
+from django.urls import reverse
 
 from products.models import Category, Product
 from .models import Order, OrderItem
@@ -148,3 +149,64 @@ class ReservationFormTests(TestCase):
 
         self.assertNotIn("status", form.fields)
         self.assertNotIn("total_price", form.fields)
+
+
+class ReservationViewTests(TestCase):
+    """Tests for the reservation submission workflow."""
+
+    def setUp(self):
+        self.category = Category.objects.create(name="Kohaku")
+
+        self.product_one = Product.objects.create(
+            name="Japanese Kohaku",
+            category=self.category,
+            price=Decimal("250.00"),
+            size=30,
+            age=2,
+        )
+
+        self.product_two = Product.objects.create(
+            name="Japanese Showa",
+            category=self.category,
+            price=Decimal("350.00"),
+            size=35,
+            age=3,
+        )
+
+    def test_customer_can_reserve_multiple_products(self):
+        """A valid request should reserve all selected koi."""
+        response = self.client.post(
+            reverse("reservation_create"),
+            {
+                "customer_name": "John Smith",
+                "email": "john@example.com",
+                "phone": "07123456789",
+                "product_ids": [
+                    str(self.product_one.pk),
+                    str(self.product_two.pk),
+                ],
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertEqual(Order.objects.count(), 1)
+
+        order = Order.objects.first()
+
+        self.assertEqual(order.items.count(), 2)
+        self.assertEqual(order.total_price, Decimal("600.00"))
+        self.assertEqual(order.status, Order.OrderStatus.PENDING)
+
+        self.product_one.refresh_from_db()
+        self.product_two.refresh_from_db()
+
+        self.assertEqual(
+            self.product_one.status,
+            Product.ProductStatus.RESERVED,
+        )
+
+        self.assertEqual(
+            self.product_two.status,
+            Product.ProductStatus.RESERVED,
+        )

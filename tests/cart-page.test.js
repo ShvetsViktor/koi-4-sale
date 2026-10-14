@@ -1,4 +1,11 @@
-const { fetchCartProducts, renderCart, initCartPage, addCartItemsToForm } = require('../static/js/cart');
+const {
+  fetchCartProducts,
+  renderCart,
+  initCartPage,
+  addCartItemsToForm,
+  getCart,
+  clearCart,
+} = require('../static/js/cart');
 
 describe('Shopping Cart Page', () => {
   beforeEach(() => {
@@ -194,5 +201,13 @@ describe('Shopping Cart Page', () => {
       expect(inputs[0].value).toBe('5');
       expect(inputs[1].value).toBe('6');
     });
+  });
+
+  test('clears the shopping cart', () => {
+    localStorage.setItem('koi4sale_cart', '[5,6]');
+
+    clearCart();
+
+    expect(getCart()).toEqual([]);
   });
 });

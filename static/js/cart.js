@@ -34,6 +34,13 @@ function saveCart(cart) {
 }
 
 /**
+ * Clear all products from the shopping cart.
+ */
+function clearCart() {
+  localStorage.removeItem('koi4sale_cart');
+}
+
+/**
  * Retrieve shopping cart contents from localStorage.
  *
  * @returns {number[]} Saved product IDs.
@@ -189,5 +196,6 @@ if (typeof module !== 'undefined') {
     renderCart,
     initCartPage,
     addCartItemsToForm,
+    clearCart,
   };
 }

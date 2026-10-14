@@ -43,6 +43,35 @@ function getCart() {
 }
 
 /**
+ * Fetch product details for items saved in the shopping cart.
+ *
+ * @returns {Promise<object[]>} Product details from the server.
+ */
+async function fetchCartProducts() {
+  const cart = getCart();
+
+  if (cart.length === 0) {
+    return [];
+  }
+
+  const params = new URLSearchParams();
+
+  cart.forEach((id) => {
+    params.append('ids', id);
+  });
+
+  const response = await fetch(`/cart/products/?${params.toString()}`);
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch cart products.');
+  }
+
+  const data = await response.json();
+
+  return data.products;
+}
+
+/**
  * Handle an Add to Cart button click.
  *
  * @param {MouseEvent} event - Button click event.
@@ -76,5 +105,13 @@ function initCartButtons() {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { addToCart, removeFromCart, saveCart, getCart, handleAddToCart, initCartButtons };
+  module.exports = {
+    addToCart,
+    removeFromCart,
+    saveCart,
+    getCart,
+    handleAddToCart,
+    initCartButtons,
+    fetchCartProducts,
+  };
 }

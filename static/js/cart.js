@@ -117,6 +117,28 @@ async function initCartPage() {
 }
 
 /**
+ * Add shopping cart product IDs as hidden reservation form fields.
+ */
+function addCartItemsToForm() {
+  const form = document.querySelector('#reservation-form');
+  const cart = getCart();
+
+  form.querySelectorAll('input[name="product_ids"]').forEach((input) => {
+    input.remove();
+  });
+
+  cart.forEach((productId) => {
+    const input = document.createElement('input');
+
+    input.type = 'hidden';
+    input.name = 'product_ids';
+    input.value = productId;
+
+    form.appendChild(input);
+  });
+}
+
+/**
  * Handle an Add to Cart button click.
  *
  * @param {MouseEvent} event - Button click event.
@@ -160,5 +182,6 @@ if (typeof module !== 'undefined') {
     fetchCartProducts,
     renderCart,
     initCartPage,
+    addCartItemsToForm,
   };
 }

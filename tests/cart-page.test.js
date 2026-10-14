@@ -1,4 +1,4 @@
-const { fetchCartProducts, renderCart, initCartPage } = require('../static/js/cart');
+const { fetchCartProducts, renderCart, initCartPage, addCartItemsToForm } = require('../static/js/cart');
 
 describe('Shopping Cart Page', () => {
   beforeEach(() => {
@@ -147,5 +147,21 @@ describe('Shopping Cart Page', () => {
 
     expect(cartItems.textContent).not.toContain('Japanese Kohaku');
     expect(cartItems.textContent).toContain('Japanese Showa');
+  });
+
+  test('adds cart product IDs to the reservation form', () => {
+    document.body.innerHTML = `
+    <form id="reservation-form"></form>
+  `;
+
+    localStorage.setItem('koi4sale_cart', '[5,6]');
+
+    addCartItemsToForm();
+
+    const inputs = document.querySelectorAll('#reservation-form input[name="product_ids"]');
+
+    expect(inputs).toHaveLength(2);
+    expect(inputs[0].value).toBe('5');
+    expect(inputs[1].value).toBe('6');
   });
 });

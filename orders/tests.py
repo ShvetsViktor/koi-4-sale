@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.test import TestCase
+from .forms import ReservationForm
 
 from products.models import Category, Product
 from .models import Order, OrderItem
@@ -83,3 +84,67 @@ class OrderModelTests(TestCase):
         )
 
         self.assertEqual(self.order.items.count(), 2)
+
+
+class ReservationFormTests(TestCase):
+    """Tests for customer reservation form validation."""
+
+    def setUp(self):
+        self.valid_data = {
+            "customer_name": "John Smith",
+            "email": "john@example.com",
+            "phone": "07123456789",
+        }
+
+    def test_form_accepts_valid_data(self):
+        """The form should accept valid customer contact details."""
+        form = ReservationForm(data=self.valid_data)
+
+        self.assertTrue(form.is_valid())
+
+    def test_customer_name_is_required(self):
+        """Customer name must not be empty."""
+        data = self.valid_data.copy()
+        data["customer_name"] = ""
+
+        form = ReservationForm(data=data)
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("customer_name", form.errors)
+
+    def test_email_is_required(self):
+        """Email must not be empty."""
+        data = self.valid_data.copy()
+        data["email"] = ""
+
+        form = ReservationForm(data=data)
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("email", form.errors)
+
+    def test_email_must_be_valid(self):
+        """The form should reject incorrectly formatted email addresses."""
+        data = self.valid_data.copy()
+        data["email"] = "invalid-email"
+
+        form = ReservationForm(data=data)
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("email", form.errors)
+
+    def test_phone_is_required(self):
+        """Phone number must not be empty."""
+        data = self.valid_data.copy()
+        data["phone"] = ""
+
+        form = ReservationForm(data=data)
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("phone", form.errors)
+
+    def test_internal_fields_are_excluded(self):
+        """Customers must not control reservation status or total price."""
+        form = ReservationForm()
+
+        self.assertNotIn("status", form.fields)
+        self.assertNotIn("total_price", form.fields)

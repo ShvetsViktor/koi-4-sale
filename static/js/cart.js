@@ -6,6 +6,10 @@
  * @returns {number[]} Updated cart.
  */
 function addToCart(cart, productId) {
+  if (cart.includes(productId)) {
+    return cart;
+  }
+
   return [...cart, productId];
 }
 

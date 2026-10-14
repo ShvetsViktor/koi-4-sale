@@ -72,7 +72,7 @@ async function fetchCartProducts() {
 }
 
 /**
- * Render shopping cart products with their names and prices.
+ * Render shopping cart products with their names, prices and remove buttons.
  *
  * @param {object[]} products - Product details returned by Django.
  */
@@ -85,11 +85,16 @@ function renderCart(products) {
     const item = document.createElement('div');
     const name = document.createElement('h2');
     const price = document.createElement('p');
+    const removeButton = document.createElement('button');
 
     name.textContent = product.name;
     price.textContent = `£${product.price}`;
 
-    item.append(name, price);
+    removeButton.type = 'button';
+    removeButton.textContent = 'Remove';
+    removeButton.dataset.removeId = product.id;
+
+    item.append(name, price, removeButton);
     cartItems.appendChild(item);
   });
 }

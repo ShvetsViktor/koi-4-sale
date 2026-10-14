@@ -59,6 +59,33 @@ describe('Shopping Cart Page', () => {
     expect(cartItems.textContent).toContain('200.00');
   });
 
+  test('renders a remove button for each cart product', () => {
+    document.body.innerHTML = '<div id="cart-items"></div>';
+
+    const products = [
+      {
+        id: 5,
+        name: 'Japanese Kohaku',
+        price: '150.00',
+        status: 'available',
+      },
+      {
+        id: 6,
+        name: 'Japanese Showa',
+        price: '200.00',
+        status: 'available',
+      },
+    ];
+
+    renderCart(products);
+
+    const removeButtons = document.querySelectorAll('#cart-items [data-remove-id]');
+
+    expect(removeButtons).toHaveLength(2);
+    expect(removeButtons[0].dataset.removeId).toBe('5');
+    expect(removeButtons[1].dataset.removeId).toBe('6');
+  });
+
   test('loads and displays cart products', async () => {
     document.body.innerHTML = '<div id="cart-items"></div>';
 

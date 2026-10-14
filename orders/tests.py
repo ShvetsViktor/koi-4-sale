@@ -535,6 +535,19 @@ class CartPageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "orders/cart.html")
 
+    def test_cart_page_contains_reservation_form(self):
+        """The cart page should contain a reservation form."""
+        response = self.client.get("/cart/")
+
+        self.assertContains(
+            response,
+            '<form id="reservation-form" method="post" action="/reserve/">',
+        )
+        self.assertContains(response, 'name="customer_name"')
+        self.assertContains(response, 'name="email"')
+        self.assertContains(response, 'name="phone"')
+        self.assertContains(response, 'type="submit"')
+
 
 class CartProductsTests(TestCase):
     """Tests for retrieving product details for the shopping cart."""

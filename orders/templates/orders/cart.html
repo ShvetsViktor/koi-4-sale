@@ -11,6 +11,26 @@
     <main>
       <h1>Shopping Cart</h1>
       <div id="cart-items"></div>
+      <form id="reservation-form" method="post" action="{% url 'reservation_create' %}">
+        {% csrf_token %}
+
+        <div>
+          <label for="customer-name">Name</label>
+          <input type="text" id="customer-name" name="customer_name" required />
+        </div>
+
+        <div>
+          <label for="customer-email">Email</label>
+          <input type="email" id="customer-email" name="email" required />
+        </div>
+
+        <div>
+          <label for="customer-phone">Phone</label>
+          <input type="tel" id="customer-phone" name="phone" required />
+        </div>
+
+        <button type="submit">Submit Reservation</button>
+      </form>
     </main>
 
     <script src="{% static 'js/cart.js' %}"></script>

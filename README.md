@@ -415,7 +415,90 @@ The final application will use a deployed Django application connected to a rela
 
 ### Local Development
 
-## Local installation and development instructions will be added once the initial project configuration is complete.
+Follow these steps to run Koi4Sale in a local development environment.
+
+#### Installation
+
+1. Clone the repository and navigate to the project directory:
+
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
+
+2. Create and activate a Python virtual environment:
+
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+
+3. Install the Python dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Create a `.env` file in the project root and configure the environment variables:
+
+   ```env
+   SECRET_KEY=your-local-development-secret-key
+
+   DATABASE_URL=postgresql://username:password@localhost:5432/database_name
+   ```
+
+   Replace the placeholder values with your local configuration.
+
+   The `.env` file contains sensitive configuration and must not be committed to version control.
+
+5. Apply database migrations:
+
+   ```bash
+   python manage.py migrate
+   ```
+
+6. Start the Django development server:
+
+   ```bash
+
+   DEBUG=True python3 manage.py runserver
+   ```
+
+   Django's debug mode is disabled by default. Setting `DEBUG=True` enables it only for the current command, without modifying `settings.py`.
+   The application will be available at `http://127.0.0.1:8000/`.
+
+#### Running Automated Tests
+
+Run Django tests:
+
+```bash
+python manage.py test
+```
+
+Install JavaScript dependencies:
+
+```bash
+npm install
+```
+
+Run JavaScript tests:
+
+```bash
+npm test
+```
+
+#### Development and Production Environments
+
+The project uses the same Django settings module for both development and production.
+
+The `DEBUG` environment variable controls Django's debugging mode:
+
+- `DEBUG=True` enables debugging during local development.
+- `DEBUG=False` disables debugging for production.
+
+Debugging is disabled by default when the environment variable is not provided.
+
+Never enable Django debugging in production.
 
 ## Attribution, Credits and Acknowledgements
 

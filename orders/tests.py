@@ -541,12 +541,25 @@ class CartPageTests(TestCase):
 
         self.assertContains(
             response,
-            '<form id="reservation-form" method="post" action="/reserve/">',
+            '<form id="reservation-form" method="post" action="/reserve/" hidden>'
         )
         self.assertContains(response, 'name="customer_name"')
         self.assertContains(response, 'name="email"')
         self.assertContains(response, 'name="phone"')
         self.assertContains(response, 'type="submit"')
+
+    def test_cart_displays_breadcrumbs(self):
+        """Display Home and Cart breadcrumbs on the cart page."""
+        response = self.client.get(reverse("cart"))
+
+        self.assertContains(
+            response,
+            '<nav aria-label="Breadcrumb">'
+        )
+        self.assertContains(
+            response,
+            '<span aria-current="page">Cart</span>'
+        )
 
 
 class CartProductsTests(TestCase):

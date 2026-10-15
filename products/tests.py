@@ -193,6 +193,19 @@ class ProductCatalogueTests(TestCase):
             f'href="{product_url}"'
         )
 
+    def test_catalogue_displays_breadcrumbs(self):
+        """Display navigation breadcrumbs on the catalogue page."""
+        response = self.client.get(reverse("product_list"))
+
+        self.assertContains(
+            response,
+            '<nav aria-label="Breadcrumb">'
+        )
+        self.assertContains(
+            response,
+            '<span aria-current="page">Catalogue</span>'
+        )
+
 
 class ProductDetailTests(TestCase):
 
@@ -335,7 +348,8 @@ class ProductFilteringTests(TestCase):
         self.assertNotContains(response, self.showa.name)
 
     def test_catalogue_without_category_shows_all_available_products(self):
-        """All available products are displayed when no category is selected."""
+        """All available products are displayed
+        when no category is selected."""
 
         response = self.client.get(reverse("product_list"))
 

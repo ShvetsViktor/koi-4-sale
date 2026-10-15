@@ -2,8 +2,10 @@
     <a href="/">Home</a>
     <span aria-hidden="true">/</span>
 
-    <a href="{% url 'product_list' %}">Catalogue</a>
-    <span aria-hidden="true">/</span>
+    {% if parent_label %}
+        <a href="{{ parent_url }}">{{ parent_label }}</a>
+        <span aria-hidden="true">/</span>
+    {% endif %}
 
-    <span aria-current="page">{{ product.name }}</span>
+    <span aria-current="page">{{ current_label }}</span>
 </nav>

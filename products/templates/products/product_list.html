@@ -4,6 +4,8 @@
 {% block title %}Catalogue | Koi4Sale{% endblock %}
 
 {% block content %}
+      {% include "includes/breadcrumbs.html" with current_label="Catalogue" only %}
+      
       <h1>Available Koi</h1>
       <form method="get" action="{% url 'product_list' %}" role="search">
         <label for="search">Search koi</label>

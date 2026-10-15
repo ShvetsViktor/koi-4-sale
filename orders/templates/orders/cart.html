@@ -4,6 +4,8 @@
 {% block title %}Shopping Cart | Koi4Sale{% endblock %}
 
 {% block content %}
+      {% include "includes/breadcrumbs.html" with current_label="Cart" only %}
+      
       <h1>Shopping Cart</h1>
       <div id="cart-items"></div>
       <div id="empty-cart" hidden>

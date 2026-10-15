@@ -79,6 +79,23 @@ async function fetchCartProducts() {
 }
 
 /**
+ * Toggle the reservation form and empty cart message based on cart contents.
+ */
+function updateCartEmptyState() {
+  const form = document.querySelector('#reservation-form');
+  const emptyCart = document.querySelector('#empty-cart');
+  const hasProducts = getCart().length > 0;
+
+  if (form) {
+    form.hidden = !hasProducts;
+  }
+
+  if (emptyCart) {
+    emptyCart.hidden = hasProducts;
+  }
+}
+
+/**
  * Render shopping cart products with their names, prices and remove buttons.
  *
  * @param {object[]} products - Product details returned by Django.
@@ -107,6 +124,7 @@ function renderCart(products) {
 
       saveCart(updatedCart);
       item.remove();
+      updateCartEmptyState();
     });
 
     item.append(name, price, removeButton);
@@ -121,10 +139,11 @@ async function initCartPage() {
   const products = await fetchCartProducts();
 
   renderCart(products);
+  updateCartEmptyState();
 
   const form = document.querySelector('#reservation-form');
 
-  if (form) {
+  if (form && products.length > 0) {
     form.addEventListener('submit', addCartItemsToForm);
   }
 }
@@ -197,5 +216,6 @@ if (typeof module !== 'undefined') {
     initCartPage,
     addCartItemsToForm,
     clearCart,
+    updateCartEmptyState,
   };
 }

@@ -1,17 +1,16 @@
+{% extends "base.html" %}
 {% load static %}
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shopping Cart | Koi4Sale</title>
-  </head>
-  <body>
-    <main>
+{% block title %}Shopping Cart | Koi4Sale{% endblock %}
+
+{% block content %}
       <h1>Shopping Cart</h1>
       <div id="cart-items"></div>
-      <form id="reservation-form" method="post" action="{% url 'reservation_create' %}">
+      <div id="empty-cart" hidden>
+        <p>Your cart is empty.</p>
+        <a href="{% url 'product_list' %}">Browse Koi</a>
+      </div>
+      <form id="reservation-form" method="post" action="{% url 'reservation_create' %}" hidden>
         {% csrf_token %}
 
         <div>
@@ -31,11 +30,11 @@
 
         <button type="submit">Submit Reservation</button>
       </form>
-    </main>
+{% endblock %}
 
+{% block extra_js %}
     <script src="{% static 'js/cart.js' %}"></script>
     <script>
       initCartPage();
     </script>
-  </body>
-</html>
+{% endblock %}

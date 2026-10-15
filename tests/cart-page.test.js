@@ -20,6 +20,7 @@ describe('Shopping Cart Page', () => {
   test('fetches product details for saved cart IDs', async () => {
     localStorage.setItem('koi4sale_cart', '[5,6]');
 
+    // Mock fetch() to return a Promise with predefined data instead of making a real HTTP request.
     global.fetch.mockResolvedValue({
       ok: true,
       json: async () => ({
@@ -98,6 +99,7 @@ describe('Shopping Cart Page', () => {
 
     localStorage.setItem('koi4sale_cart', '[5]');
 
+    // Mock fetch() to return a Promise with predefined data instead of making a real HTTP request.
     global.fetch.mockResolvedValue({
       ok: true,
       json: async () => ({
@@ -180,9 +182,15 @@ describe('Shopping Cart Page', () => {
 
     localStorage.setItem('koi4sale_cart', '[5,6]');
 
+    // Mock fetch() to return a Promise with predefined data instead of making a real HTTP request.
     global.fetch.mockResolvedValue({
       ok: true,
-      json: async () => ({ products: [] }),
+      json: async () => ({
+        products: [
+          { id: 5, name: 'Japanese Kohaku', price: '150.00' },
+          { id: 6, name: 'Japanese Showa', price: '200.00' },
+        ],
+      }),
     });
 
     return initCartPage().then(() => {
@@ -209,5 +217,37 @@ describe('Shopping Cart Page', () => {
     clearCart();
 
     expect(getCart()).toEqual([]);
+  });
+
+  test('hides the reservation form when the cart is empty', async () => {
+    document.body.innerHTML = `
+    <div id="cart-items"></div>
+    <div id="empty-cart" hidden></div>
+    <form id="reservation-form" hidden></form>
+  `;
+
+    await initCartPage();
+
+    expect(document.querySelector('#reservation-form').hidden).toBe(true);
+    expect(document.querySelector('#empty-cart').hidden).toBe(false);
+  });
+
+  test('shows empty cart message after removing the last product', () => {
+    document.body.innerHTML = `
+    <div id="cart-items"></div>
+    <div id="empty-cart" hidden></div>
+    <form id="reservation-form"></form>
+  `;
+
+    localStorage.setItem('koi4sale_cart', '[5]');
+
+    renderCart([{ id: 5, name: 'Japanese Kohaku', price: '150.00' }]);
+
+    document.querySelector('[data-remove-id="5"]').click();
+
+    expect(getCart()).toEqual([]);
+    expect(document.querySelector('#cart-items').children).toHaveLength(0);
+    expect(document.querySelector('#reservation-form').hidden).toBe(true);
+    expect(document.querySelector('#empty-cart').hidden).toBe(false);
   });
 });

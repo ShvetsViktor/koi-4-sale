@@ -261,6 +261,20 @@ class ProductDetailTests(TestCase):
             self.product.get_status_display()
         )
 
+    def test_product_detail_displays_breadcrumbs(self):
+        """Display navigation breadcrumbs on the product detail page."""
+        response = self.client.get(
+            reverse("product_detail", args=[self.product.pk])
+        )
+
+        self.assertContains(
+            response,
+            '<nav aria-label="Breadcrumb">'
+        )
+        self.assertContains(response, "Home")
+        self.assertContains(response, "Catalogue")
+        self.assertContains(response, self.product.name)
+
 
 class CategoryModelTests(TestCase):
     @classmethod

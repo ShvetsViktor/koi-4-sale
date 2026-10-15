@@ -527,3 +527,18 @@ External code, tutorials, libraries and other sources will be attributed where a
 ## Future Improvements
 
 Features intentionally excluded from the initial project scope may be documented here after the MVP has been completed.
+
+### Separate Homepage and Catalogue
+
+Currently, the product catalogue is used as the homepage.
+
+A dedicated homepage is planned for a future development stage.
+
+When implementing the homepage:
+
+- [ ] Create a dedicated homepage view and template.
+- [ ] Assign the `/` URL to the homepage.
+- [ ] Keep the product catalogue at `/products/`.
+- [ ] Update the `Home` link in `templates/includes/breadcrumbs.html` to use `{% url 'home' %}` instead of `/`.
+- [ ] Update the `Home` link in `templates/includes/header.html` if necessary.
+- [ ] Update navigation tests to reflect the new URL structure.

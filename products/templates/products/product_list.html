@@ -1,18 +1,12 @@
+{% extends "base.html" %}
 {% load static %}
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Koi Catalogue | Koi4Sale</title>
-  </head>
-  <body>
-    <main>
+{% block title %}Catalogue | Koi4Sale{% endblock %}
+
+{% block content %}
       <h1>Available Koi</h1>
       <form method="get" action="{% url 'product_list' %}" role="search">
         <label for="search">Search koi</label>
-
         <input type="search" id="search" name="q" value="{{ request.GET.q }}" placeholder="Search by name or variety" />
 
         {% if request.GET.category %}
@@ -53,11 +47,11 @@
         <p>No koi are currently available.</p>
         {% endif %} {% endfor %}
       </section>
-    </main>
-    <script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}
 
+{% block extra_js %}
+    <script src="{% static 'js/cart.js' %}"></script>
     <script>
       initCartButtons();
     </script>
-  </body>
-</html>
+{% endblock %}

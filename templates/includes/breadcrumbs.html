@@ -1,0 +1,9 @@
+<nav aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span aria-hidden="true">/</span>
+
+    <a href="{% url 'product_list' %}">Catalogue</a>
+    <span aria-hidden="true">/</span>
+
+    <span aria-current="page">{{ product.name }}</span>
+</nav>

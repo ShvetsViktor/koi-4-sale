@@ -2,6 +2,13 @@
 {% load static%}
 
 {% block content %}
+        {# Get the catalogue URL and store it in the catalogue_url variable. #}
+        {% url 'product_list' as catalogue_url %}
+
+        {# Pass the required variables to the included template. #}
+        {# The 'only' keyword restricts its context to explicitly passed variables. #}
+        {% include "includes/breadcrumbs.html" with parent_label="Catalogue" parent_url=catalogue_url current_label=product.name only %}
+
         <div class="product-images">
             {% for image in product.images.all %}
             <img src="{{ image.image.url }}" alt="{{ product.name }}"></img>

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Koi4Sale{% endblock %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Premium Japanese Koi</h1>
+        <p>Discover beautiful Japanese koi and reserve your favourites.</p>
+        <a href="{% url 'product_list' %}">Explore Our Koi</a>
+    </section>
+{% endblock %}

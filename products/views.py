@@ -1,6 +1,5 @@
 from django.db.models import Prefetch, Q
-from django.views.generic import ListView
-from django.views.generic import DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 
 from .models import Product, ProductImage, Category
 
@@ -43,6 +42,14 @@ class ProductList(ListView):
 
 
 class ProductDetail(DetailView):
+    """Display detailed information about an individual koi."""
+
     model = Product
     template_name = "products/product_detail.html"
     context_object_name = "product"
+
+
+class HomeView(TemplateView):
+    """Display the homepage."""
+
+    template_name = "products/home.html"

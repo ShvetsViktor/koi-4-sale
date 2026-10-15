@@ -472,3 +472,27 @@ class ProductSearchTests(TestCase):
             response,
             "No koi found",
         )
+
+
+class HomePageTests(TestCase):
+    """Test the homepage."""
+
+    def test_homepage_displays_hero_section(self):
+        """The homepage displays a hero section with a catalogue link."""
+        response = self.client.get(reverse("home"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Premium Japanese Koi")
+        self.assertContains(
+            response,
+            f'href="{reverse("product_list")}"',
+        )
+
+    def test_homepage_header_links_to_home(self):
+        """The site logo links to the homepage."""
+        response = self.client.get(reverse("home"))
+
+        self.assertContains(
+            response,
+            f'<a href="{reverse("home")}">Koi4Sale</a>',
+        )

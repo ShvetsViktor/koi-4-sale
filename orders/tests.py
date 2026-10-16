@@ -1,12 +1,14 @@
 from decimal import Decimal
 
-from django.test import TestCase
-from .forms import ReservationForm
-from django.urls import reverse
 from django.contrib.admin.sites import AdminSite
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.test import TestCase
+from django.urls import reverse
+
+from products.models import Category, Product, ProductImage
 
 from .admin import OrderAdmin
-from products.models import Category, Product
+from .forms import ReservationForm
 from .models import Order, OrderItem
 
 
@@ -586,4 +588,68 @@ class CartProductsTests(TestCase):
         self.assertEqual(
             response.json()["products"][0]["name"],
             "Japanese Kohaku",
+        )
+
+    def test_returns_primary_product_image_url(self):
+        """Return the primary Cloudinary image URL for a cart product."""
+        category = Category.objects.create(name="Kohaku")
+
+        product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=category,
+            price=Decimal("150.00"),
+            size=30,
+            age=2,
+        )
+
+        ProductImage.objects.create(
+            product=product,
+            image="koi4sale/products/test-kohaku",
+            is_primary=True,
+        )
+
+        # Reload the image from the database to obtain the
+        # Cloudinary field value instead of the assigned string.
+        image = ProductImage.objects.get(product=product)
+
+        response = self.client.get(
+            reverse("cart_products"),
+            {"ids": [product.pk]},
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        product_data = response.json()["products"][0]
+
+        self.assertEqual(
+            product_data["image_url"],
+            image.image.url,
+        )
+
+    def test_returns_fallback_image_when_no_primary_exists(self):
+        """Return the default image when a koi has no primary photo."""
+        category = Category.objects.create(name="Kohaku")
+
+        product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=category,
+            price=Decimal("150.00"),
+            size=30,
+            age=2,
+        )
+
+        response = self.client.get(
+            reverse("cart_products"),
+            {"ids": [product.pk]},
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        product_data = response.json()["products"][0]
+
+        # Use Django's static files storage to support
+        # WhiteNoise's hashed filenames in production.
+        self.assertEqual(
+            product_data["image_url"],
+            staticfiles_storage.url("images/default.png"),
         )

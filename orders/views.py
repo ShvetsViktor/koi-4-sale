@@ -3,8 +3,11 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import DetailView, TemplateView
+from django.conf import settings
+from django.db.models import Prefetch
+from django.contrib.staticfiles.storage import staticfiles_storage
 
-from products.models import Product
+from products.models import Product, ProductImage
 
 from .forms import ReservationForm
 from .models import Order, OrderItem
@@ -97,14 +100,31 @@ class CartProductsView(View):
         """Retrieve products matching the requested IDs."""
         product_ids = request.GET.getlist("ids")
 
-        products = Product.objects.filter(pk__in=product_ids)
+        # Fetch primary images separately to avoid additional database
+        # queries for each product when building the JSON response.
+        products = Product.objects.filter(
+            pk__in=product_ids
+        ).prefetch_related(
+            Prefetch(
+                "images",
+                queryset=ProductImage.objects.filter(is_primary=True),
+                to_attr="primary_images",
+            )
+        )
 
+        # Use the primary Cloudinary image when available.
+        # Otherwise, return the static placeholder image.
         product_data = [
             {
                 "id": product.pk,
                 "name": product.name,
                 "price": str(product.price),
                 "status": product.status,
+                "image_url": (
+                    product.primary_images[0].image.url
+                    if product.primary_images
+                    else staticfiles_storage.url("images/default.png")
+                ),
             }
             for product in products
         ]

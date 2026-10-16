@@ -2,7 +2,7 @@
 
 <!-- Add responsive mockup after the main interface is completed -->
 
-**Live Website:** To be added after deployment.
+**Live Website:** https://koi-for-sale-2e89f5c55c63.herokuapp.com/
 
 ## Overview
 
@@ -500,6 +500,99 @@ Debugging is disabled by default when the environment variable is not provided.
 
 Never enable Django debugging in production.
 
+### Static Files
+
+Koi4Sale uses Django's static files framework and WhiteNoise to serve static assets in production.
+
+Static files include CSS, JavaScript, favicons and default product images.
+
+The project uses the following Django settings:
+
+- `STATIC_URL` defines the URL prefix for static assets.
+- `STATICFILES_DIRS` identifies the project's static files directory.
+- `STATIC_ROOT` specifies the directory where collected static files are stored.
+- `WhiteNoiseMiddleware` enables Django to serve static assets in production.
+- `CompressedManifestStaticFilesStorage` provides compressed and versioned static files.
+
+Static assets are referenced in Django templates using the `{% static %}` template tag.
+
+Before deployment, static files can be collected using:
+
+```bash
+python3 manage.py collectstatic --noinput
+```
+
+During deployment, Heroku collects the static files for production use.
+
+WhiteNoise serves the collected files when `DEBUG=False`, without requiring a separate static file server.
+
+The generated `staticfiles/` directory is excluded from version control.
+
+### Product Image Storage — Cloudinary
+
+Koi4Sale uses Cloudinary for persistent storage and delivery of product images.
+
+Heroku's filesystem is ephemeral, meaning files uploaded directly to the application filesystem cannot be relied upon to persist between deployments or dyno restarts.
+
+Cloudinary provides external image storage, allowing uploaded product photographs to remain available independently of the application's deployment lifecycle.
+
+#### Configuration
+
+The project uses the Cloudinary Python SDK and Django integration.
+
+Cloudinary credentials are configured using the `CLOUDINARY_URL` environment variable.
+
+```text
+CLOUDINARY_URL=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
+```
+
+The actual credentials are stored in local environment configuration and Heroku Config Vars. They are not committed to the repository.
+
+#### Product Images
+
+Product photographs are managed through the `ProductImage` model.
+
+Each image belongs to a specific `Product` through a foreign key relationship.
+
+The image field uses Cloudinary's `CloudinaryField`:
+
+```python
+image = CloudinaryField(
+    "image",
+    folder="koi4sale/products"
+)
+```
+
+Uploaded images are organised under the `koi4sale/products` path in Cloudinary.
+
+Each product can have multiple images, with one image optionally designated as the primary image.
+
+The primary image is displayed in the product catalogue, while the product detail page displays the available product images.
+
+#### Fallback Images
+
+Products without uploaded images display a default placeholder image.
+
+The fallback image is stored locally:
+
+```text
+static/images/default.png
+```
+
+It is served through Django's static files configuration and WhiteNoise.
+
+The placeholder is displayed conditionally in Django templates and does not require a `ProductImage` database record.
+
+When an administrator uploads product photographs and selects a primary image, the uploaded photographs replace the placeholder in the relevant views.
+
+#### Production Behaviour
+
+Product images are delivered through Cloudinary rather than Heroku's filesystem.
+
+This ensures that images remain available after application redeployment or dyno restarts.
+
+Image uploads and retrieval have been tested in both local development and the deployed Heroku environment.
+
 ## Attribution, Credits and Acknowledgements
 
 ### Existing Koi4Sale Project
@@ -527,18 +620,3 @@ External code, tutorials, libraries and other sources will be attributed where a
 ## Future Improvements
 
 Features intentionally excluded from the initial project scope may be documented here after the MVP has been completed.
-
-### Separate Homepage and Catalogue
-
-Currently, the product catalogue is used as the homepage.
-
-A dedicated homepage is planned for a future development stage.
-
-When implementing the homepage:
-
-- [ ] Create a dedicated homepage view and template.
-- [ ] Assign the `/` URL to the homepage.
-- [ ] Keep the product catalogue at `/products/`.
-- [ ] Update the `Home` link in `templates/includes/breadcrumbs.html` to use `{% url 'home' %}` instead of `/`.
-- [ ] Update the `Home` link in `templates/includes/header.html` if necessary.
-- [ ] Update navigation tests to reflect the new URL structure.

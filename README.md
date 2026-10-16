@@ -1,18 +1,26 @@
 # Koi4Sale – Django Koi Reservation Website
 
-<!-- Add responsive mockup after the main interface is completed -->
+<!-- TODO: Add a responsive mockup of the completed application. -->
 
 **Live Website:** https://koi-for-sale-2e89f5c55c63.herokuapp.com/
 
 ## Overview
 
-Koi4Sale is a full-stack web application for browsing and reserving individual Japanese koi.
-The project is being developed for the Code Institute Unit 3 Back End Development assessment. It uses Django and a relational database to provide persistent data storage, server-side business logic, CRUD functionality, form processing, and administrative management.
-Each koi is represented as an individual product rather than a product variation. Visitors can browse currently available koi, view detailed information and images, search or filter the catalogue, add koi to a client-side shopping cart, and submit a reservation request without creating an account.
-When a reservation request is successfully submitted, the application creates the required customer and order records in the database and changes the selected koi from available to reserved. This prevents reserved koi from continuing to appear as available for reservation.
-Customer registration and authentication are intentionally outside the scope of the initial project. Django's authentication system is used for administrative access, allowing authorised staff to manage products, images, product information, customers and orders through the Django Admin interface.
-The application is being developed incrementally using Test-Driven Development (TDD) where appropriate. Important business behaviours are first described through automated tests, followed by the minimum implementation required to make the test pass and subsequent refactoring.
-The existing Koi4Sale website previously developed using Next.js is used only as a visual and UX reference. This project is a new implementation built with Django Templates, HTML, CSS, Bootstrap and vanilla JavaScript.
+Koi4Sale is a full-stack web application for browsing individual Japanese koi and submitting reservation requests without creating a customer account or making an online payment.
+
+The project is developed for the **Code Institute Level 5 Diploma in Web Application Development – Unit 3: Back End Development** assessment. It uses **Django**, a relational database, Django Templates, **Bootstrap 5.3**, custom CSS and vanilla JavaScript.
+
+Each koi is represented as a unique product rather than a variation of a stock item. Visitors can browse available koi, view detailed product information and images, search and filter the catalogue, manage a client-side shopping cart and submit a reservation request.
+
+The server validates product availability before creating customer and order records. When a reservation is successfully submitted, the selected koi are marked as reserved to prevent duplicate reservations.
+
+Customer registration and authentication are intentionally excluded from the initial project scope. Authorised administrators manage products, images, customers and reservation requests through Django Admin.
+
+The project is developed incrementally using GitHub Issues, milestones and automated testing. Testable functionality follows the **RED → GREEN → REFACTOR** development cycle where appropriate.
+
+The previous Koi4Sale website, developed using Next.js, React and TypeScript, serves as a visual and UX reference. This project is a separate implementation using Django Templates, HTML, CSS, Bootstrap and vanilla JavaScript.
+
+> **Project Status:** The backend and reservation functionality have been developed. The responsive frontend interface is currently being implemented and refined. Features are not considered complete until implemented and verified.
 
 ---
 
@@ -20,7 +28,7 @@ The existing Koi4Sale website previously developed using Next.js is used only as
 
 1. [Project Goals](#project-goals)
 2. [Target Audience](#target-audience)
-3. [User Stories](#user-stories)
+3. [User Stories and Prioritisation](#user-stories-and-prioritisation)
 4. [Five Planes of UX](#five-planes-of-ux)
 5. [Database Design](#database-design)
 6. [Development Process](#development-process)
@@ -30,7 +38,7 @@ The existing Koi4Sale website previously developed using Next.js is used only as
 10. [Technologies Used](#technologies-used)
 11. [Deployment](#deployment)
 12. [Attribution, Credits and Acknowledgements](#attribution-credits-and-acknowledgements)
-13. [Repo Structure](#repo-structure)
+13. [Repository Structure](#repository-structure)
 14. [Future Improvements](#future-improvements)
 
 ---
@@ -39,259 +47,655 @@ The existing Koi4Sale website previously developed using Next.js is used only as
 
 ### User Goals
 
-- Browse koi currently available for reservation.
-- View detailed information and images for an individual koi.
-- Search and filter available koi.
-- Add selected koi to a shopping cart.
-- Review and modify the cart before checkout.
+- Understand what Koi4Sale offers and which fish are available.
+- Browse individual koi and examine prices, characteristics and photographs.
+- Search for koi using relevant product information.
+- Filter koi by category.
+- Add and remove koi from a shopping cart.
+- Review selected products and the total price.
 - Submit a reservation request without creating an account.
-- Receive clear feedback when a reservation request is successfully submitted.
+- Receive clear confirmation or validation feedback.
+- Access delivery information and contact details.
 - Use the website comfortably on mobile, tablet and desktop devices.
 
 ### Site Owner Goals
 
-- Present available koi professionally.
-- Store product, customer and order information in a relational database.
-- Manage individual koi and their availability.
-- Add and manage multiple images for individual koi.
-- Manage reservation requests.
-- Prevent the same koi from being reserved by multiple customers.
-- Maintain historical order information.
-- Manage application data securely through authenticated administrative access.
-- Keep the application maintainable and suitable for future development.
+- Present available koi professionally and accurately.
+- Maintain product details, photographs and availability.
+- Store customer and reservation information in a relational database.
+- Manage products and reservation requests through authenticated administration.
+- Prevent duplicate reservations.
+- Preserve historical order information.
+- Keep the application secure, maintainable and suitable for future development.
 
 ### Assessment Goals
 
-- Build a full-stack web application using Python and Django.
-- Design and implement a relational database appropriate to the project domain.
-- Use Django ORM to create and manipulate persistent application data.
-- Implement meaningful relationships between database entities.
-- Provide Create, Read, Update and Delete functionality.
-- Implement server-side form handling and validation.
-- Use Django authentication and authorisation where appropriate.
-- Build the front end using HTML, custom CSS, Bootstrap and vanilla JavaScript.
-- Use automated testing to verify important application behaviour.
+- Develop a full-stack web application using Python and Django.
+- Design and implement a relational database.
+- Use Django ORM and meaningful relationships between models.
+- Implement Create, Read, Update and Delete functionality.
+- Process forms and validate submitted information on the server.
+- Apply authentication and authorisation where appropriate.
+- Build a responsive frontend using HTML, custom CSS, Bootstrap and JavaScript.
+- Implement automated testing for important application behaviour.
 - Use Git and GitHub throughout development.
-- Document UX decisions, database design, development, testing and deployment.
-- Deploy the completed application with a production relational database.
+- Document UX decisions, database design, development and testing.
+- Deploy the application with a production relational database.
 
-### Why this project suits the brief
+### Why This Project Suits the Brief
 
-Koi4Sale is suited to the Unit 3 Back End Development brief because its core functionality depends on persistent relational data and server-side business logic.
-Products, product images, product highlights, customers, orders and order items have defined relationships. Users interact with this data through the catalogue and reservation process, while authorised administrators can manage application records through authenticated administrative functionality.
-The reservation workflow also provides a meaningful business rule: when an available koi is included in a successfully submitted order, its availability status must change so that it cannot be reserved again.
+Koi4Sale is suitable for the Unit 3 Back End Development assessment because its core functionality depends on persistent relational data and server-side business logic.
+
+Products, product images, customers, orders and order items are connected through database relationships.
+
+The reservation workflow demonstrates an important business rule: the server must verify product availability before accepting a reservation request.
+
+When a reservation is successfully created, the selected koi must become unavailable for further reservation.
+
+Django Admin provides authenticated administrative functionality for managing application records.
 
 ---
 
 ## Target Audience
 
-The target audience includes:
+The primary target audience consists of customers in the United Kingdom who are interested in purchasing individual Japanese koi.
 
-- Koi enthusiasts looking for individual fish to purchase.
-- Existing koi keepers looking for specific varieties, sizes or price ranges.
-- New koi keepers comparing available fish before making an enquiry.
-- Customers who prefer to reserve a fish before completing the final purchase directly with the seller.
+### Experienced Koi Keepers
 
----
+Customers who already maintain koi ponds and want to compare individual fish by size, variety, appearance and price.
 
-## User Stories
+### New Koi Keepers
 
-### US1 — Browse Available Koi
+Customers who need clear product descriptions, photographs and practical information before making a reservation.
 
-As a visitor, I want to browse koi that are currently available so that I can see which fish I can reserve.
-**Acceptance Criteria:**
+### Customers Seeking Direct Contact
 
-- The catalogue displays products with an `available` status.
-- Reserved koi are not displayed as available for reservation.
-- Sold koi are not displayed as available for reservation.
-- Unavailable koi are not displayed as available for reservation.
-- Each catalogue item provides a clear route to its product detail page.
-- A clear message is displayed if no available koi are found.
+Customers who prefer to reserve a fish before arranging payment, collection or delivery directly with the seller.
 
----
+### User Needs and Business Needs
 
-### US2 — View Koi Details
+Customers need:
 
-As a visitor, I want to view detailed information about an individual koi so that I can decide whether it is suitable for me.
-**Acceptance Criteria:**
+- Accurate information about available koi.
+- Clear photographs and product characteristics.
+- Simple navigation.
+- An understandable reservation process.
+- Confidence that unavailable koi cannot be reserved.
+- Clear delivery and contact information.
 
-- The product detail page displays the koi's main information.
-- The product price is clearly displayed.
-- Product images are displayed where available.
-- Product highlights or important characteristics are displayed where available.
-- A visitor can add an available koi to the cart.
-- A non-existent product URL returns an appropriate 404 response.
+The site owner needs:
+
+- Reliable product availability management.
+- Persistent customer and reservation records.
+- Straightforward product administration.
+- Protection against duplicate reservations.
+- A maintainable application.
+
+These requirements inform the project's functionality and UX decisions.
 
 ---
 
-### US3 — Search and Filter Koi
+## User Stories and Prioritisation
 
-As a visitor, I want to search or filter available koi so that I can find suitable fish more quickly.
-**Acceptance Criteria:**
+User stories describe the needs of visitors, customers and administrators.
 
-- Visitors can search the catalogue using relevant product information.
-- Search results contain only matching products.
-- Products that are not available are not returned as purchasable catalogue results.
-- A clear message is displayed when no products match the search or filter.
+They are organised by functionality rather than assigned additional story numbers.
 
----
+GitHub Issues and milestones are used to track implementation tasks, acceptance criteria and development progress. Issue titles follow the same naming conventions as the user stories documented here.
 
-### US4 — Manage Shopping Cart
+The project uses **MoSCoW prioritisation** to distinguish essential functionality from optional enhancements.
 
-As a visitor, I want to add and remove koi from my shopping cart so that I can prepare my reservation request before checkout.
-**Acceptance Criteria:**
+### MoSCoW Prioritisation
 
-- An available koi can be added to the cart.
-- The same koi cannot be added to the cart more than once.
-- Items can be removed from the cart.
-- The cart displays the selected koi.
-- The cart displays the current total price.
-- Cart contents remain available while the visitor continues browsing the website.
+| User Story                     | Priority    | Purpose                                                   |
+| ------------------------------ | ----------- | --------------------------------------------------------- |
+| Browse Available Koi           | Must Have   | Display koi available for reservation.                    |
+| View Koi Details               | Must Have   | Provide detailed product information and photographs.     |
+| Filter Koi by Category         | Must Have   | Allow visitors to browse koi by category.                 |
+| Manage Shopping Cart           | Must Have   | Allow visitors to manage selected koi.                    |
+| Submit a Reservation Request   | Must Have   | Process customer reservation requests.                    |
+| Prevent Duplicate Reservations | Must Have   | Prevent unavailable koi from being reserved again.        |
+| Manage Products                | Must Have   | Provide authenticated product administration.             |
+| Manage Orders                  | Must Have   | Provide authenticated reservation management.             |
+| Responsive Navigation          | Must Have   | Provide accessible navigation across screen sizes.        |
+| Responsive Catalogue           | Must Have   | Display product cards appropriately on different devices. |
+| Delivery Information           | Should Have | Explain delivery arrangements and conditions.             |
+| Contact Information            | Should Have | Provide contact details and enquiry options.              |
+| Search Koi                     | Should Have | Help visitors find koi using search terms.                |
+| Frequently Asked Questions     | Could Have  | Answer common customer questions.                         |
+| Reservation Confirmation Email | Could Have  | Send customers confirmation of their reservation request. |
+| Featured Koi Carousel          | Could Have  | Highlight selected products on the home page.             |
 
----
+### Core User Stories
 
-### US5 — Submit a Reservation Request
+#### Browse Available Koi
 
-As a customer, I want to submit my contact details and selected koi so that I can request a reservation without creating an account.
-**Acceptance Criteria:**
+As a **visitor**, I want to browse currently available koi so that I can see which fish I can reserve.
 
-- Checkout displays the selected koi.
+**Acceptance Criteria**
+
+- Only available koi appear as reservable catalogue items.
+- Reserved, sold and unavailable koi are excluded from the available catalogue.
+- Each product provides a link to its detail page.
+- An empty catalogue displays a useful message.
+
+#### View Koi Details
+
+As a **visitor**, I want to view photographs and detailed information about an individual koi so that I can decide whether to reserve it.
+
+**Acceptance Criteria**
+
+- The product detail page displays the koi's name, price and description.
+- Available product photographs are displayed.
+- Important characteristics are displayed where recorded.
+- Available koi can be added to the cart.
+- Invalid product URLs return an appropriate 404 response.
+
+#### Filter Koi by Category
+
+As a **visitor**, I want to filter koi by category so that I can browse fish belonging to a particular variety or group.
+
+**Acceptance Criteria**
+
+- Visitors can select a category to filter the catalogue.
+- Only products belonging to the selected category are displayed.
+- Unavailable products are excluded from reservable results.
+- Visitors can return to the complete available catalogue.
+- An appropriate message is displayed when a category contains no available products.
+
+#### Manage Shopping Cart
+
+As a **visitor**, I want to add and remove koi from my shopping cart so that I can prepare a reservation request.
+
+**Acceptance Criteria**
+
+- Available koi can be added to the cart.
+- The same koi cannot be added more than once.
+- Cart contents persist while the visitor continues browsing.
+- The cart displays selected products, images and prices.
+- The total price is calculated and displayed.
+- Products can be removed without creating an account.
+
+#### Submit a Reservation Request
+
+As a **customer**, I want to submit my contact details and selected koi so that I can request a reservation without paying online.
+
+**Acceptance Criteria**
+
 - Required customer information is collected through a form.
-- Invalid or incomplete form data is rejected.
-- Product availability is checked by the server before the reservation is created.
-- A successful submission creates the required customer and order records.
-- Each selected koi is associated with the created order.
-- A successful reservation changes the selected koi from `available` to `reserved`.
-- The customer receives clear confirmation that the request was submitted.
+- Submitted information is validated on the server.
+- Product availability is checked before creating the reservation.
+- Successful submission creates related customer and order records.
+- Selected products are associated with the created order.
+- Successfully reserved products change from `available` to `reserved`.
+- Confirmation explains that a reservation request has been received.
 
----
+#### Prevent Duplicate Reservations
 
-### US6 — Prevent Duplicate Reservations
+As a **customer**, I want unavailable koi to be rejected during submission so that I do not receive a misleading reservation confirmation.
 
-As a customer, I want unavailable koi to be rejected during checkout so that I cannot submit a reservation for a fish that has already been reserved.
-**Acceptance Criteria:**
+**Acceptance Criteria**
 
-- Product availability is checked on the server during checkout.
-- A koi that is no longer available cannot be successfully reserved.
-- An unsuccessful reservation does not leave a partially created order.
-- The customer receives a clear message explaining that one or more selected koi are no longer available.
+- Product availability is checked on the server.
+- Unavailable koi cannot be successfully reserved again.
+- Failed validation does not leave partially created reservation records.
+- The customer receives a clear error message.
 
----
+#### Manage Products
 
-### US7 — Manage Products
+As an **authorised administrator**, I want to manage koi records so that the catalogue contains accurate product information.
 
-As an authorised administrator, I want to manage koi records so that the catalogue contains accurate and current information.
-**Acceptance Criteria:**
+**Acceptance Criteria**
 
-- Administrative functionality requires authentication.
-- An authorised administrator can create product records.
-- Existing product records can be viewed.
-- Existing product records can be edited.
-- Product records can be deleted where appropriate.
-- Product availability status can be changed.
-- Related product information can be managed.
+- Administrative functionality requires authentication and appropriate permissions.
+- Product records can be created and viewed.
+- Existing products can be updated.
+- Products can be deleted where appropriate.
+- Product images and related information can be managed.
+- Product availability can be changed.
 
----
+#### Manage Orders
 
-### US8 — Manage Orders
+As an **authorised administrator**, I want to manage reservation requests so that customer orders can be processed.
 
-As an authorised administrator, I want to view and manage reservation requests so that customer orders can be processed.
-**Acceptance Criteria:**
+**Acceptance Criteria**
 
-- Administrative functionality requires authentication.
-- Orders can be located and viewed.
-- Customer information associated with an order can be viewed.
-- Products associated with an order can be viewed.
+- Administrative functionality requires authentication and appropriate permissions.
+- Orders and associated customer information can be viewed.
+- Products associated with an order can be identified.
 - Order status can be updated.
-- Reservation status and product availability remain consistent with the application's business rules.
+- Product availability remains consistent with reservation rules.
 
----
+#### Responsive Navigation
 
-### US9 — Use the Website on Different Devices
+As a **visitor**, I want navigation that adapts to my device so that I can easily access important pages.
 
-As a visitor, I want to use the website comfortably on different screen sizes so that I can browse and reserve koi using my preferred device.
-**Acceptance Criteria:**
+**Acceptance Criteria**
 
-- Navigation remains usable on mobile, tablet and desktop.
+- Navigation is usable on mobile, tablet and desktop.
+- Desktop navigation displays visible links to important pages.
+- Mobile navigation provides an accessible collapsible menu.
+- The logo links to the home page.
+- The current page is visually identifiable.
+- Navigation supports keyboard interaction.
+
+#### Responsive Catalogue
+
+As a **visitor**, I want the product catalogue to adapt to my screen size so that I can browse koi comfortably on any device.
+
+**Acceptance Criteria**
+
 - Product cards adapt to available screen width.
-- Product detail content remains readable on smaller screens.
-- Cart and checkout remain usable on mobile devices.
-- Forms remain readable and easy to complete.
-- The website does not introduce unnecessary horizontal scrolling.
+- Images maintain appropriate proportions.
+- Product information remains readable.
+- Important actions remain accessible.
+- The catalogue does not introduce unnecessary horizontal scrolling.
+
+#### Delivery Information
+
+As a **visitor**, I want to understand the delivery arrangements so that I can decide whether purchasing a koi is practical for me.
+
+**Acceptance Criteria**
+
+- Delivery information is accessible through the website.
+- Available delivery or collection arrangements are explained.
+- Relevant limitations or conditions are clearly communicated.
+
+#### Contact Information
+
+As a **visitor**, I want to contact the seller so that I can ask questions before submitting a reservation.
+
+**Acceptance Criteria**
+
+- Contact information is easy to locate.
+- Visitors have a clear method of contacting the seller.
+- Any contact form includes appropriate validation and feedback.
+
+### Additional User Stories
+
+#### Search Koi
+
+As a **visitor**, I want to search available koi using relevant information so that I can find suitable fish more quickly.
+
+**Acceptance Criteria**
+
+- Visitors can submit a search query.
+- Search results contain products matching the query.
+- Unavailable products are not presented as reservable results.
+- An appropriate message is displayed when no products match.
+- Visitors can return to the complete available catalogue.
+
+#### Frequently Asked Questions
+
+As a **visitor**, I want answers to common questions so that I can understand the reservation process and koi purchasing arrangements.
+
+**Acceptance Criteria**
+
+- Frequently asked questions are accessible from the website.
+- Questions and answers are clearly organised.
+- Information is relevant to the purchasing and reservation process.
+
+#### Reservation Confirmation Email
+
+As a **customer**, I want to receive an email confirming my reservation request so that I have a record of the products I requested.
+
+**Acceptance Criteria**
+
+- A confirmation email is sent after a successful reservation request.
+- The email includes relevant reservation information.
+- The email clearly identifies the reservation as a request rather than a completed purchase.
+- No confirmation email is sent for an unsuccessful reservation.
+- Email delivery failures are handled appropriately.
+
+#### Featured Koi Carousel
+
+As a **visitor**, I want to see highlighted koi on the home page so that I can discover interesting available fish.
+
+**Acceptance Criteria**
+
+- Featured products are displayed on the home page.
+- Product images and information are presented clearly.
+- Featured items link to their product detail pages.
+- The component remains usable on different screen sizes.
 
 ---
 
 ## Five Planes of UX
 
-The Five Planes of UX are being used to organise design decisions from the overall purpose of the application through to its final interface.
+The project follows Jesse James Garrett's **Five Planes of User Experience** framework.
 
-### Strategy
+The framework connects user and business needs to the final visual interface.
 
-The strategy of Koi4Sale is to make browsing and reserving individual koi simple while giving the site owner reliable control over product availability and reservation requests.
-The project is based on three priorities:
+The five planes are:
 
-- **Clarity:** visitors should quickly understand which koi are currently available.
-- **Confidence:** visitors should have enough information and imagery to make an informed reservation decision.
-- **Reliability:** reservation requests must be processed consistently and unavailable koi must not be presented as available for reservation.
+1. **Strategy** — Why does the website exist?
+2. **Scope** — What functionality and content are required?
+3. **Structure** — How is information organised?
+4. **Skeleton** — How are interface elements arranged?
+5. **Surface** — What does the finished interface look like?
 
-### Scope
+Each plane builds upon the decisions made at the previous level.
 
-The planned project scope includes:
+### 1. Strategy — Why Does the Website Exist?
 
-- Available koi catalogue.
-- Individual koi detail pages.
-- Product images.
-- Product highlights.
-- Search and filtering.
-- Client-side shopping cart.
-- Checkout without customer registration.
-- Customer data collection.
-- Reservation request creation.
-- Automatic product reservation.
-- Administrative product management.
-- Administrative order management.
-- Responsive interface.
-- Form validation.
-- Automated testing of important business logic.
-- Custom error handling.
+The purpose of Koi4Sale is to make browsing and reserving individual koi straightforward while providing the site owner with reliable control over products and reservations.
 
-### Structure
+#### Business Objectives
 
-The main customer journey is:
+- Present individual koi professionally.
+- Make currently available fish easy to discover.
+- Receive reservation enquiries from interested customers.
+- Maintain accurate product availability.
+- Manage customer and reservation information efficiently.
 
-1. **Browse available koi**
-2. **Search or filter catalogue**
-3. **View individual koi**
-4. **Add koi to cart**
-5. **Review cart**
-6. **Complete checkout**
-7. **Submit reservation request**
-8. **Receive confirmation**
-   Administrative functionality provides a separate authenticated workflow for managing products and reservation requests.
+#### User Objectives
 
-### Skeleton / Wireframes
+- Discover available koi.
+- Compare individual fish.
+- Access reliable product information.
+- Understand the reservation process.
+- Submit a reservation request with confidence.
 
-Wireframes will be added as the interface structure is finalised.
+#### Design Principles
 
-### Surface
+**Clarity**
 
-The visual design will use the existing Koi4Sale website as a visual reference while being reimplemented specifically for the Django application.
-The intended interface is:
+Visitors should immediately understand what the website offers and which products are available.
 
-- Clean.
-- Product-focused.
-- Image-led.
-- Easy to navigate.
-- Responsive.
-- Accessible.
-- Consistent across catalogue, product, cart and checkout pages.
+**Confidence**
+
+Product photographs, descriptions, prices and practical information should help visitors make informed decisions.
+
+**Reliability**
+
+Reservation requests must be validated on the server, and unavailable products must not be reserved again.
+
+**Simplicity**
+
+The initial application does not require customer registration or online payment.
+
+### 2. Scope — What Must the Website Provide?
+
+The Scope plane translates business and user objectives into functional and content requirements.
+
+#### Must Have — Essential Functionality
+
+- Browse Available Koi.
+- View Koi Details.
+- Filter Koi by Category.
+- Manage Shopping Cart.
+- Submit a Reservation Request.
+- Prevent Duplicate Reservations.
+- Manage Products.
+- Manage Orders.
+- Responsive Navigation.
+- Responsive Catalogue.
+
+These functions form the core of the application.
+
+#### Should Have — Supporting Functionality
+
+- Delivery Information.
+- Contact Information.
+- Search Koi.
+
+These features improve product discovery and help visitors make informed reservation decisions.
+
+#### Could Have — Optional Enhancements
+
+- Frequently Asked Questions.
+- Reservation Confirmation Email.
+- Featured Koi Carousel.
+
+These enhancements provide additional value but should not delay completion of the essential functionality.
+
+#### Content Requirements
+
+The website should provide:
+
+- Product names and descriptions.
+- Product prices.
+- Product sizes and relevant characteristics.
+- Product photographs.
+- Availability information.
+- Delivery information.
+- Contact information.
+- Reservation guidance.
+
+The scope is managed using MoSCoW prioritisation and GitHub Issues.
+
+A feature is not considered complete solely because its backend functionality exists. User-facing behaviour must also be implemented and verified.
+
+### 3. Structure — How Is Information Organised?
+
+The Structure plane defines the information architecture and user interaction flows.
+
+#### Information Architecture
+
+The planned customer-facing structure is:
+
+```text
+Koi4Sale
+│
+├── Home
+│
+├── Catalogue
+│   ├── Category Filtering
+│   ├── Search
+│   └── Product Details
+│
+├── Cart
+│   └── Reservation Request
+│       └── Confirmation
+│
+├── Delivery Information
+│
+├── Contact
+│
+└── Frequently Asked Questions
+```
+
+Administrative functionality is accessed separately through authenticated Django Admin.
+
+#### Primary User Flow — Reservation
+
+The main customer journey follows these steps:
+
+1. Open the home page or catalogue.
+2. Browse, search or filter available koi.
+3. Open an individual product page.
+4. Review photographs, characteristics and price.
+5. Add one or more koi to the cart.
+6. Review selected products and the total.
+7. Enter contact information.
+8. Submit a reservation request.
+9. Receive confirmation or validation feedback.
+
+#### Reservation Terminology
+
+The interface must distinguish a reservation request from a completed purchase.
+
+Preferred terminology includes:
+
+- **Add to Cart**
+- **View Cart**
+- **Request Reservation**
+- **Reservation Request Received**
+
+The application should not suggest that payment has been completed when no payment has occurred.
+
+#### Error Handling
+
+Users should receive clear feedback when:
+
+- Required form information is missing.
+- Submitted information is invalid.
+- A selected koi is no longer available.
+- A reservation cannot be completed.
+- A requested product does not exist.
+- A search or category filter returns no results.
+
+<!-- TODO: Add the final user-flow diagram. -->
+
+### 4. Skeleton — Where Do Elements Go?
+
+The Skeleton plane defines the arrangement of navigation, content and interactive elements before final visual styling.
+
+Wireframes will be used to document the layout of important pages.
+
+#### Global Navigation
+
+**Desktop**
+
+- The logo appears on the left.
+- Navigation links appear horizontally on the right.
+- The cart is accessible from the header.
+- A hamburger menu is not displayed on desktop.
+
+**Mobile**
+
+- The logo remains visible on the left.
+- The cart remains easily accessible.
+- A hamburger button opens the collapsed navigation.
+- Navigation links remain readable and easy to select.
+
+The current page should be visually identifiable and communicated to assistive technologies.
+
+#### Home Page
+
+**Desktop Layout**
+
+- A prominent hero section introduces the website.
+- The main heading and description appear beside a large koi photograph.
+- A primary **Shop Koi** button leads to the catalogue.
+- Supporting actions may link to delivery information.
+- Featured products may appear below the hero section.
+
+**Mobile Layout**
+
+- Hero content is arranged vertically.
+- The main heading and calls-to-action appear before the image.
+- Text remains readable without horizontal scrolling.
+- Buttons are large enough for comfortable touch interaction.
+
+#### Catalogue
+
+- Products are displayed using a responsive grid.
+- Product photographs are visually prominent.
+- Product names, prices and important characteristics are clearly displayed.
+- Each product provides a route to its detail page.
+- Category filtering and search controls are positioned where visitors can easily find them.
+- The number of columns adapts to screen width.
+
+#### Product Details
+
+- Product photographs are easy to examine.
+- Product information is organised logically.
+- Price and availability are clearly visible.
+- The Add to Cart action is prominent for available products.
+- Content remains readable on mobile devices.
+
+#### Cart and Reservation Form
+
+- Selected koi are displayed with photographs and prices.
+- The total price is clearly presented.
+- Products can be removed from the cart.
+- The reservation form uses clearly labelled fields.
+- Validation errors appear near relevant inputs where appropriate.
+- Confirmation explains the next steps.
+
+<!-- TODO: Add desktop and mobile wireframes. -->
+
+### 5. Surface — What Does the Interface Look Like?
+
+The Surface plane defines the visual identity of the application.
+
+The previous Koi4Sale website serves as a visual reference, while the Django implementation uses Bootstrap components and custom CSS.
+
+#### Colour Palette
+
+| Design Element     | Colour    | Purpose                                    |
+| ------------------ | --------- | ------------------------------------------ |
+| Primary Background | `#111827` | Dark navy background.                      |
+| Primary Accent     | `#fe5a08` | Buttons, highlights and important actions. |
+| Primary Text       | `#ffffff` | Main headings and text on dark surfaces.   |
+| Secondary Text     | `#9ca3af` | Supporting descriptions.                   |
+| Input Background   | `#1f2937` | Form fields and contrasting surfaces.      |
+
+These colours represent the intended design and will be reviewed during accessibility and contrast testing.
+
+#### Typography
+
+The initial implementation uses Bootstrap's system font stack.
+
+Typography should provide:
+
+- Clear heading hierarchy.
+- Readable body text.
+- Consistent font sizes.
+- Appropriate line spacing.
+- Strong contrast between text and backgrounds.
+
+#### Visual Hierarchy
+
+The home page should guide attention through:
+
+1. Brand identity.
+2. Main value proposition.
+3. Primary Shop Koi action.
+4. Koi photography.
+5. Available or featured products.
+
+#### Responsive Design
+
+Bootstrap 5.3 provides the responsive grid and navigation components.
+
+The layout adapts to:
+
+- Mobile devices.
+- Tablets.
+- Desktop screens.
+
+The current navigation uses Bootstrap's `lg` breakpoint at 992px.
+
+The breakpoint may be adjusted if testing shows that another layout works better.
+
+#### Accessibility
+
+The interface should include:
+
+- Semantic HTML landmarks.
+- Meaningful image alternative text.
+- Keyboard-accessible navigation.
+- Visible keyboard focus indicators.
+- Accessible form labels.
+- Appropriate colour contrast.
+- Clear validation messages.
+- Responsive content without unnecessary horizontal scrolling.
+
+<!-- TODO: Add final screenshots and visual testing evidence. -->
+
+### UX Review Checklist
+
+Before completing a frontend user story, the implementation should be reviewed against all five UX planes.
+
+| Plane     | Review Question                                                 |
+| --------- | --------------------------------------------------------------- |
+| Strategy  | Does the feature solve a genuine user or business need?         |
+| Scope     | Is the feature required for the MVP or an optional enhancement? |
+| Structure | Can users find and complete the relevant interaction?           |
+| Skeleton  | Does the layout work on mobile, tablet and desktop?             |
+| Surface   | Is the interface visually consistent, readable and accessible?  |
+
+UX decisions should be revisited when testing reveals usability problems.
 
 ---
 
 ## Database Design
 
-The application uses a relational database designed around individual koi products and reservation requests.
-The current Entity Relationship Diagram contains six main entities:
+Koi4Sale uses a relational database designed around unique koi products and reservation requests.
+
+The database design includes the following entities:
 
 - `Product`
 - `ProductImage`
@@ -299,181 +703,221 @@ The current Entity Relationship Diagram contains six main entities:
 - `Customer`
 - `Order`
 - `OrderItem`
-<!-- Add final ERD image here -->
+
+The final Entity Relationship Diagram must be checked against the implemented Django models before submission.
+
+<!-- TODO: Add the final ERD image. -->
 
 ### Database Relationships
 
-To be documented after the Django models are finalised.
+The principal relationships include:
+
+- A product can have multiple images.
+- Each product image belongs to one product.
+- A customer can have multiple orders.
+- Each order belongs to one customer.
+- An order contains selected products through order items.
+- Product highlights are associated with their relevant products.
+
+The final documentation will describe foreign keys, cardinality, deletion rules and database constraints.
 
 ### Product Availability
 
 Each koi is represented by one `Product` record.
-The planned product states are:
+
+Product status determines whether a koi is available for reservation.
+
+The planned status values are:
 
 - `available`
 - `reserved`
 - `sold`
 - `unavailable`
-  Product status is intended to act as the single source of truth for availability rather than maintaining a separate boolean availability field.
-  The reservation workflow will change a successfully reserved product from:
+
+Product status acts as the source of truth for availability.
+
+The reservation workflow changes a successfully reserved product from:
 
 ```text
 available → reserved
 ```
 
-## Further status behaviour will be documented as the order workflow is implemented.
+The application should not maintain a duplicate availability boolean without a specific requirement.
+
+### Reservation Integrity
+
+Product availability is checked on the server when a reservation request is submitted.
+
+The reservation process must ensure that:
+
+- Unavailable products are rejected.
+- Related customer and order records are created consistently.
+- Successfully reserved products are marked as reserved.
+- Failed requests do not leave partially created orders.
+
+The final documentation will describe the transaction and concurrency safeguards used in the implementation.
+
+---
 
 ## Development Process
 
-The application is being developed incrementally using small Test-Driven Development cycles where appropriate.
-The basic development cycle is:
+The application is developed incrementally using GitHub Issues, milestones and small commits.
+
+Testable functionality follows a Test-Driven Development approach where appropriate.
+
+### Test-Driven Development
+
+The development cycle is:
 
 ```text
 RED → GREEN → REFACTOR
 ```
 
-1. Define an expected behaviour.
-2. Write an automated test for that behaviour.
-3. Run the test and confirm that it fails for the expected reason.
-4. Implement the minimum functionality required.
-5. Run the test and confirm that it passes.
-6. Refactor where appropriate while keeping the tests passing.
-7. Commit the completed behaviour to version control.
-   Development stages will be documented here as the application is implemented.
+**RED**
+
+1. Define the expected behaviour.
+2. Write an automated test.
+3. Run the test.
+4. Confirm that it fails for the expected reason.
+
+**GREEN**
+
+1. Implement the minimum functionality required.
+2. Run the test.
+3. Confirm that the test passes.
+
+**REFACTOR**
+
+1. Improve the implementation where appropriate.
+2. Preserve the expected behaviour.
+3. Run the relevant tests again.
+
+### Version Control
+
+Development changes are committed in small, meaningful stages.
+
+Tests and implementation may be committed separately to provide a clear development history.
+
+Where tests are added after implementation, they are treated as retrospective test coverage rather than presented as a completed RED phase.
+
+### Frontend Development
+
+Frontend functionality is reviewed against the Five Planes of UX.
+
+Django tests are used to verify rendered templates and application behaviour.
+
+JavaScript tests verify client-side functionality.
+
+Visual styling and responsive behaviour are also checked through manual browser testing.
+
+A successful Django template test does not by itself prove that the interface behaves correctly in a browser.
+
+### Development Milestones
+
+<!-- TODO: Add the final GitHub milestone names, descriptions and completion status. -->
+
+**Current Development Stage:** Frontend and User Experience.
+
+The current focus is responsive navigation, shared layout and page presentation.
 
 ---
 
 ## Features
 
-## Features will be documented as they are implemented and verified.
+This section will be expanded as functionality is implemented and verified.
 
-## Testing
+### Implemented / Under Verification
 
-Testing documentation will be expanded throughout development rather than added only after the application is complete.
-Planned testing includes:
+- Django models and relational data storage.
+- Product catalogue backend.
+- Category filtering functionality.
+- Product search functionality.
+- Product image storage using Cloudinary.
+- Default placeholder images.
+- Customer and reservation records.
+- Server-side reservation processing.
+- Client-side shopping cart.
+- JavaScript cart tests.
+- Shared Django base template.
+- Shared header and footer templates.
+- Bootstrap responsive navigation markup.
+- Automated tests for shared template assets.
+- Automated tests for navigation markup.
 
-- Django model tests.
-- Django view tests.
-- Form validation tests.
-- Business logic tests.
-- Reservation workflow tests.
-- Authentication and authorisation tests.
-- Manual user-flow testing.
-- Responsive testing.
-- Accessibility testing.
-- HTML validation.
-- CSS validation.
-- JavaScript linting.
-- Python code quality checks.
-- Lighthouse testing.
+### In Progress
 
-### Automated Testing
+- Custom navigation styling.
+- Responsive home page.
+- Responsive catalogue presentation.
+- Product detail page styling.
+- Cart and reservation form presentation.
+- Delivery, contact and FAQ page presentation.
+- Complete responsive and accessibility testing.
 
-Automated test evidence and instructions will be added as tests are implemented.
+### Optional Features
 
-### Manual Testing
+- Reservation confirmation email.
+- Featured koi carousel.
 
-## Manual testing results will be recorded as functionality is completed.
+Features will be moved into the implemented section only after they have been completed and verified.
 
-## Bugs
-
-Bugs discovered during development will be documented here with their cause, fix and retest result.
-
-### Known Bugs
-
-## No known bugs are currently documented.
-
-## Technologies Used
-
-### Main Technologies
-
-- Python
-- Django
-- PostgreSQL
-- HTML5
-- CSS3
-- JavaScript
-
-### Libraries
-
-- Bootstrap
-  Additional libraries will be documented if they are introduced.
-
-### Development Tools
-
-- Visual Studio Code
-- Git
-- GitHub
-- Chrome DevTools
+<!-- TODO: Add screenshots and descriptions of completed features. -->
 
 ---
 
-## Deployment
+## Testing
 
-Deployment instructions will be documented after the production environment has been configured.
-The final application will use a deployed Django application connected to a relational production database.
+Testing is performed throughout development.
 
-### Local Development
+Automated tests verify important application behaviour, while manual testing checks complete user journeys and visual presentation.
 
-Follow these steps to run Koi4Sale in a local development environment.
+Detailed test cases, expected and actual results, screenshots and bug retesting will be documented in a separate **TESTING.md** file.
 
-#### Installation
+### Automated Testing
 
-1. Clone the repository and navigate to the project directory:
+#### Django Tests
 
-   ```bash
-   git clone <repository-url>
-   cd <repository-directory>
-   ```
+Django tests cover:
 
-2. Create and activate a Python virtual environment:
+- Models.
+- Views.
+- Forms.
+- Business rules.
+- Reservation processing.
+- Authentication and authorisation.
+- Rendered template output.
 
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   ```
-
-3. Install the Python dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Create a `.env` file in the project root and configure the environment variables:
-
-   ```env
-   SECRET_KEY=your-local-development-secret-key
-
-   DATABASE_URL=postgresql://username:password@localhost:5432/database_name
-   ```
-
-   Replace the placeholder values with your local configuration.
-
-   The `.env` file contains sensitive configuration and must not be committed to version control.
-
-5. Apply database migrations:
-
-   ```bash
-   python manage.py migrate
-   ```
-
-6. Start the Django development server:
-
-   ```bash
-
-   DEBUG=True python3 manage.py runserver
-   ```
-
-   Django's debug mode is disabled by default. Setting `DEBUG=True` enables it only for the current command, without modifying `settings.py`.
-   The application will be available at `http://127.0.0.1:8000/`.
-
-#### Running Automated Tests
-
-Run Django tests:
+Run the Django test suite:
 
 ```bash
-python manage.py test
+python3 manage.py test
 ```
+
+Shared template tests are located in:
+
+```text
+tests/django/
+```
+
+Run the base template tests:
+
+```bash
+python3 manage.py test tests.django.test_base
+```
+
+Run the navigation tests:
+
+```bash
+python3 manage.py test tests.django.test_header
+```
+
+These tests verify rendered HTML and expected attributes.
+
+They do not establish that Bootstrap assets load successfully in a real browser or that responsive components behave correctly.
+
+#### JavaScript Tests
+
+Jest is used to test client-side cart functionality.
 
 Install JavaScript dependencies:
 
@@ -487,36 +931,280 @@ Run JavaScript tests:
 npm test
 ```
 
-#### Development and Production Environments
+### Manual Testing
 
-The project uses the same Django settings module for both development and production.
+Manual testing will cover:
 
-The `DEBUG` environment variable controls Django's debugging mode:
+- Navigation between pages.
+- Mobile navigation behaviour.
+- Product browsing.
+- Category filtering.
+- Product search.
+- Product details.
+- Cart interactions.
+- Reservation form submission.
+- Validation errors.
+- Reservation confirmation.
+- Unavailable product handling.
 
-- `DEBUG=True` enables debugging during local development.
-- `DEBUG=False` disables debugging for production.
+### Responsive Testing
 
-Debugging is disabled by default when the environment variable is not provided.
+The website will be tested at mobile, tablet and desktop viewport widths.
 
-Never enable Django debugging in production.
+Testing will verify:
 
-### Static Files
+- Layout adaptation.
+- Readable text.
+- Appropriate image scaling.
+- Accessible navigation.
+- Usable forms.
+- Absence of unintended horizontal scrolling.
+
+### Accessibility Testing
+
+Accessibility checks will include:
+
+- Keyboard navigation.
+- Focus visibility.
+- Image alternative text.
+- Form labels.
+- Colour contrast.
+- Semantic HTML.
+- Accessible navigation controls.
+
+### Code Validation and Quality
+
+Planned checks include:
+
+- HTML validation.
+- CSS validation.
+- JavaScript code quality.
+- Python code quality.
+- Browser compatibility.
+- Chrome DevTools Lighthouse.
+
+### Testing Evidence
+
+<!-- TODO: Add actual test results, screenshots, validator reports and browser coverage. -->
+
+---
+
+## Bugs
+
+Significant bugs discovered during development will be documented with:
+
+1. Description of the problem.
+2. Cause of the problem.
+3. Steps taken to resolve it.
+4. Retesting results.
+
+### Known Bugs
+
+<!-- TODO: Add verified bugs and fixes. -->
+
+---
+
+## Technologies Used
+
+### Languages and Frameworks
+
+- Python
+- Django
+- PostgreSQL
+- HTML5
+- CSS3
+- JavaScript
+- Bootstrap 5.3
+
+### Application and Infrastructure
+
+- Django Templates
+- Django ORM
+- Django Admin
+- Cloudinary
+- WhiteNoise
+- Gunicorn
+- Heroku
+
+### Testing Tools
+
+- Django Test Framework
+- Jest
+- Chrome DevTools
+- Lighthouse
+
+### Development Tools
+
+- Visual Studio Code
+- Git
+- GitHub
+- GitHub Issues
+- GitHub Milestones
+
+### Bootstrap
+
+Bootstrap 5.3 is loaded through a Content Delivery Network.
+
+The project does not require Bootstrap to be installed as a Python dependency.
+
+Bootstrap provides:
+
+- Responsive grid utilities.
+- Navigation components.
+- Collapsible mobile navigation.
+- Buttons and form styling.
+- Reusable layout utilities.
+
+Custom CSS is used to establish the visual identity of Koi4Sale.
+
+<!-- TODO: Add exact dependency versions from requirements.txt and package.json. -->
+
+---
+
+## Deployment
+
+**Live Website:** https://koi-for-sale-2e89f5c55c63.herokuapp.com/
+
+Koi4Sale is deployed on Heroku.
+
+The production environment uses a relational database, Cloudinary for uploaded images and WhiteNoise for static files.
+
+### Local Development
+
+Follow these steps to run the application locally.
+
+#### 1. Clone the Repository
+
+```bash
+git clone https://github.com/ShvetsViktor/koi-4-sale.git
+cd koi-4-sale
+```
+
+#### 2. Create a Virtual Environment
+
+```bash
+python3 -m venv .venv
+```
+
+Activate the environment:
+
+```bash
+source .venv/bin/activate
+```
+
+#### 3. Install Python Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+#### 4. Configure Environment Variables
+
+The application uses environment variables for sensitive configuration.
+
+Required values include:
+
+- Django secret key.
+- Database connection information.
+- Cloudinary credentials.
+
+Local configuration uses `env.py` according to the project's Django settings.
+
+Sensitive configuration must not be committed to Git.
+
+Production configuration is managed through Heroku Config Vars.
+
+#### 5. Apply Database Migrations
+
+```bash
+python3 manage.py migrate
+```
+
+#### 6. Start the Development Server
+
+```bash
+DEBUG=True python3 manage.py runserver
+```
+
+The application will be available at:
+
+`http://127.0.0.1:8000/`
+
+Django debugging is disabled by default.
+
+Setting `DEBUG=True` enables debugging for the current command without modifying the shared settings module.
+
+Debugging must remain disabled in production.
+
+#### 7. Run Automated Tests
+
+Django:
+
+```bash
+python3 manage.py test
+```
+
+JavaScript:
+
+```bash
+npm install
+npm test
+```
+
+### Production Deployment — Heroku
+
+The final deployment guide will document the exact steps used to deploy the application.
+
+The process includes:
+
+1. Creating a Heroku application.
+2. Configuring a production PostgreSQL database.
+3. Setting the required environment variables.
+4. Configuring production security settings.
+5. Installing application dependencies.
+6. Starting Gunicorn using the Procfile.
+7. Applying database migrations.
+8. Collecting static files.
+9. Verifying the deployed application.
+
+<!-- TODO: Add the complete, reproducible Heroku deployment instructions. -->
+
+### Development and Production Environments
+
+The application uses the same Django settings module for development and production.
+
+The `DEBUG` environment variable controls debugging behaviour.
+
+- `DEBUG=True` enables local debugging.
+- `DEBUG=False` disables debugging.
+- Debugging is disabled by default when the variable is not provided.
+
+Production credentials are stored in Heroku Config Vars.
+
+Sensitive configuration files are excluded from version control.
+
+### Static Files — WhiteNoise
 
 Koi4Sale uses Django's static files framework and WhiteNoise to serve static assets in production.
 
-Static files include CSS, JavaScript, favicons and default product images.
+Static assets include:
+
+- Custom CSS.
+- JavaScript.
+- Favicons.
+- Default product images.
 
 The project uses the following Django settings:
 
-- `STATIC_URL` defines the URL prefix for static assets.
-- `STATICFILES_DIRS` identifies the project's static files directory.
-- `STATIC_ROOT` specifies the directory where collected static files are stored.
-- `WhiteNoiseMiddleware` enables Django to serve static assets in production.
-- `CompressedManifestStaticFilesStorage` provides compressed and versioned static files.
+- `STATIC_URL` defines the URL prefix.
+- `STATICFILES_DIRS` identifies the source static directory.
+- `STATIC_ROOT` specifies the collection destination.
+- `WhiteNoiseMiddleware` enables static asset delivery.
+- `CompressedManifestStaticFilesStorage` provides compressed and versioned files.
 
-Static assets are referenced in Django templates using the `{% static %}` template tag.
+Static assets are referenced in templates using Django's `{% static %}` template tag.
 
-Before deployment, static files can be collected using:
+Collect static files using:
 
 ```bash
 python3 manage.py collectstatic --noinput
@@ -524,35 +1212,41 @@ python3 manage.py collectstatic --noinput
 
 During deployment, Heroku collects the static files for production use.
 
-WhiteNoise serves the collected files when `DEBUG=False`, without requiring a separate static file server.
+WhiteNoise serves collected files when `DEBUG=False`.
 
 The generated `staticfiles/` directory is excluded from version control.
 
+Bootstrap is loaded separately through a CDN.
+
 ### Product Image Storage — Cloudinary
 
-Koi4Sale uses Cloudinary for persistent storage and delivery of product images.
+Koi4Sale uses Cloudinary for persistent storage and delivery of uploaded product photographs.
 
-Heroku's filesystem is ephemeral, meaning files uploaded directly to the application filesystem cannot be relied upon to persist between deployments or dyno restarts.
+Heroku's filesystem is ephemeral, meaning uploaded files cannot be relied upon to persist between deployments or dyno restarts.
 
-Cloudinary provides external image storage, allowing uploaded product photographs to remain available independently of the application's deployment lifecycle.
+Cloudinary provides external image storage independent of the application filesystem.
 
-#### Configuration
+#### Cloudinary Configuration
 
-The project uses the Cloudinary Python SDK and Django integration.
+The application uses the Cloudinary Python SDK and Django integration.
 
-Cloudinary credentials are configured using the `CLOUDINARY_URL` environment variable.
+Credentials are configured using the `CLOUDINARY_URL` environment variable.
+
+Example format:
 
 ```text
 CLOUDINARY_URL=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
 ```
 
-The actual credentials are stored in local environment configuration and Heroku Config Vars. They are not committed to the repository.
+Actual credentials are stored in local configuration and Heroku Config Vars.
+
+They must not be committed to the repository.
 
 #### Product Images
 
 Product photographs are managed through the `ProductImage` model.
 
-Each image belongs to a specific `Product` through a foreign key relationship.
+Each image belongs to a specific product through a foreign key relationship.
 
 The image field uses Cloudinary's `CloudinaryField`:
 
@@ -563,17 +1257,19 @@ image = CloudinaryField(
 )
 ```
 
-Uploaded images are organised under the `koi4sale/products` path in Cloudinary.
+Uploaded images are organised under the configured Cloudinary folder.
 
-Each product can have multiple images, with one image optionally designated as the primary image.
+A product can have multiple photographs.
 
-The primary image is displayed in the product catalogue, while the product detail page displays the available product images.
+One image may be designated as the primary image.
+
+The primary image is used in the catalogue, while additional images can be displayed on the product detail page.
 
 #### Fallback Images
 
-Products without uploaded images display a default placeholder image.
+Products without uploaded photographs display a default placeholder.
 
-The fallback image is stored locally:
+The placeholder is stored at:
 
 ```text
 static/images/default.png
@@ -581,42 +1277,98 @@ static/images/default.png
 
 It is served through Django's static files configuration and WhiteNoise.
 
-The placeholder is displayed conditionally in Django templates and does not require a `ProductImage` database record.
-
-When an administrator uploads product photographs and selects a primary image, the uploaded photographs replace the placeholder in the relevant views.
+The fallback does not require a separate `ProductImage` database record.
 
 #### Production Behaviour
 
-Product images are delivered through Cloudinary rather than Heroku's filesystem.
+Uploaded photographs are delivered through Cloudinary rather than Heroku's filesystem.
 
-This ensures that images remain available after application redeployment or dyno restarts.
+This allows images to remain available after application redeployment or dyno restarts.
 
-Image uploads and retrieval have been tested in both local development and the deployed Heroku environment.
+Image upload and retrieval have been tested in local development and the deployed Heroku environment.
+
+---
 
 ## Attribution, Credits and Acknowledgements
 
-### Existing Koi4Sale Project
+### Original Koi4Sale Design
 
-The visual design and user experience of this Django project are based partly on the author's existing Koi4Sale website.
-The Django version is a new implementation and does not use the existing Next.js, React or TypeScript application as its application architecture.
+The author's previous Koi4Sale website, developed with Next.js, React and TypeScript, provides visual and UX inspiration.
 
-### Libraries and Tools
+The Django project is a separate implementation using server-rendered templates, Bootstrap and vanilla JavaScript.
 
-Libraries and external tools will be documented here as they are introduced.
+### Frameworks and Libraries
+
+- **Django** — Python web framework.
+- **Bootstrap 5.3** — responsive layout and interface components.
+- **Cloudinary** — persistent product image storage.
+- **WhiteNoise** — static asset delivery.
+- **Jest** — JavaScript testing.
 
 ### Code Attribution
 
 Custom application code is written and adapted for this project.
-External code, tutorials, libraries and other sources will be attributed where applicable.
 
-### Support and Learning Resources
+External code, tutorials, documentation, images and other resources will be attributed where applicable.
 
-## Resources used during development will be documented here.
+### Learning Resources
 
-## Repo Structure
+<!-- TODO: Add learning resources, external references and required acknowledgements. -->
 
-## The final repository structure will be documented after the initial Django project and applications have been created.
+---
+
+## Repository Structure
+
+The project is organised as follows:
+
+```text
+koi-4-sale/
+├── config/                 # Django project configuration
+├── orders/                 # Cart and reservation functionality
+├── products/               # Product catalogue and images
+├── static/                 # CSS, JavaScript and images
+├── templates/              # Django templates
+│   └── includes/           # Shared header and footer
+├── tests/                  # Shared tests
+│   └── django/             # Django template tests
+├── manage.py
+├── requirements.txt
+├── package.json
+├── Procfile
+├── README.md
+└── TESTING.md
+```
+
+The repository excludes local virtual environments, generated static files, database files and sensitive configuration.
+
+---
 
 ## Future Improvements
 
-Features intentionally excluded from the initial project scope may be documented here after the MVP has been completed.
+The following features may be considered after the MVP has been completed.
+
+### Advanced Search and Filtering
+
+Extend the existing catalogue search and category filtering with additional options such as size, price and other product characteristics.
+
+### Featured Koi Carousel
+
+Highlight selected products on the home page to improve product discovery.
+
+### Reservation Confirmation Email
+
+Send customers an email containing their reservation details and information about the next steps.
+
+### Improved Reservation Management
+
+Expand administrative functionality for managing reservation requests and customer communication.
+
+### Additional Automated Testing
+
+Introduce further browser-based tests to verify complete user journeys and responsive interactions.
+
+### Accessibility Improvements
+
+Continue refining keyboard navigation, contrast, form accessibility and usability based on testing results.
+
+These improvements are not considered part of the completed application unless they are implemented and verified.

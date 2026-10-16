@@ -3,7 +3,6 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import DetailView, TemplateView
-from django.conf import settings
 from django.db.models import Prefetch
 from django.contrib.staticfiles.storage import staticfiles_storage
 

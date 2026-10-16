@@ -12,6 +12,8 @@
         <div class="product-images">
             {% for image in product.images.all %}
             <img src="{{ image.image.url }}" alt="{{ product.name }}"></img>
+            {% empty %}
+            <img src="{% static 'images/default.png' %}" alt="No image available for {{ product.name }}"></img>
             {% endfor %}
         </div>
         <h1>{{ product.name }}</h1>

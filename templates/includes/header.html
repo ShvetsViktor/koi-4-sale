@@ -1,7 +1,65 @@
 <header>
-  <nav aria-label="Main navigation">
-    <a href="{% url 'home' %}">Koi4Sale</a>
-    <a href="{% url 'product_list' %}">Catalogue</a>
-    <a href="{% url 'cart' %}">Cart</a>
+  <nav
+    class="navbar navbar-expand-lg bg-body-tertiary"
+    aria-label="Main navigation"
+  >
+    <div class="container">
+
+      <!-- Brand -->
+      <a class="navbar-brand" href="{% url 'home' %}">
+        Koi4Sale
+      </a>
+
+      <!-- Mobile navigation toggle -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mainNavbar"
+        aria-controls="mainNavbar"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation links -->
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav ms-auto">
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+              href="{% url 'home' %}"
+              {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %}
+            >
+              Home
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.resolver_match.url_name == 'product_list' %}active{% endif %}"
+              href="{% url 'product_list' %}"
+              {% if request.resolver_match.url_name == 'product_list' %}aria-current="page"{% endif %}
+            >
+              Catalogue
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.resolver_match.url_name == 'cart' %}active{% endif %}"
+              href="{% url 'cart' %}"
+              {% if request.resolver_match.url_name == 'cart' %}aria-current="page"{% endif %}
+            >
+              Cart
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
+    </div>
   </nav>
 </header>

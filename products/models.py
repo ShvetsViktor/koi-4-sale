@@ -1,4 +1,5 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 
 class Category(models.Model):
@@ -52,7 +53,7 @@ class ProductImage(models.Model):
         related_name="images",
     )
 
-    image = models.ImageField(upload_to="products/")
+    image = CloudinaryField("image", folder="koi4sale/products")
     is_primary = models.BooleanField(default=False)
 
     class Meta:

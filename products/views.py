@@ -52,4 +52,4 @@ class ProductDetail(DetailView):
 class HomeView(TemplateView):
     """Display the homepage."""
 
-    template_name = "products/home.html"
+    template_name = "home.html"

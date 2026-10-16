@@ -37,7 +37,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=lo6z#-o6%hrszlj8u17i070&@vkhwzo!3y0^5*y=3mb$#6uez'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # Use an environment variable to control debugging without changing settings.py
 # between development and production environments.
@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cloudinary_storage',
+    'cloudinary',
     'products',
     "orders",
 ]

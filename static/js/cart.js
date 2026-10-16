@@ -96,7 +96,7 @@ function updateCartEmptyState() {
 }
 
 /**
- * Render shopping cart products with their names, prices and remove buttons.
+ * Render shopping cart products with images, names, prices and remove buttons.
  *
  * @param {object[]} products - Product details returned by Django.
  */
@@ -110,6 +110,13 @@ function renderCart(products) {
     const name = document.createElement('h2');
     const price = document.createElement('p');
     const removeButton = document.createElement('button');
+    const image = document.createElement('img');
+
+    image.src = product.image_url;
+    image.alt = product.name;
+    image.width = 150;
+    image.height = 150;
+    image.loading = 'lazy';
 
     name.textContent = product.name;
     price.textContent = `£${product.price}`;
@@ -127,7 +134,7 @@ function renderCart(products) {
       updateCartEmptyState();
     });
 
-    item.append(name, price, removeButton);
+    item.append(image, name, price, removeButton);
     cartItems.appendChild(item);
   });
 }

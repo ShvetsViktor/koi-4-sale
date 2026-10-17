@@ -1,10 +1,38 @@
-/* Global styles */
+/* Koi4Sale colour themes */
+[data-bs-theme='dark'] {
+  --koi-bg: #111827;
+  --koi-surface: #1f2937;
+  --koi-text: #ffffff;
+  --koi-text-muted: #9ca3af;
+  --koi-accent: #fe5a08;
+}
+
+[data-bs-theme='light'] {
+  --koi-bg: #ffffff;
+  --koi-surface: #f3f4f6;
+  --koi-text: #111827;
+  --koi-text-muted: #4b5563;
+  --koi-accent: #fe5a08;
+}
+
+/* Local Inter font */
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/InterVariable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --bs-body-font-family: 'Inter', Arial, sans-serif;
+}
 
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
+  background-color: var(--koi-bg);
+  color: var(--koi-text);
 }
 
 main {
-  padding: 1.5rem;
+  min-height: 70vh;
 }

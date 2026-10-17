@@ -1,6 +1,6 @@
 # Koi4Sale – Django Koi Reservation Website
 
-<!-- TODO: Add a responsive mockup of the completed application. -->
+<!-- mockup goes here -->
 
 **Live Website:** https://koi-for-sale-2e89f5c55c63.herokuapp.com/
 
@@ -1310,6 +1310,15 @@ The Django project is a separate implementation using server-rendered templates,
 Custom application code is written and adapted for this project.
 
 External code, tutorials, documentation, images and other resources will be attributed where applicable.
+
+### Fonts
+
+- **Inter** — designed by Rasmus Andersson and contributors.
+  Used for typography throughout the website.
+  The font is self-hosted in WOFF2 format and distributed
+  under the SIL Open Font License 1.1 (OFL-1.1).
+  Source: https://github.com/rsms/inter
+  License: [`LICENSE.txt`](static/fonts/LICENSE.txt)
 
 ### Learning Resources
 

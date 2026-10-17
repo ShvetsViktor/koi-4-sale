@@ -1,11 +1,52 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Home | Koi4Sale{% endblock %}
 
 {% block content %}
-    <section class="hero">
-        <h1>Premium Japanese Koi</h1>
-        <p>Discover beautiful Japanese koi and reserve your favourites.</p>
-        <a href="{% url 'product_list' %}">Explore Our Koi</a>
-    </section>
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container">
+    <div class="row">
+
+      <!-- Hero content -->
+      <div class="col-lg-5 hero-content">
+        <h1 id="hero-title">
+          Vibrant, Healthy Koi — Raised with Care at Home
+        </h1>
+
+        <p>
+          Discover healthy, vibrant koi fish raised with care in our
+          own backyard pond. Perfect for ponds and water gardens,
+          our home-bred koi are well-acclimated, easy to care for,
+          and ready to bring beauty and tranquility to your space.
+        </p>
+
+        <div class="d-flex flex-wrap align-items-center">
+          <a href="{% url 'product_list' %}" class="btn hero-btn-primary">
+            Shop Koi
+          </a>
+
+          <!-- Add Shipping Info link when delivery URL is available -->
+        </div>
+      </div>
+
+      <!-- Desktop spacing -->
+      <div class="d-none d-lg-block col-lg-1"></div>
+
+      <!-- Hero image -->
+      <div class="col-lg-6 hero-image">
+        <div class="hero-image-wrapper">
+          <img
+            src="{% static 'images/hero-home.jpg' %}"
+            alt="Orange Japanese koi swimming in a pond"
+            width="1200"
+            height="800"
+            fetchpriority="high"
+          >
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 {% endblock %}

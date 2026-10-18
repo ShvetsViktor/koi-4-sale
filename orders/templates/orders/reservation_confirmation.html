@@ -25,14 +25,14 @@
             {% for item in order.items.all %}
             <div class="reservation-item d-flex align-items-center gap-3 py-3">
 
-              {% with image=item.product.images.first %}
-              <img
-                src="{% if image %}{{ image.image.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
-                alt="{{ item.product.name }}"
-                class="reservation-item-image"
-                width="64"
-                height="64"
-              >
+              {% with image=item.product.primary_image %}
+                <img
+                  src="{% if image %}{{ image.image.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
+                  alt="{{ item.product.name }}"
+                  class="reservation-item-image"
+                  width="64"
+                  height="64"
+                >
               {% endwith %}
 
               <span class="flex-grow-1">{{ item.product.name }}</span>

@@ -71,19 +71,13 @@
         <article class="card h-100">
 
           <a href="{% url 'product_detail' product.pk %}" aria-label="View {{ product.name }} details">
-            {% for image in product.primary_images %}
-            <img
-              src="{{ image.image.url }}"
-              class="card-img-top product-image"
-              alt="{{ product.name }}"
-            >
-            {% empty %}
-            <img
-              src="{% static 'images/default.png' %}"
-              class="card-img-top product-image"
-              alt="No image available for {{ product.name }}"
-            >
-            {% endfor %}
+            {% with image=product.primary_image %}
+              <img
+                src="{% if image %}{{ image.image.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
+                class="card-img-top product-image"
+                alt="{% if image %}{{ product.name }}{% else %}No image available for {{ product.name }}{% endif %}"
+              >
+            {% endwith %}
           </a>
 
           <div class="card-body">

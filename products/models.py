@@ -42,6 +42,10 @@ class Product(models.Model):
     class Meta:
         ordering = ["-created_on"]
 
+    @property
+    def primary_image(self):
+        return self.images.filter(is_primary=True).first()
+
     def __str__(self):
         return self.name
 

@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from cloudinary import CloudinaryImage
@@ -6,6 +6,21 @@ from django.db import IntegrityError, transaction
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 from .models import Product, ProductImage, Category
+
+
+class Custom404PageTests(TestCase):
+    """Test the custom page-not-found response."""
+
+    @override_settings(DEBUG=False)
+    def test_unknown_url_displays_custom_404_page(self):
+        """Unknown URLs return the custom 404 page."""
+
+        response = self.client.get("/non-existent-page/")
+
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "404.html")
+        self.assertContains(response, "Page Not Found", status_code=404)
+        self.assertContains(response, "Back to Home", status_code=404)
 
 
 class ProductAdminTests(TestCase):

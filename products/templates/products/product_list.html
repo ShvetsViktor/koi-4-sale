@@ -4,58 +4,135 @@
 {% block title %}Catalogue | Koi4Sale{% endblock %}
 
 {% block content %}
-      {% include "includes/breadcrumbs.html" with current_label="Catalogue" only %}
-      
-      <h1>Available Koi</h1>
-      <form method="get" action="{% url 'product_list' %}" role="search">
-        <label for="search">Search koi</label>
-        <input type="search" id="search" name="q" value="{{ request.GET.q }}" placeholder="Search by name or variety" />
+<section class="catalogue" aria-labelledby="catalogue-title">
+  <div class="container">
+
+    {% include "includes/breadcrumbs.html" with current_label="Catalogue" only %}
+
+    <h1 id="catalogue-title">Available Koi</h1>
+
+    <!-- Search -->
+    <form
+      method="get"
+      action="{% url 'product_list' %}"
+      role="search"
+      class="mb-4"
+    >
+      <label for="search" class="visually-hidden">
+        Search koi
+      </label>
+
+      <div class="input-group">
+        <input
+          type="search"
+          class="form-control"
+          id="search"
+          name="q"
+          value="{{ request.GET.q }}"
+          placeholder="Search by name or variety"
+        >
 
         {% if request.GET.category %}
-        <input type="hidden" name="category" value="{{ request.GET.category }}" />
+        <input
+          type="hidden"
+          name="category"
+          value="{{ request.GET.category }}"
+        >
         {% endif %}
 
-        <button type="submit">Search</button>
-      </form>
-      <nav aria-label="Filter koi by variety">
-        <a href="{% url 'product_list' %}">All Koi</a>
+        <button class="btn btn-primary" type="submit">
+          Search
+        </button>
+      </div>
+    </form>
 
-        {% for category in categories %}
-        <a href="?category={{ category.pk }}"> {{ category.name }} </a>
-        {% endfor %}
-      </nav>
+    <!-- Category filters -->
+    <nav aria-label="Filter koi by variety" class="d-flex flex-wrap gap-3 mb-4">
+      <a href="{% url 'product_list' %}">All Koi</a>
 
-      <section>
-        {% for product in products %}
-        <article>
+      {% for category in categories %}
+      <a href="?category={{ category.pk }}">
+        {{ category.name }}
+      </a>
+      {% endfor %}
+    </nav>
+
+    <!-- Product grid -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+
+      {% for product in products %}
+      <div class="col">
+        <article class="card h-100">
+
           {% for image in product.primary_images %}
-          <img src="{{ image.image.url }}" alt="{{ product.name }}" /></img>
+          <img
+            src="{{ image.image.url }}"
+            class="card-img-top"
+            alt="{{ product.name }}"
+          >
           {% empty %}
-          <img src="{% static 'images/default.png' %}" alt="No image available for {{ product.name }}"></img>
+          <img
+            src="{% static 'images/default.png' %}"
+            class="card-img-top"
+            alt="No image available for {{ product.name }}"
+          >
           {% endfor %}
 
-          <a href="{% url 'product_detail' product.pk %}">
-            <h2>{{ product.name }}</h2>
-          </a>
-          <p>Variety: {{ product.category.name }}</p>
-          <p>Size: {{ product.size }} cm</p>
-          <p>Age: {{ product.age }} years</p>
-          <p>Price: £{{ product.price }}</p>
-          <button type="button" data-product-id="{{ product.pk }}">Add to Cart</button>
+          <div class="card-body">
+            <h2 class="card-title h5">
+              <a href="{% url 'product_detail' product.pk %}">
+                {{ product.name }}
+              </a>
+            </h2>
+
+            <p class="card-text">
+              Variety: {{ product.category.name }}
+            </p>
+
+            <p class="card-text">
+              Size: {{ product.size }} cm
+            </p>
+
+            <p class="card-text">
+              Age: {{ product.age }} years
+            </p>
+
+            <p class="card-text fw-semibold">
+              £{{ product.price }}
+            </p>
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-product-id="{{ product.pk }}"
+            >
+              Add to Cart
+            </button>
+          </div>
+
         </article>
-        {% empty %} {% if request.GET.q %}
+      </div>
+
+      {% empty %}
+      <div class="col-12">
+        {% if request.GET.q %}
         <p>No koi found matching your search.</p>
         {% elif request.GET.category %}
         <p>No koi available in this category.</p>
         {% else %}
         <p>No koi are currently available.</p>
-        {% endif %} {% endfor %}
-      </section>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'js/cart.js' %}"></script>
-    <script>
-      initCartButtons();
-    </script>
+  <script src="{% static 'js/cart.js' %}"></script>
+  <script>
+    initCartButtons();
+  </script>
 {% endblock %}

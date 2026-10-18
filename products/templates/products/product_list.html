@@ -72,19 +72,21 @@
       <div class="col">
         <article class="card h-100">
 
-          {% for image in product.primary_images %}
-          <img
-            src="{{ image.image.url }}"
-            class="card-img-top"
-            alt="{{ product.name }}"
-          >
-          {% empty %}
-          <img
-            src="{% static 'images/default.png' %}"
-            class="card-img-top"
-            alt="No image available for {{ product.name }}"
-          >
-          {% endfor %}
+          <a href="{% url 'product_detail' product.pk %}" aria-label="View {{ product.name }} details">
+            {% for image in product.primary_images %}
+            <img
+              src="{{ image.image.url }}"
+              class="card-img-top product-image"
+              alt="{{ product.name }}"
+            >
+            {% empty %}
+            <img
+              src="{% static 'images/default.png' %}"
+              class="card-img-top product-image"
+              alt="No image available for {{ product.name }}"
+            >
+            {% endfor %}
+          </a>
 
           <div class="card-body">
             <h2 class="card-title h5">

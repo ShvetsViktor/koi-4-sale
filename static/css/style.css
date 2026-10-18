@@ -152,12 +152,12 @@ main {
 }
 
 /* Product links */
-.product-card a {
+.catalogue .card-title a {
   color: var(--koi-text);
   text-decoration: none;
 }
 
-.product-card a:hover {
+.catalogue .card-title a:hover {
   color: var(--koi-accent);
 }
 
@@ -243,11 +243,15 @@ main {
 }
 
 .product-detail-image {
+  border-radius: 8px;
+}
+
+/* Product images */
+.product-image {
   display: block;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 8px;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
   background-color: var(--koi-surface);
 }
 

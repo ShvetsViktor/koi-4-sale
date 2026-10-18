@@ -19,14 +19,14 @@
             <img
               src="{{ image.image.url }}"
               alt="{{ product.name }}"
-              class="product-detail-image"
+              class="product-detail-image product-image"
               {% if not forloop.first %}loading="lazy"{% endif %}
             >
           {% empty %}
             <img
               src="{% static 'images/default.png' %}"
               alt="No image available for {{ product.name }}"
-              class="product-detail-image"
+              class="product-detail-image product-image"
             >
           {% endfor %}
         </div>

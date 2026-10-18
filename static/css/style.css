@@ -216,6 +216,11 @@ main {
   object-fit: cover;
 }
 
+/* Catalogue */
+.catalogue {
+  padding-block: 32px 80px;
+}
+
 /* Category filters */
 .category-filters a {
   color: var(--koi-text-muted);

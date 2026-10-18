@@ -4,22 +4,70 @@
 {% block title %}Reservation Confirmation | Koi4Sale{% endblock %}
 
 {% block content %}
-<main>
-  <h1>Reservation #{{ order.pk }}</h1>
+<section class="reservation-confirmation" aria-labelledby="confirmation-title">
+  <div class="container">
 
-  <p>Your reservation has been successfully submitted!</p>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
 
-  <h2>Reservation Summary</h2>
+        <h1 id="confirmation-title" class="mb-3">
+          Reservation #{{ order.pk }}
+        </h1>
 
-  <ul>
-    {% for item in order.items.all %}
-    <li>{{ item.product.name }} — £{{ item.price }}</li>
-    {% endfor %}
-  </ul>
+        <p class="confirmation-message mb-4" role="status">
+          Your reservation request has been successfully submitted!
+        </p>
 
-  <p><strong>Total: £{{ order.total_price }}</strong></p>
-</main>
+        <div class="confirmation-summary">
+          <h2 class="h4 mb-4">Reservation Summary</h2>
 
+          <ul class="list-unstyled mb-4">
+            {% for item in order.items.all %}
+            <div class="reservation-item d-flex align-items-center gap-3 py-3">
+
+              {% with image=item.product.images.first %}
+              <img
+                src="{% if image %}{{ image.image.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
+                alt="{{ item.product.name }}"
+                class="reservation-item-image"
+                width="64"
+                height="64"
+              >
+              {% endwith %}
+
+              <span class="flex-grow-1">{{ item.product.name }}</span>
+
+              <span class="fw-semibold text-nowrap">
+                £{{ item.price }}
+              </span>
+
+            </div>
+            {% endfor %}
+          </ul>
+
+          <div class="confirmation-total">
+            <span>Total</span>
+            <span>£{{ order.total_price }}</span>
+          </div>
+        </div>
+
+        <p class="confirmation-note mt-4">
+          Your reservation request has been received.
+          Please note that no payment has been taken.
+        </p>
+
+        <a href="{% url 'product_list' %}" class="btn btn-primary mt-3">
+          Back to Catalogue
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
 <script src="{% static 'js/cart.js' %}"></script>
 <script>
   clearCart();

@@ -275,6 +275,60 @@ main {
   margin-top: auto;
 }
 
+/* Reservation confirmation */
+.reservation-confirmation {
+  padding-block: 48px 80px;
+}
+
+.confirmation-message {
+  color: var(--koi-accent);
+  font-weight: 500;
+}
+
+.confirmation-summary {
+  padding: 24px;
+  background-color: var(--koi-surface);
+  border-radius: 8px;
+}
+
+.confirmation-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--koi-bg);
+}
+
+.confirmation-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.confirmation-note {
+  color: var(--koi-text-muted);
+}
+
+.reservation-confirmation .btn-primary {
+  background-color: var(--koi-accent);
+  border-color: var(--koi-accent);
+}
+
+.reservation-confirmation .btn-primary:hover {
+  background-color: #e64f07;
+  border-color: #e64f07;
+}
+
+.reservation-item-image {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
 /* Footer */
 .site-footer {
   padding-block: 32px;

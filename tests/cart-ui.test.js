@@ -38,7 +38,7 @@ describe('Shopping Cart UI', () => {
     initCartButtons();
     button.click();
 
-    expect(button.textContent).toBe('Added to Cart');
+    expect(button.textContent).toBe('✓ Added to Cart');
   });
 
   test('shows Added to Cart for products already in the cart', () => {
@@ -48,6 +48,6 @@ describe('Shopping Cart UI', () => {
 
     const button = document.querySelector('[data-product-id="1"]');
 
-    expect(button.textContent).toBe('Added to Cart');
+    expect(button.textContent).toBe('✓ Added to Cart');
   });
 });

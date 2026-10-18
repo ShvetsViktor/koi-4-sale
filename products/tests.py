@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from cloudinary import CloudinaryImage
+from django.db import IntegrityError, transaction
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 from .models import Product, ProductImage, Category
 
@@ -195,6 +197,16 @@ class ProductCatalogueTests(TestCase):
         self.assertContains(
             response,
             f'href="{product_url}"'
+        )
+
+    def test_catalogue_displays_fallback_image(self):
+        """Display a placeholder when a product has no primary image."""
+
+        response = self.client.get(reverse("product_list"))
+
+        self.assertContains(
+            response,
+            staticfiles_storage.url("images/default.png"),
         )
 
 
@@ -491,3 +503,56 @@ class HomePageTests(TestCase):
             'class="navbar-brand" href="/" aria-label="Koi4Sale home"'
         )
         self.assertContains(response, 'alt="Koi4Sale"')
+
+
+class ProductPrimaryImageTests(TestCase):
+    """Test primary product image selection and constraints."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.category = Category.objects.create(name="Kohaku")
+        cls.product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=cls.category,
+            price=250.00,
+            size=35,
+            age=2,
+        )
+
+    def test_primary_image_property(self):
+        """Return the primary image or None when it is missing."""
+
+        self.assertIsNone(self.product.primary_image)
+
+        ProductImage.objects.create(
+            product=self.product,
+            image="products/secondary",
+            is_primary=False,
+        )
+
+        self.assertIsNone(self.product.primary_image)
+
+        primary = ProductImage.objects.create(
+            product=self.product,
+            image="products/primary",
+            is_primary=True,
+        )
+
+        self.assertEqual(self.product.primary_image, primary)
+
+    def test_only_one_primary_image_per_product(self):
+        """Prevent multiple primary images for the same product."""
+
+        ProductImage.objects.create(
+            product=self.product,
+            image="products/primary",
+            is_primary=True,
+        )
+
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                ProductImage.objects.create(
+                    product=self.product,
+                    image="products/another_primary",
+                    is_primary=True,
+                )

@@ -4,6 +4,7 @@ from django.contrib.admin.sites import AdminSite
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.test import TestCase
 from django.urls import reverse
+from cloudinary import CloudinaryImage
 
 from products.models import Category, Product, ProductImage
 
@@ -402,6 +403,8 @@ class ReservationConfirmationTests(TestCase):
     """Tests for the reservation confirmation page."""
 
     def setUp(self):
+        self.category = Category.objects.create(name="Kohaku")
+
         self.order = Order.objects.create(
             customer_name="John Smith",
             email="john@example.com",
@@ -442,6 +445,61 @@ class ReservationConfirmationTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+    def test_confirmation_displays_primary_image(self):
+        """Display the reserved product's primary image."""
+
+        product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=self.category,
+            price=250.00,
+            size=35,
+            age=2,
+        )
+
+        OrderItem.objects.create(
+            order=self.order,
+            product=product,
+            price=product.price,
+        )
+
+        primary_image = ProductImage.objects.create(
+            product=product,
+            image=CloudinaryImage("products/test_primary"),
+            is_primary=True,
+        )
+
+        response = self.client.get(
+            reverse("reservation_confirmation", args=[self.order.pk])
+        )
+
+        self.assertContains(response, primary_image.image.url)
+
+    def test_confirmation_displays_fallback_image(self):
+        """Display a placeholder when the product has no primary image."""
+
+        product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=self.category,
+            price=250.00,
+            size=35,
+            age=2,
+        )
+
+        OrderItem.objects.create(
+            order=self.order,
+            product=product,
+            price=product.price,
+        )
+
+        response = self.client.get(
+            reverse("reservation_confirmation", args=[self.order.pk])
+        )
+
+        self.assertContains(
+            response,
+            staticfiles_storage.url("images/default.png"),
+        )
 
 
 class OrderAdminTests(TestCase):

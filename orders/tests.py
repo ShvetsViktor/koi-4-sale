@@ -155,6 +155,73 @@ class ReservationFormTests(TestCase):
         self.assertNotIn("status", form.fields)
         self.assertNotIn("total_price", form.fields)
 
+    def test_phone_rejects_letters(self):
+        """Phone numbers containing letters should be rejected."""
+
+        form = ReservationForm(
+            data={
+                "customer_name": "John Smith",
+                "email": "john@example.com",
+                "phone": "abc123456",
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("phone", form.errors)
+
+    def test_phone_accepts_valid_uk_number(self):
+        """Accept a valid UK phone number."""
+        form = ReservationForm(data={
+            "customer_name": "John Smith",
+            "email": "john@example.com",
+            "phone": "07123456789",
+        })
+
+        self.assertTrue(form.is_valid())
+
+    def test_phone_accepts_international_number(self):
+        """Accept an international number with spaces and a leading +."""
+        form = ReservationForm(data={
+            "customer_name": "John Smith",
+            "email": "john@example.com",
+            "phone": "+44 7123 456789",
+        })
+
+        self.assertTrue(form.is_valid())
+
+    def test_phone_rejects_short_number(self):
+        """Reject phone numbers containing fewer than 7 digits."""
+        form = ReservationForm(data={
+            "customer_name": "John Smith",
+            "email": "john@example.com",
+            "phone": "123456",
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("phone", form.errors)
+
+    def test_phone_rejects_long_number(self):
+        """Reject phone numbers containing more than 15 digits."""
+        form = ReservationForm(data={
+            "customer_name": "John Smith",
+            "email": "john@example.com",
+            "phone": "1234567890123456",
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("phone", form.errors)
+
+    def test_phone_rejects_special_characters(self):
+        """Reject phone numbers containing special characters."""
+        form = ReservationForm(data={
+            "customer_name": "John Smith",
+            "email": "john@example.com",
+            "phone": "07123-456789",
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("phone", form.errors)
+
 
 class ReservationViewTests(TestCase):
     """Tests for the reservation submission workflow."""

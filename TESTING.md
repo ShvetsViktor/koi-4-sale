@@ -98,6 +98,32 @@ The following examples demonstrate the validation rules:
 | `1234567890123456` | Rejected        | PASS   |
 | `07123-456789`     | Rejected        | PASS   |
 
+### Contact Page
+
+The Contact page provides customers with a way to contact Koi4Sale
+regarding product availability, reservations, and delivery.
+
+| Test                    | Expected Result                                  | Result |
+| ----------------------- | ------------------------------------------------ | ------ |
+| Open Contact page       | Page loads successfully                          | PASS   |
+| Contact navigation link | Opens the Contact page                           | PASS   |
+| Active navigation state | Contact link is highlighted                      | PASS   |
+| Email address link      | Opens the default email application              | PASS   |
+| Send an Email button    | Opens the default email application              | PASS   |
+| Responsive layout       | Content displays correctly on mobile and desktop | PASS   |
+| Keyboard navigation     | Interactive elements are keyboard accessible     | PASS   |
+
+**Automated testing:**
+
+- Contact page returns HTTP 200.
+- Correct Django template is rendered.
+- Contact page heading is displayed.
+- Contact information and email link are present.
+
+**Test command:**
+
+`python3 manage.py test tests.django.test_contact`
+
 ### Manual Testing
 
 | Test                       | Expected Result                                | Actual Result                    | Status  |

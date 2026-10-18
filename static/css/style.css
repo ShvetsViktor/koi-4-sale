@@ -568,6 +568,13 @@ main {
   padding-bottom: 3rem;
 }
 
+/* Contact page */
+
+.contact-details {
+  background-color: var(--koi-surface);
+  border: 1px solid var(--bs-border-color);
+}
+
 @media (max-width: 1199.98px) {
   .delivery-hero {
     padding-top: 2rem;

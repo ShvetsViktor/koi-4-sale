@@ -63,16 +63,20 @@ main {
 }
 
 /* Breadcrumbs */
-.breadcrumb a {
+.breadcrumbs {
+  color: var(--koi-text-muted);
+}
+
+.breadcrumbs a {
   color: var(--koi-text-muted);
   text-decoration: none;
 }
 
-.breadcrumb a:hover {
+.breadcrumbs a:hover {
   color: var(--koi-accent);
 }
 
-.breadcrumb-item.active {
+.breadcrumbs [aria-current='page'] {
   color: var(--koi-text);
 }
 

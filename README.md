@@ -147,24 +147,25 @@ The project uses **MoSCoW prioritisation** to distinguish essential functionalit
 
 ### MoSCoW Prioritisation
 
-| User Story                     | Priority    | Purpose                                                   |
-| ------------------------------ | ----------- | --------------------------------------------------------- |
-| Browse Available Koi           | Must Have   | Display koi available for reservation.                    |
-| View Koi Details               | Must Have   | Provide detailed product information and photographs.     |
-| Filter Koi by Category         | Must Have   | Allow visitors to browse koi by category.                 |
-| Manage Shopping Cart           | Must Have   | Allow visitors to manage selected koi.                    |
-| Submit a Reservation Request   | Must Have   | Process customer reservation requests.                    |
-| Prevent Duplicate Reservations | Must Have   | Prevent unavailable koi from being reserved again.        |
-| Manage Products                | Must Have   | Provide authenticated product administration.             |
-| Manage Orders                  | Must Have   | Provide authenticated reservation management.             |
-| Responsive Navigation          | Must Have   | Provide accessible navigation across screen sizes.        |
-| Responsive Catalogue           | Must Have   | Display product cards appropriately on different devices. |
-| Delivery Information           | Should Have | Explain delivery arrangements and conditions.             |
-| Contact Information            | Should Have | Provide contact details and enquiry options.              |
-| Search Koi                     | Should Have | Help visitors find koi using search terms.                |
-| Frequently Asked Questions     | Could Have  | Answer common customer questions.                         |
-| Reservation Confirmation Email | Could Have  | Send customers confirmation of their reservation request. |
-| Featured Koi Carousel          | Could Have  | Highlight selected products on the home page.             |
+| User Story                     | Priority    | Purpose                                                                                      |
+| ------------------------------ | ----------- | -------------------------------------------------------------------------------------------- |
+| Browse Available Koi           | Must Have   | Display koi available for reservation.                                                       |
+| View Koi Details               | Must Have   | Provide detailed product information and photographs.                                        |
+| Filter Koi by Category         | Must Have   | Allow visitors to browse koi by category.                                                    |
+| Manage Shopping Cart           | Must Have   | Allow visitors to manage selected koi.                                                       |
+| Shopping Cart Indicator        | Should Have | Display the number of selected products and provide quick access to the cart across devices. |
+| Submit a Reservation Request   | Must Have   | Process customer reservation requests.                                                       |
+| Prevent Duplicate Reservations | Must Have   | Prevent unavailable koi from being reserved again.                                           |
+| Manage Products                | Must Have   | Provide authenticated product administration.                                                |
+| Manage Orders                  | Must Have   | Provide authenticated reservation management.                                                |
+| Responsive Navigation          | Must Have   | Provide accessible navigation across screen sizes.                                           |
+| Responsive Catalogue           | Must Have   | Display product cards appropriately on different devices.                                    |
+| Delivery Information           | Should Have | Explain delivery arrangements and conditions.                                                |
+| Contact Information            | Should Have | Provide contact details and enquiry options.                                                 |
+| Search Koi                     | Should Have | Help visitors find koi using search terms.                                                   |
+| Frequently Asked Questions     | Could Have  | Answer common customer questions.                                                            |
+| Reservation Confirmation Email | Could Have  | Send customers confirmation of their reservation request.                                    |
+| Featured Koi Carousel          | Could Have  | Highlight selected products on the home page.                                                |
 
 ### Core User Stories
 
@@ -312,6 +313,20 @@ As a **visitor**, I want to contact the seller so that I can ask questions befor
 - Any contact form includes appropriate validation and feedback.
 
 ### Additional User Stories
+
+#### Shopping Cart Indicator
+
+As a **visitor**, I want to see how many koi are in my shopping cart without opening it so that I can keep track of my selections while browsing.
+
+**Acceptance Criteria**
+
+- The header displays the number of products currently in the cart.
+- The indicator updates immediately when products are added or removed.
+- The indicator is hidden when the cart is empty.
+- The cart icon remains visible on mobile devices when the navigation menu is collapsed.
+- The cart icon provides direct access to the shopping cart.
+- The indicator remains accurate after reloading the page.
+- The cart indicator is accessible on mobile and desktop devices.
 
 #### Search Koi
 
@@ -571,17 +586,16 @@ Wireframes will be used to document the layout of important pages.
 
 - The logo appears on the left.
 - Navigation links appear horizontally on the right.
-- The cart is accessible from the header.
+- A shopping cart icon with an item counter provides direct access to the cart.
 - A hamburger menu is not displayed on desktop.
 
 **Mobile**
 
 - The brand logo remains visible on the left.
+- A shopping cart icon remains visible even when the navigation menu is collapsed.
+- The cart counter displays the number of selected products.
 - A hamburger button opens the collapsed navigation.
-- Navigation links include Home, Catalogue and Cart.
 - Navigation links remain readable and easy to select.
-
-The current page should be visually identifiable and communicated to assistive technologies.
 
 #### Shared Footer
 
@@ -863,6 +877,28 @@ Visual styling and responsive behaviour are also checked through manual browser 
 
 A successful Django template test does not by itself prove that the interface behaves correctly in a browser.
 
+#### Unplanned UX Improvements
+
+During responsive testing, an additional usability issue was identified:
+the shopping cart link was hidden inside the collapsed mobile navigation,
+making it difficult for visitors to see whether products had been added.
+
+To address this issue, a shopping cart indicator was introduced as an
+additional Should Have feature.
+
+The implementation uses:
+
+- A Bootstrap Icons `cart3` SVG icon in the header.
+- A counter showing the number of products stored in `localStorage`.
+- JavaScript to update the counter when cart contents change.
+- CSS positioning to display the counter above the cart icon.
+- Responsive navigation that keeps the cart accessible on mobile devices.
+
+The same cart indicator is used on desktop and mobile.
+
+This improvement was added during development in response to usability
+testing rather than being part of the original project scope.
+
 ### Reusable Frontend Components
 
 The frontend uses reusable Django template components to maintain
@@ -909,6 +945,9 @@ This section will be expanded as functionality is implemented and verified.
 - Customer and reservation records.
 - Server-side reservation processing.
 - Client-side shopping cart.
+- Responsive shopping cart icon with a live item counter.
+- Persistent cart count based on browser localStorage.
+- Direct access to the cart from the mobile header without opening the navigation menu.
 - JavaScript cart tests.
 - Shared Django base template.
 - Responsive header with custom SVG branding.
@@ -1406,13 +1445,13 @@ External code, tutorials, documentation, images and other resources will be attr
   Source: https://github.com/rsms/inter
   License: [`LICENSE.txt`](static/fonts/LICENSE.txt)
 
+### Icons
+
+- **Bootstrap Icons** — The `cart3` SVG icon used in the responsive navigation is provided by Bootstrap Icons and licensed under the MIT License. [Bootstrap Icons](https://icons.getbootstrap.com/icons/cart3/).
+
 ### Graphics
 
 - [Photopea](https://www.photopea.com/) — used to edit SVG graphics.
-
-### Learning Resources
-
-<!-- TODO: Add learning resources, external references and required acknowledgements. -->
 
 ---
 

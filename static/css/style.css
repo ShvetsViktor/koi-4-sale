@@ -202,36 +202,6 @@ main {
 .cart-page .btn-primary:hover {
   background-color: #e64f07;
   border-color: #e64f07;
-} /* Shopping cart */
-.cart-page {
-  padding-block: 32px 80px;
-}
-
-.reservation-form {
-  padding: 24px;
-  background-color: var(--koi-surface);
-  border-radius: 8px;
-}
-
-.cart-page .form-control {
-  background-color: var(--koi-bg);
-  color: var(--koi-text);
-  border: 1px solid var(--koi-text-muted);
-}
-
-.cart-page .form-control:focus {
-  border-color: var(--koi-accent);
-  box-shadow: 0 0 0 0.2rem rgb(254 90 8 / 20%);
-}
-
-.cart-page .btn-primary {
-  background-color: var(--koi-accent);
-  border-color: var(--koi-accent);
-}
-
-.cart-page .btn-primary:hover {
-  background-color: #e64f07;
-  border-color: #e64f07;
 }
 
 /* Cart items */
@@ -299,6 +269,14 @@ main {
   border-bottom: 1px solid var(--koi-bg);
 }
 
+.reservation-item-image {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
 .confirmation-total {
   display: flex;
   justify-content: space-between;
@@ -319,14 +297,6 @@ main {
 .reservation-confirmation .btn-primary:hover {
   background-color: #e64f07;
   border-color: #e64f07;
-}
-
-.reservation-item-image {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 8px;
-  flex-shrink: 0;
 }
 
 /* Footer */

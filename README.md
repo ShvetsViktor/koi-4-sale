@@ -1,6 +1,6 @@
-# Koi4Sale – Django Koi Reservation Website
+# Koi4Sale – Japanese Koi Reservation Website
 
-<!-- TODO: Add responsive website mockup. -->
+![Koi4Sale Responsive Website Mockup](assets/readme/images/apple-responsive-devices-mockup.png)
 
 **Live Website:** https://koi-for-sale-2e89f5c55c63.herokuapp.com/
 
@@ -196,6 +196,8 @@ As a **visitor**, I want to browse currently available koi so that I can see whi
 - Each product provides a link to its detail page.
 - An empty catalogue displays a useful message.
 
+![Browse Available Koi](assets/readme/screenshots/us01-browse-koi.png)
+
 #### View Koi Details
 
 As a **visitor**, I want to view photographs and detailed information about an individual koi so that I can decide whether to reserve it.
@@ -207,6 +209,8 @@ As a **visitor**, I want to view photographs and detailed information about an i
 - Important characteristics are displayed where recorded.
 - Available koi can be added to the cart.
 - Invalid product URLs return an appropriate 404 response.
+
+![View Koi Details](assets/readme/screenshots/us02-koi-details.png)
 
 #### Filter Koi by Category
 
@@ -220,6 +224,8 @@ As a **visitor**, I want to filter koi by category so that I can browse fish bel
 - Visitors can return to the complete available catalogue.
 - An appropriate message is displayed when a category contains no available products.
 
+![Filter Koi by Category](assets/readme/screenshots/us03-filter-koi.png)
+
 #### Manage Shopping Cart
 
 As a **visitor**, I want to add and remove koi from my shopping cart so that I can prepare a reservation request.
@@ -232,6 +238,8 @@ As a **visitor**, I want to add and remove koi from my shopping cart so that I c
 - The cart displays selected products, images and prices.
 - The total price is calculated and displayed.
 - Products can be removed without creating an account.
+
+![Manage Shopping Cart](assets/readme/screenshots/us06-shopping-cart.png)
 
 #### Submit a Reservation Request
 
@@ -247,6 +255,8 @@ As a **customer**, I want to submit my contact details and selected koi so that 
 - Successfully reserved products change from `available` to `reserved`.
 - Confirmation explains that a reservation request has been received.
 
+![Submit a Reservation Request](assets/readme/screenshots/us08-reservation.png)
+
 #### Prevent Duplicate Reservations
 
 As a **customer**, I want unavailable koi to be rejected during submission so that I do not receive a misleading reservation confirmation.
@@ -257,6 +267,8 @@ As a **customer**, I want unavailable koi to be rejected during submission so th
 - Unavailable koi cannot be successfully reserved again.
 - Failed validation does not leave partially created reservation records.
 - The customer receives a clear error message.
+
+![Prevent Duplicate Reservations](assets/readme/screenshots/us09-duplicate-reservation.png)
 
 #### Manage Products
 
@@ -271,6 +283,8 @@ As an **authorised administrator**, I want to manage koi records so that the cat
 - Product images and related information can be managed.
 - Product availability can be changed.
 
+![Manage Products](assets/readme/screenshots/us10-manage-products.png)
+
 #### Manage Orders
 
 As an **authorised administrator**, I want to manage reservation requests so that customer orders can be processed.
@@ -282,6 +296,8 @@ As an **authorised administrator**, I want to manage reservation requests so tha
 - Products associated with an order can be identified.
 - Order status can be updated.
 - Cancelling an order restores its reserved products to `available`.
+
+![Manage Orders](assets/readme/screenshots/us11-manage-orders.png)
 
 #### Responsive Navigation
 
@@ -296,6 +312,8 @@ As a **visitor**, I want navigation that adapts to my device so that I can easil
 - The current page is visually identifiable.
 - Navigation supports keyboard interaction.
 
+![Responsive Navigation](assets/readme/screenshots/us12-responsive-navigation.png)
+
 #### Responsive Catalogue
 
 As a **visitor**, I want the product catalogue to adapt to my screen size so that I can browse koi comfortably on any device.
@@ -307,6 +325,8 @@ As a **visitor**, I want the product catalogue to adapt to my screen size so tha
 - Product information remains readable.
 - Important actions remain accessible.
 - The catalogue does not introduce unnecessary horizontal scrolling.
+
+![Responsive Catalogue](assets/readme/screenshots/us05-responsive-catalogue.png)
 
 #### Delivery Information
 
@@ -320,6 +340,8 @@ As a **visitor**, I want to understand the delivery arrangements so that I can d
 - Visitors can navigate to the Delivery page from the main navigation.
 - The page is responsive on mobile and desktop devices.
 
+![Delivery Information](assets/readme/screenshots/us13-delivery.png)
+
 #### Contact Information
 
 As a **visitor**, I want to find the seller's contact details so that I can ask questions about koi, delivery or reservations.
@@ -332,6 +354,8 @@ As a **visitor**, I want to find the seller's contact details so that I can ask 
 - A **Send an Email** button provides a direct email contact option.
 - The Contact page is accessible through the main navigation.
 - The page displays correctly on mobile, tablet and desktop devices.
+
+![Contact Information](assets/readme/screenshots/us14-contact.png)
 
 **Implementation Notes**
 
@@ -360,6 +384,8 @@ As a **visitor**, I want to see how many koi are in my shopping cart without ope
 - The indicator remains accurate after reloading the page.
 - The cart indicator is accessible on mobile and desktop devices.
 
+![Shopping Cart Indicator](assets/readme/screenshots/us07-cart-indicator.png)
+
 #### Search Koi
 
 As a **visitor**, I want to search available koi using relevant information so that I can find suitable fish more quickly.
@@ -371,6 +397,8 @@ As a **visitor**, I want to search available koi using relevant information so t
 - Unavailable products are not presented as reservable results.
 - An appropriate message is displayed when no products match.
 - Visitors can return to the complete available catalogue.
+
+![Search Koi](assets/readme/screenshots/us04-search-koi.png)
 
 #### Frequently Asked Questions
 
@@ -1282,6 +1310,16 @@ Send an Email button to open their preferred email application.
 
 ![Contact Page](assets/readme/images/contact.png)
 
+### Custom 404 Page
+
+A custom 404 page is displayed when visitors navigate to a URL
+that does not exist.
+
+The page follows the website's design and provides a
+Back to Home button to help visitors return to the homepage.
+
+![Custom 404 Page](assets/readme/images/404.png)
+
 ### Responsive Navigation
 
 The shared header provides navigation across desktop,
@@ -1565,6 +1603,17 @@ Django debugging is disabled by default.
 Setting `DEBUG=True` enables debugging for the current command without modifying the shared settings module.
 
 Debugging must remain disabled in production.
+
+### Sample Product Images
+
+Sample koi photographs are provided in `assets/sample_products/`
+for development and testing purposes.
+
+After setting up the local database, developers can create sample
+products through Django Admin and upload these images.
+
+Product images are stored using Cloudinary, while product information
+is stored in the relational database.
 
 #### 7. Run Automated Tests
 

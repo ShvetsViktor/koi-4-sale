@@ -43,7 +43,7 @@ main {
 /* Header */
 .navbar {
   background-color: var(--koi-bg);
-  padding-block: 16px;
+  padding-block: 10px;
 }
 
 .navbar-brand img {
@@ -80,6 +80,25 @@ main {
 
 .cart-count[hidden] {
   display: none;
+}
+
+/* Cart icon and badge */
+.mobile-cart,
+.desktop-cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.mobile-cart .cart-count,
+.desktop-cart .cart-count {
+  position: absolute;
+  top: -9px;
+  right: -12px;
+  margin-left: 0;
+  min-width: 18px;
+  height: 18px;
+  font-size: 11px;
 }
 
 /* Breadcrumbs */
@@ -447,6 +466,14 @@ main {
 }
 
 /* Large screens */
+
+/* Align desktop cart icon with the bottom of navigation text */
+@media (min-width: 992px) {
+  .desktop-cart svg {
+    transform: translateY(-12px);
+  }
+}
+
 @media (min-width: 992px) {
   .hero {
     padding-top: 50px;

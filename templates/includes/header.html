@@ -17,6 +17,26 @@
         >
       </a>
 
+      <!-- Mobile cart -->
+      <a
+        href="{% url 'cart' %}"
+        class="nav-link mobile-cart d-lg-none ms-auto me-3"
+        aria-label="Shopping cart"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="32"
+          fill="currentColor"
+          class="bi bi-cart3"
+          viewBox="0 0 16 16"
+          aria-hidden="true"
+        >
+          <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .49.598l-1 5A.5.5 0 0 1 13.5 11H4a.5.5 0 0 1-.485-.379L1.61 2H.5a.5.5 0 0 1-.5-.5M3.14 6l1 4h8.95l.8-4zM5.5 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
+        </svg>
+        <span class="cart-count" hidden></span>
+      </a>
+
       <!-- Mobile navigation toggle -->
       <button
         class="navbar-toggler"
@@ -54,14 +74,25 @@
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item d-none d-lg-block">
             <a
-              class="nav-link {% if request.resolver_match.url_name == 'cart' %}active{% endif %}"
+              class="nav-link desktop-cart {% if request.resolver_match.url_name == 'cart' %}active{% endif %}"
               href="{% url 'cart' %}"
+              aria-label="Shopping cart"
               {% if request.resolver_match.url_name == 'cart' %}aria-current="page"{% endif %}
             >
-              Cart
-              <span id="cart-count" class="cart-count" hidden></span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="36"
+                height="36"
+                fill="currentColor"
+                class="bi bi-cart3"
+                viewBox="0 0 16 16"
+                aria-hidden="true"
+              >
+                <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .49.598l-1 5A.5.5 0 0 1 13.5 11H4a.5.5 0 0 1-.485-.379L1.61 2H.5a.5.5 0 0 1-.5-.5M3.14 6l1 4h8.95l.8-4zM5.5 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
+              </svg>
+              <span class="cart-count" hidden></span>
             </a>
           </li>
 

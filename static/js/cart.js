@@ -52,19 +52,15 @@ function getCart() {
 }
 
 /**
- * Update the cart item count displayed in the header.
+ * Update cart item counters in the navigation.
  */
 function updateCartCount() {
-  const badge = document.querySelector('#cart-count');
-
-  if (!badge) {
-    return;
-  }
-
   const count = getCart().length;
 
-  badge.textContent = count;
-  badge.hidden = count === 0;
+  document.querySelectorAll('.cart-count').forEach((badge) => {
+    badge.textContent = count;
+    badge.hidden = count === 0;
+  });
 }
 
 /**
@@ -146,7 +142,6 @@ function renderCart(products) {
     price.className = 'cart-item-price';
     price.textContent = `£${product.price}`;
 
-    removeButton.className = 'btn btn-outline-secondary btn-sm';
     removeButton.type = 'button';
     removeButton.className = 'btn btn-outline-secondary';
     removeButton.textContent = 'Remove';

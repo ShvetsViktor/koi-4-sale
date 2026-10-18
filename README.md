@@ -497,6 +497,28 @@ Koi4Sale
 
 Administrative functionality is accessed separately through authenticated Django Admin.
 
+#### Breadcrumb Navigation
+
+Breadcrumb navigation provides an additional way for visitors to understand
+their location within the website.
+
+The breadcrumbs follow the page hierarchy:
+
+- Catalogue: Home → Catalogue
+- Product Details: Home → Catalogue → Product Name
+
+Parent pages are displayed as links, allowing visitors to navigate backwards
+through the website hierarchy.
+
+The current page is displayed as text rather than a link.
+
+Breadcrumbs are implemented using a reusable Django template:
+
+`templates/includes/breadcrumbs.html`
+
+The component receives the current page label and optional parent page
+information through Django template context.
+
 #### Primary User Flow — Reservation
 
 The main customer journey follows these steps:
@@ -554,12 +576,22 @@ Wireframes will be used to document the layout of important pages.
 
 **Mobile**
 
-- The logo remains visible on the left.
-- The cart remains easily accessible.
+- The brand logo remains visible on the left.
 - A hamburger button opens the collapsed navigation.
+- Navigation links include Home, Catalogue and Cart.
 - Navigation links remain readable and easy to select.
 
 The current page should be visually identifiable and communicated to assistive technologies.
+
+#### Shared Footer
+
+The footer is implemented as a reusable Django template.
+
+- The brand logo links to the home page.
+- Copyright information includes the current year.
+- Desktop layouts position the logo and copyright information horizontally.
+- Mobile layouts stack the footer elements vertically.
+- The page layout keeps the footer at the bottom of the viewport when content is short.
 
 #### Home Page
 
@@ -568,8 +600,8 @@ The current page should be visually identifiable and communicated to assistive t
 - A prominent hero section introduces the website.
 - The main heading and description appear beside a large koi photograph.
 - A primary **Shop Koi** button leads to the catalogue.
-- Supporting actions may link to delivery information.
-- Featured products may appear below the hero section.
+- The hero uses a two-column layout with text on the left and a koi photograph on the right.
+- The primary call-to-action links directly to the product catalogue.
 
 **Mobile Layout**
 
@@ -614,19 +646,27 @@ The previous Koi4Sale website serves as a visual reference, while the Django imp
 
 #### Colour Palette
 
-| Design Element     | Colour    | Purpose                                    |
-| ------------------ | --------- | ------------------------------------------ |
-| Primary Background | `#111827` | Dark navy background.                      |
-| Primary Accent     | `#fe5a08` | Buttons, highlights and important actions. |
-| Primary Text       | `#ffffff` | Main headings and text on dark surfaces.   |
-| Secondary Text     | `#9ca3af` | Supporting descriptions.                   |
-| Input Background   | `#1f2937` | Form fields and contrasting surfaces.      |
+| Design Element     | Colour    | Purpose                                        |
+| ------------------ | --------- | ---------------------------------------------- |
+| Primary Background | `#111827` | Dark navy background.                          |
+| Primary Accent     | `#fe5a08` | Buttons, highlights and important actions.     |
+| Primary Text       | `#ffffff` | Main headings and text on dark surfaces.       |
+| Secondary Text     | `#9ca3af` | Supporting descriptions.                       |
+| Surface Background | `#1f2937` | Cards, form controls and contrasting surfaces. |
 
 These colours represent the intended design and will be reviewed during accessibility and contrast testing.
 
 #### Typography
 
-The initial implementation uses Bootstrap's system font stack.
+The website uses the Inter variable font, self-hosted in WOFF2 format.
+
+Inter was selected for its readability, clean appearance and suitability
+for responsive interfaces.
+
+The font is applied consistently across headings, body text, navigation
+and interface components.
+
+The project includes the font's SIL Open Font License 1.1.
 
 Typography should provide:
 
@@ -659,6 +699,17 @@ The layout adapts to:
 The current navigation uses Bootstrap's `lg` breakpoint at 992px.
 
 The breakpoint may be adjusted if testing shows that another layout works better.
+
+The home page hero uses a two-column layout on larger screens and stacks
+its content vertically on smaller screens.
+
+The catalogue uses Bootstrap's responsive grid utilities to adjust the
+number of product columns according to viewport width.
+
+Mobile container spacing was customised to provide more comfortable
+horizontal padding.
+
+The shared footer adapts its layout to the available screen width.
 
 #### Accessibility
 
@@ -812,6 +863,27 @@ Visual styling and responsive behaviour are also checked through manual browser 
 
 A successful Django template test does not by itself prove that the interface behaves correctly in a browser.
 
+### Reusable Frontend Components
+
+The frontend uses reusable Django template components to maintain
+consistency across pages.
+
+Shared components include:
+
+- `base.html` — common document structure and page layout.
+- `includes/header.html` — branding and responsive navigation.
+- `includes/footer.html` — branding and copyright information.
+- `includes/breadcrumbs.html` — contextual page navigation.
+
+Individual pages extend the base template and include shared components
+where appropriate.
+
+Bootstrap 5.3 provides responsive layout utilities, while custom CSS
+defines the website's visual identity.
+
+The frontend follows a mobile-first approach, with layouts progressively
+adapting to larger viewport widths.
+
 ### Development Milestones
 
 <!-- TODO: Add the final GitHub milestone names, descriptions and completion status. -->
@@ -839,16 +911,21 @@ This section will be expanded as functionality is implemented and verified.
 - Client-side shopping cart.
 - JavaScript cart tests.
 - Shared Django base template.
-- Shared header and footer templates.
-- Bootstrap responsive navigation markup.
+- Responsive header with custom SVG branding.
+- Bootstrap collapsible mobile navigation.
+- Reusable breadcrumb navigation.
+- Responsive home page hero with koi photography.
+- Responsive product catalogue grid.
+- Shared responsive footer with SVG branding.
+- Sticky footer layout for pages with limited content.
+- Self-hosted Inter variable font.
+- Custom dark colour scheme and orange brand accent.
 - Automated tests for shared template assets.
 - Automated tests for navigation markup.
 
 ### In Progress
 
-- Custom navigation styling.
-- Responsive home page.
-- Responsive catalogue presentation.
+- Final catalogue styling.
 - Product detail page styling.
 - Cart and reservation form presentation.
 - Delivery, contact and FAQ page presentation.
@@ -946,6 +1023,9 @@ Manual testing will cover:
 - Validation errors.
 - Reservation confirmation.
 - Unavailable product handling.
+- Breadcrumb navigation and parent-page links.
+- Logo links in the header and footer.
+- Footer positioning on pages with limited content.
 
 ### Responsive Testing
 
@@ -959,6 +1039,10 @@ Testing will verify:
 - Accessible navigation.
 - Usable forms.
 - Absence of unintended horizontal scrolling.
+- Hero image and text stacking on mobile devices.
+- Header logo scaling across viewport widths.
+- Footer layout adaptation.
+- Breadcrumb readability on narrow screens.
 
 ### Accessibility Testing
 
@@ -971,6 +1055,7 @@ Accessibility checks will include:
 - Colour contrast.
 - Semantic HTML.
 - Accessible navigation controls.
+- Breadcrumb navigation landmarks and current-page identification.
 
 ### Code Validation and Quality
 
@@ -1040,6 +1125,7 @@ Significant bugs discovered during development will be documented with:
 - GitHub
 - GitHub Issues
 - GitHub Milestones
+- Photopea — SVG image editing.
 
 ### Bootstrap
 
@@ -1320,6 +1406,10 @@ External code, tutorials, documentation, images and other resources will be attr
   Source: https://github.com/rsms/inter
   License: [`LICENSE.txt`](static/fonts/LICENSE.txt)
 
+### Graphics
+
+- [Photopea](https://www.photopea.com/) — used to edit SVG graphics.
+
 ### Learning Resources
 
 <!-- TODO: Add learning resources, external references and required acknowledgements. -->
@@ -1330,15 +1420,23 @@ External code, tutorials, documentation, images and other resources will be attr
 
 The project is organised as follows:
 
-```text
-koi-4-sale/
+```koi-4-sale/
 ├── config/                 # Django project configuration
 ├── orders/                 # Cart and reservation functionality
 ├── products/               # Product catalogue and images
-├── static/                 # CSS, JavaScript and images
-├── templates/              # Django templates
-│   └── includes/           # Shared header and footer
-├── tests/                  # Shared tests
+├── static/
+│   ├── css/                # Custom styles
+│   ├── fonts/              # Self-hosted Inter font and licence
+│   ├── images/             # Logo, hero and placeholder images
+│   └── js/                 # Client-side JavaScript
+├── templates/
+│   ├── includes/
+│   │   ├── breadcrumbs.html
+│   │   ├── footer.html
+│   │   └── header.html
+│   ├── base.html
+│   └── home.html
+├── tests/
 │   └── django/             # Django template tests
 ├── manage.py
 ├── requirements.txt

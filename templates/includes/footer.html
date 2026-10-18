@@ -1,3 +1,13 @@
-<footer>
-  <p>&copy; Koi4Sale</p>
+<footer class="site-footer">
+  <div class="container">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+      <a class="site-footer-brand" href="{% url 'home' %}">
+        Koi4Sale
+      </a>
+
+      <p class="mb-0">
+        &copy; {% now "Y" %} Koi4Sale. All rights reserved.
+      </p>
+    </div>
+  </div>
 </footer>

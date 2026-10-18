@@ -331,6 +331,13 @@ main {
   line-height: 1.7;
 }
 
+.product-image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: center;
+}
+
 /* Shopping cart */
 .cart-page {
   padding-block: 32px 80px;

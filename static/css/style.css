@@ -31,10 +31,13 @@
 body {
   background-color: var(--koi-bg);
   color: var(--koi-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 main {
-  min-height: 70vh;
+  flex: 1;
 }
 
 /* Header */
@@ -163,7 +166,6 @@ main {
 /* Footer */
 .site-footer {
   padding-block: 32px;
-  border-top: 1px solid var(--koi-surface);
 }
 
 .site-footer-brand {

@@ -88,7 +88,7 @@ The previous Koi4Sale website, developed using Next.js, React and TypeScript, se
 
 Koi4Sale is suitable for the Unit 3 Back End Development assessment because its core functionality depends on persistent relational data and server-side business logic.
 
-Products, product images, customers, orders and order items are connected through database relationships.
+Categories, products, product images, orders and order items are connected through database relationships. Customer contact details are stored directly in reservation records.
 
 The reservation workflow demonstrates an important business rule: the server must verify product availability before accepting a reservation request.
 
@@ -842,31 +842,42 @@ UX decisions should be revisited when testing reveals usability problems.
 
 Koi4Sale uses a relational database designed around unique koi products and reservation requests.
 
-The database design includes the following entities:
+The database contains five Django models:
 
+- `Category`
 - `Product`
 - `ProductImage`
-- `ProductHighlight`
-- `Customer`
 - `Order`
 - `OrderItem`
 
-The final Entity Relationship Diagram must be checked against the implemented Django models before submission.
+The database stores product information, categories, product images, customer contact details and reservation records.
 
-<!-- TODO: Add the final ERD image. -->
+Product data allows visitors to browse and compare individual koi, while order data enables the seller to process reservation requests and maintain a record of previous reservations.
+
+Customer contact information is stored directly in the `Order` model. A separate customer model is not required because visitors can submit reservation requests without creating an account.
+
+### Entity Relationship Diagram
+
+![Koi4Sale Entity Relationship Diagram](assets/readme/images/erd.png)
 
 ### Database Relationships
 
-The principal relationships include:
+The database uses the following relationships:
 
-- A product can have multiple images.
-- Each product image belongs to one product.
-- A customer can have multiple orders.
-- Each order belongs to one customer.
-- An order contains selected products through order items.
-- Product highlights are associated with their relevant products.
+- **Category → Product:** One category can contain multiple products. Each product belongs to one category.
+- **Product → ProductImage:** One product can have multiple images. Each image belongs to one product.
+- **Order → OrderItem:** One reservation request can contain multiple order items.
+- **Product → OrderItem:** Each order item references one product.
 
-The final documentation will describe foreign keys, cardinality, deletion rules and database constraints.
+The relationships are implemented using Django `ForeignKey` fields.
+
+Deleting a category containing products is prevented using `on_delete=models.PROTECT`.
+
+Deleting a product automatically deletes its associated images through `on_delete=models.CASCADE`.
+
+Deleting an order automatically deletes its order items.
+
+Deleting a product referenced by an order item is prevented using `on_delete=models.PROTECT`, preserving the integrity of reservation records.
 
 ### Product Availability
 
@@ -874,7 +885,7 @@ Each koi is represented by one `Product` record.
 
 Product status determines whether a koi is available for reservation.
 
-The status values are:
+The available status values are:
 
 - `available`
 - `reserved`
@@ -885,11 +896,25 @@ Product status acts as the source of truth for availability.
 
 The reservation workflow changes a successfully reserved product from:
 
-```text
-available → reserved
-```
+    available → reserved
 
 The application does not require a duplicate availability boolean.
+
+### Database Constraints
+
+The application uses database constraints to maintain data integrity.
+
+**Primary Product Image**
+
+Each product can have only one image marked as primary.
+
+The `ProductImage` model uses a conditional `UniqueConstraint` to prevent multiple primary images for the same product.
+
+**Unique Products Within an Order**
+
+The `OrderItem` model uses a `UniqueConstraint` on the combination of `order` and `product`.
+
+This prevents the same product from appearing more than once within a single reservation request.
 
 ### Reservation Integrity
 
@@ -898,13 +923,61 @@ Product availability is checked on the server when a reservation request is subm
 The reservation process ensures that:
 
 - Unavailable products are rejected.
-- Related customer and order records are created consistently.
+- Related order and order item records are created consistently.
 - Successfully reserved products are marked as reserved.
 - Failed requests do not leave partially created orders.
 
-The final documentation will describe the transaction and concurrency safeguards used in the implementation.
+Database transactions are used to maintain consistency during reservation processing.
 
----
+The application stores the product price in `OrderItem` when a reservation is created.
+
+This preserves the price associated with the reservation even if the product price changes later.
+
+### Security Considerations
+
+Security was considered throughout the development of Koi4Sale to protect customer information, prevent unauthorised access and maintain the integrity of reservation records.
+
+#### Sensitive Configuration
+
+Sensitive information, including the Django secret key, database credentials and Cloudinary credentials, is stored in environment variables rather than directly in the source code.
+
+Local configuration files containing secrets are excluded from version control using `.gitignore`.
+
+Production credentials are managed through Heroku Config Vars.
+
+#### Authentication and Authorisation
+
+Administrative functionality is provided through Django Admin.
+
+Access to product and reservation management requires authentication and appropriate staff permissions.
+
+Customer registration is not required because visitors only need to provide contact information when submitting a reservation request.
+
+#### Form Validation and CSRF Protection
+
+The reservation form uses Django's server-side validation to check submitted customer information.
+
+Django's CSRF protection is used to protect form submissions against cross-site request forgery.
+
+Product availability is checked on the server rather than relying solely on information displayed in the browser.
+
+#### Database Integrity
+
+Reservation processing uses database transactions to ensure that related records are created consistently.
+
+Product availability is checked before a reservation is accepted.
+
+Successfully reserved products are marked as reserved, preventing them from being reserved again.
+
+If a reservation fails, the transaction prevents partially created reservation records.
+
+#### Production Configuration
+
+Django debugging is disabled by default and remains disabled in the production environment.
+
+Sensitive configuration values are not included in the public GitHub repository.
+
+Uploaded product images are stored using Cloudinary rather than relying on Heroku's temporary filesystem.
 
 ## Development Process
 
@@ -1638,6 +1711,17 @@ External code, tutorials, documentation, images and other resources will be attr
 ### Graphics
 
 - [Photopea](https://www.photopea.com/) — used to edit SVG graphics.
+
+### AI-Assisted Content
+
+ChatGPT (OpenAI) was used to assist with the creation and
+visual styling of the Entity Relationship Diagram (ERD).
+
+The diagram represents the database models and relationships
+implemented in the Django application.
+
+The decorative koi illustrations were generated as part
+of the diagram and were not sourced from external websites.
 
 ---
 

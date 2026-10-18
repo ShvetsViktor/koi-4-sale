@@ -206,13 +206,15 @@ function addCartItemsToForm() {
  * @param {MouseEvent} event - Button click event.
  */
 function handleAddToCart(event) {
-  const productId = Number(event.currentTarget.dataset.productId);
-
+  const button = event.currentTarget;
+  const productId = Number(button.dataset.productId);
   const cart = getCart();
   const updatedCart = addToCart(cart, productId);
 
   saveCart(updatedCart);
-  event.currentTarget.textContent = 'Added to Cart';
+
+  button.textContent = '✓ Added to Cart';
+  button.classList.replace('btn-primary', 'btn-outline-secondary');
 }
 
 /**
@@ -226,7 +228,8 @@ function initCartButtons() {
     const productId = Number(button.dataset.productId);
 
     if (cart.includes(productId)) {
-      button.textContent = 'Added to Cart';
+      button.textContent = '✓ Added to Cart';
+      button.classList.replace('btn-primary', 'btn-outline-secondary');
     }
 
     button.addEventListener('click', handleAddToCart);

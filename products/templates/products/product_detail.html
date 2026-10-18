@@ -1,26 +1,83 @@
 {% extends "base.html" %}
-{% load static%}
+{% load static %}
+
+{% block title %}{{ product.name }} | Koi4Sale{% endblock %}
 
 {% block content %}
-        {# Get the catalogue URL and store it in the catalogue_url variable. #}
-        {% url 'product_list' as catalogue_url %}
+<section class="product-detail">
+  <div class="container">
 
-        {# Pass the required variables to the included template. #}
-        {# The 'only' keyword restricts its context to explicitly passed variables. #}
-        {% include "includes/breadcrumbs.html" with parent_label="Catalogue" parent_url=catalogue_url current_label=product.name only %}
+    {% url 'product_list' as catalogue_url %}
+    {% include "includes/breadcrumbs.html" with parent_label="Catalogue" parent_url=catalogue_url current_label=product.name only %}
 
-        <div class="product-images">
-            {% for image in product.images.all %}
-            <img src="{{ image.image.url }}" alt="{{ product.name }}"></img>
-            {% empty %}
-            <img src="{% static 'images/default.png' %}" alt="No image available for {{ product.name }}"></img>
-            {% endfor %}
+    <div class="row g-4 g-lg-5 mt-2">
+
+      <!-- Product images -->
+      <div class="col-lg-6">
+        <div class="product-detail-images">
+          {% for image in product.images.all %}
+            <img
+              src="{{ image.image.url }}"
+              alt="{{ product.name }}"
+              class="product-detail-image"
+              {% if not forloop.first %}loading="lazy"{% endif %}
+            >
+          {% empty %}
+            <img
+              src="{% static 'images/default.png' %}"
+              alt="No image available for {{ product.name }}"
+              class="product-detail-image"
+            >
+          {% endfor %}
         </div>
-        <h1>{{ product.name }}</h1>
-        <p>Variety: {{ product.category.name }}</p>
-        <p>Price: £{{ product.price }}</p>
-        <p>Status: {{ product.get_status_display }}</p>
-        <p>Size: {{ product.size }} cm</p>
-        <p>Age: {{ product.age }} years</p>
-        <p>{{ product.description }}</p>
+      </div>
+
+      <!-- Product information -->
+      <div class="col-lg-6">
+        <div class="product-detail-info">
+
+          <h1>{{ product.name }}</h1>
+
+          <p class="product-detail-price">£{{ product.price }}</p>
+
+          <p class="product-detail-status">
+            Status: {{ product.get_status_display }}
+          </p>
+
+          <div class="product-detail-specs">
+            <p><strong>Variety:</strong> {{ product.category.name }}</p>
+            <p><strong>Size:</strong> {{ product.size }} cm</p>
+            <p><strong>Age:</strong> {{ product.age }} years</p>
+          </div>
+
+          {% if product.description %}
+            <div class="product-detail-description">
+              <h2>About this Koi</h2>
+              <p>{{ product.description }}</p>
+            </div>
+          {% endif %}
+
+          {% if product.status == 'available' %}
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-product-id="{{ product.pk }}"
+            >
+              Add to Cart
+            </button>
+          {% endif %}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/cart.js' %}"></script>
+<script>
+  initCartButtons();
+</script>
 {% endblock %}

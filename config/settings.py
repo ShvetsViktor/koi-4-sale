@@ -15,6 +15,10 @@ import os
 import dj_database_url
 if os.path.isfile('env.py'):
     import env
+import cloudinary
+
+# Ensure Cloudinary generates HTTPS URLs to prevent mixed content warnings.
+cloudinary.config(secure=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

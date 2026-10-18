@@ -1,175 +1,167 @@
-# Testing
+# Koi4Sale – Testing
 
-## Django Admin CRUD Testing
+## Overview
 
-| Test                 | Expected Result                                       | Actual Result                       | Status |
-| -------------------- | ----------------------------------------------------- | ----------------------------------- | ------ |
-| View product         | Existing product details are displayed                | Product details displayed correctly | PASS   |
-| Create product       | New product is saved to the database                  | Product created successfully        | PASS   |
-| Update product       | Updated information is saved                          | Changes persisted successfully      | PASS   |
-| Reserve product      | Reserved product disappears from the public catalogue | Product no longer displayed         | PASS   |
-| Restore availability | Product reappears in the public catalogue             | Product displayed again             | PASS   |
-| Delete product       | Product is deleted after confirmation                 | Test product deleted successfully   | PASS   |
+Koi4Sale was tested using Django's built-in test framework, Jest and manual checks. Automated tests verify application logic, while manual checks assess user-facing behaviour and administration. The results below distinguish completed checks from those still awaiting verification.
 
-## Admin Access Control
+## Automated Testing
 
-Access to product management is restricted through Django Admin permissions.
+### Django
 
-Automated tests verify that:
+Run the complete Django test suite:
 
-- Anonymous visitors cannot access product administration.
-- Authenticated users without staff permissions cannot access product administration.
-- Administrators can access product management.
+```bash
+python3 manage.py test
+```
 
-## US09 — Search Koi by Name or Variety
+Latest result:
 
-### Automated Testing
+```text
+Found 70 test(s).
+System check identified no issues (0 silenced).
+Ran 70 tests in 28.658s
+OK
+```
 
-Search functionality is tested using Django's built-in TestCase framework.
+Django tests cover areas including product search, reservation form validation, reservation workflows, access permissions and page rendering.
 
-The following automated tests were implemented:
+### JavaScript
 
-| Test                                      | Description                                                        | Result |
-| ----------------------------------------- | ------------------------------------------------------------------ | ------ |
-| test_search_by_product_name               | Verifies that searching by product name returns matching koi       | PASS   |
-| test_search_by_category_name              | Verifies that searching by variety returns matching koi            | PASS   |
-| test_search_excludes_unavailable_products | Verifies that reserved koi are excluded from search results        | PASS   |
-| test_search_no_results                    | Verifies that a message appears when no koi match the search query | PASS   |
+Install dependencies and run Jest:
 
-Run the search tests using:
+```bash
+npm install
+npm test
+```
 
-    python3 manage.py test products.tests.ProductSearchTests
+Latest result:
 
-All four automated tests passed.
+```text
+PASS tests/cart-ui.test.js
+PASS tests/cart-page.test.js
+PASS tests/cart.test.js
 
-### Manual Testing
+Test Suites: 3 passed, 3 total
+Tests:       19 passed, 19 total
+Snapshots:   0 total
+```
 
-| Test                        | Expected Result                                         | Actual Result     | Status  |
-| --------------------------- | ------------------------------------------------------- | ----------------- | ------- |
-| Search by name              | Matching koi are displayed                              | Pass verification | PENDING |
-| Search by variety           | Koi matching the selected variety are displayed         | Pass verification | PENDING |
-| Case-insensitive search     | Lowercase and uppercase queries return matching results | Pass verification | PENDING |
-| Search unavailable koi      | Reserved koi are excluded from results                  | Pass verification | PENDING |
-| Search with no matches      | An appropriate message is displayed                     | Pass verification | PENDING |
-| Search with category filter | Results satisfy both search and category conditions     | Pass verification | PENDING |
+### Results
 
-## Reservation Form Validation
+| Test suite | Passed | Failed | Result |
+| --- | ---: | ---: | --- |
+| Django | 70 | 0 | PASS |
+| Jest | 19 | 0 | PASS |
+| **Total** | **89** | **0** | **PASS** |
 
-The reservation form uses HTML5 validation and Django's `ReservationForm` to validate customer contact details before creating an order.
+## User Story Testing
 
-Server-side validation ensures that invalid customer information cannot be saved to the database.
+The table summarises verification of the 14 implemented user stories. Automated results are supported by the passing test suites above. `PENDING` identifies manual checks not yet recorded as completed. Screenshots of implemented features are provided in the main README's Features section.
 
-### Automated Testing
+| User Story | Verification | Result |
+| --- | --- | --- |
+| Browse Available Koi | Check catalogue displays available products and excludes reserved products. | PENDING manual check |
+| View Koi Details | Check product information, images and add-to-cart action. | PENDING manual check |
+| Filter Koi by Category | Check category filtering and matching results. | PENDING manual check |
+| Search Koi | Django search tests passed; manually check name, variety, case-insensitive and no-result searches. | Automated PASS; manual PENDING |
+| Responsive Catalogue | Check product grid and images on mobile, tablet and desktop. | PENDING |
+| Manage Shopping Cart | Jest cart tests passed; check add, remove, totals and persistence in a browser. | Automated PASS; manual PENDING |
+| Shopping Cart Indicator | Check count updates and desktop/mobile visibility. | Automated PASS; manual PENDING |
+| Submit a Reservation Request | Django validation/workflow tests passed; valid submission and correction of an invalid email were checked manually. | Automated PASS; partial manual PASS |
+| Prevent Duplicate Reservations | Verify unavailable koi cannot be reserved again. | Automated PASS; manual PENDING |
+| Manage Products | Create, view, update and delete products in Django Admin; check availability changes in catalogue. | Manual PASS |
+| Manage Orders | Check order status updates and product availability after cancellation. | PENDING manual check |
+| Responsive Navigation | Check menu, links and cart access across screen sizes. | PENDING |
+| Delivery Information | Check page content, four delivery steps and catalogue link. | PENDING final check |
+| Contact Information | Check page, email links, active navigation and keyboard access. | Manual PASS (previously recorded) |
 
-Reservation form validation is tested using Django's built-in TestCase framework.
+The FAQ page, featured koi carousel and reservation confirmation email are deferred *Could Have* features and are excluded from current-release testing.
 
-| Test                          | Expected Result                                          | Status |
-| ----------------------------- | -------------------------------------------------------- | ------ |
-| Required fields               | Empty required fields are rejected                       | PASS   |
-| Invalid email                 | Invalid email addresses are rejected                     | PASS   |
-| Phone containing letters      | Phone numbers containing letters are rejected            | PASS   |
-| Valid UK phone number         | Valid UK phone number is accepted                        | PASS   |
-| International phone number    | Number with spaces and leading + is accepted             | PASS   |
-| Short phone number            | Numbers containing fewer than 7 digits are rejected      | PASS   |
-| Long phone number             | Numbers containing more than 15 digits are rejected      | PASS   |
-| Phone with special characters | Numbers containing unsupported characters are rejected   | PASS   |
-| Invalid reservation           | No order is created when validation fails                | PASS   |
-| Corrected email               | Reservation succeeds after correcting an invalid email   | PASS   |
-| Preserve form values          | Previously entered values remain after validation errors | PASS   |
+### Recorded Manual Checks
 
-Phone number validation is implemented using `ReservationForm.clean_phone()`.
+The following checks were already completed during development:
 
-The validation allows:
+| Area | Check | Recorded result |
+| --- | --- | --- |
+| Django Admin | View, create, update and delete a product. | PASS |
+| Django Admin | Mark a product reserved and confirm it disappears from the catalogue. | PASS |
+| Django Admin | Restore product availability and confirm it reappears. | PASS |
+| Reservation form | Invalid email displays an error. | PASS |
+| Reservation form | Form values and cart contents remain after validation fails. | PASS |
+| Reservation form | Corrected email allows a successful reservation. | PASS |
+| Contact | Page loads, links open email application, navigation and keyboard access work. | PASS |
 
-- Digits (`0–9`).
-- Spaces.
-- An optional leading `+`.
+The following reservation form checks have **not** yet been recorded manually: empty required fields; letters in phone number; valid UK and international phone numbers; phone numbers shorter than 7 or longer than 15 digits; unsupported phone characters. Automated form-validation tests passed.
 
-Phone numbers must contain between 7 and 15 digits.
+## Responsive Testing
 
-The following examples demonstrate the validation rules:
+Check the homepage, catalogue, product details, cart, reservation form, Delivery and Contact pages at mobile, tablet and desktop widths. Verify readable text, correctly sized images, usable navigation, accessible cart controls and no unintended horizontal scrolling.
 
-| Phone Number       | Expected Result | Status |
-| ------------------ | --------------- | ------ |
-| `07123456789`      | Accepted        | PASS   |
-| `+44 7123 456789`  | Accepted        | PASS   |
-| `abc123456`        | Rejected        | PASS   |
-| `123456`           | Rejected        | PASS   |
-| `1234567890123456` | Rejected        | PASS   |
-| `07123-456789`     | Rejected        | PASS   |
+| Device / viewport | Result |
+| --- | --- |
+| Mobile | PENDING |
+| Tablet | PENDING |
+| Desktop | PENDING |
 
-### Contact Page
+## Browser Compatibility
 
-The Contact page provides customers with a way to contact Koi4Sale
-regarding product availability, reservations, and delivery.
+| Browser | Result |
+| --- | --- |
+| Chrome | PENDING |
+| Safari | PENDING |
+| Firefox | PENDING |
+| Edge | PENDING |
 
-| Test                    | Expected Result                                  | Result |
-| ----------------------- | ------------------------------------------------ | ------ |
-| Open Contact page       | Page loads successfully                          | PASS   |
-| Contact navigation link | Opens the Contact page                           | PASS   |
-| Active navigation state | Contact link is highlighted                      | PASS   |
-| Email address link      | Opens the default email application              | PASS   |
-| Send an Email button    | Opens the default email application              | PASS   |
-| Responsive layout       | Content displays correctly on mobile and desktop | PASS   |
-| Keyboard navigation     | Interactive elements are keyboard accessible     | PASS   |
+Record the browser version and device used when these checks are completed.
 
-**Automated testing:**
+## Accessibility Testing
 
-- Contact page returns HTTP 200.
-- Correct Django template is rendered.
-- Contact page heading is displayed.
-- Contact information and email link are present.
+| Check | Result |
+| --- | --- |
+| Keyboard navigation and visible focus across all pages | PENDING final review |
+| Form labels and validation messages | PENDING final review |
+| Image alternative text | PENDING final review |
+| Heading hierarchy and semantic HTML | PENDING final review |
+| Colour contrast | PENDING final review |
 
-**Test command:**
+## Code Validation
 
-`python3 manage.py test tests.django.test_contact`
+| Tool / check | Result | Evidence |
+| --- | --- | --- |
+| HTML validation | PENDING | Add result or screenshot |
+| CSS validation | PENDING | Add result or screenshot |
+| Python linting / style checks | PENDING | Add command and result |
+| JavaScript linting / style checks | PENDING | Add command and result |
+| Django deployment checks (`python3 manage.py check --deploy`) | PENDING | Add result and explain any environment-specific warnings |
 
-### Manual Testing
+## Lighthouse Testing
 
-| Test                       | Expected Result                                | Actual Result                    | Status  |
-| -------------------------- | ---------------------------------------------- | -------------------------------- | ------- |
-| Submit empty fields        | Browser prevents submission                    | Not yet recorded                 | PENDING |
-| Submit invalid email       | Validation error appears below the email field | Error displayed correctly        | PASS    |
-| Preserve entered details   | Form values remain after validation failure    | Values preserved                 | PASS    |
-| Preserve cart contents     | Selected koi remain in the cart                | Cart contents preserved          | PASS    |
-| Correct invalid email      | Reservation succeeds after correction          | Reservation created successfully | PASS    |
-| Enter letters in phone     | Phone validation error is displayed            | Not yet verified manually        | PENDING |
-| Enter valid UK number      | Phone number is accepted                       | Not yet verified                 | PENDING |
-| Enter international number | Number beginning with `+` is accepted          | Not yet verified                 | PENDING |
-| Enter fewer than 7 digits  | Phone number is rejected                       | Not yet verified                 | PENDING |
-| Enter more than 15 digits  | Phone number is rejected                       | Not yet verified                 | PENDING |
-| Enter special characters   | Phone number is rejected                       | Not yet verified                 | PENDING |
+Record results from Chrome DevTools Lighthouse for representative pages after testing the deployed site.
 
-### Validation Error Handling
+| Page | Performance | Accessibility | Best Practices | SEO |
+| --- | --- | --- | --- | --- |
+| Home | PENDING | PENDING | PENDING | PENDING |
+| Catalogue | PENDING | PENDING | PENDING | PENDING |
+| Product Details | PENDING | PENDING | PENDING | PENDING |
 
-When server-side validation fails:
+## Bugs and Fixes
 
-- The reservation is not created.
-- The form is displayed again with validation errors.
-- Previously entered customer details are preserved.
-- Selected koi remain in the shopping cart.
-- Customers can correct their details and resubmit the reservation.
+### Outdated Homepage Hero Test Assertion — Resolved
 
-Validation errors are displayed beneath the corresponding form fields.
+**Issue:** After the homepage hero heading was updated, `test_homepage_displays_hero_section` still expected the previous heading, causing one of the 70 Django tests to fail.
 
-The reservation form also displays a general error message informing customers that their submitted information requires correction.
+**Fix:** Updated the test assertion to match the current heading, `Beautiful Koi, Raised with Care`.
 
-### Testing Commands
+**Retest:** All 70 Django tests passed. All 19 Jest tests also passed.
 
-Run the reservation form tests:
+### Other Bugs
 
-    python3 manage.py test orders.tests.ReservationFormTests
+Add further confirmed bugs and fixes here if identified during final manual testing or validation. Do not record unverified issues as resolved.
 
-Run the reservation workflow tests:
+## Final Testing Summary
 
-    python3 manage.py test orders.tests.ReservationViewTests
+**Automated tests:** 89 passed, 0 failed.
 
-Run all Django tests:
+**Manual testing:** Product CRUD, selected reservation-form behaviours and Contact page checks have recorded PASS results. Other user journeys, responsive layouts, browser compatibility, accessibility and validator results still require final verification.
 
-    python3 manage.py test
-
-Run JavaScript tests:
-
-    npm test
-
-All automated Django and JavaScript tests passed following the implementation of phone number validation.
+The testing documentation will be updated with actual results and evidence before final submission.

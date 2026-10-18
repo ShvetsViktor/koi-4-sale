@@ -12,15 +12,17 @@ The project is developed for the **Code Institute Level 5 Diploma in Web Applica
 
 Each koi is represented as a unique product rather than a variation of a stock item. Visitors can browse available koi, view detailed product information and images, search and filter the catalogue, manage a client-side shopping cart and submit a reservation request.
 
-The server validates product availability before creating customer and order records. When a reservation is successfully submitted, the selected koi are marked as reserved to prevent duplicate reservations.
+The server validates product availability before creating an order and its associated order items, storing customer contact details directly in the order. When a reservation is successfully submitted, the selected koi are marked as reserved to prevent duplicate reservations.
 
-Customer registration and authentication are intentionally excluded from the initial project scope. Authorised administrators manage products, images, customers and reservation requests through Django Admin.
+Customer registration and authentication are intentionally excluded from the initial project scope. Authorised administrators manage products, images and reservation
+requests, including customer contact information, through Django Admin.
 
 The project is developed incrementally using GitHub Issues, milestones and automated testing. Testable functionality follows the **RED → GREEN → REFACTOR** development cycle where appropriate.
 
 The previous Koi4Sale website, developed using Next.js, React and TypeScript, serves as a visual and UX reference. This project is a separate implementation using Django Templates, HTML, CSS, Bootstrap and vanilla JavaScript.
 
-> **Project Status:** The backend and reservation functionality have been developed. The responsive frontend interface is being completed and refined. The Delivery and Contact pages have been implemented. Final testing and documentation are ongoing.
+> **Project Status:** Completed and deployed. Core reservation functionality,
+> responsive layouts, automated testing and project documentation have been finalised.
 
 ---
 
@@ -77,7 +79,7 @@ The previous Koi4Sale website, developed using Next.js, React and TypeScript, se
 - Use Django ORM and meaningful relationships between models.
 - Implement Create, Read, Update and Delete functionality.
 - Process forms and validate submitted information on the server.
-- Apply authentication and authorisation where appropriate.
+- Apply authentication and authorisation through Django Admin to protect administrative functionality without requiring customer accounts.
 - Build a responsive frontend using HTML, custom CSS, Bootstrap and JavaScript.
 - Implement automated testing for important application behaviour.
 - Use Git and GitHub throughout development.
@@ -153,25 +155,33 @@ The project uses **MoSCoW prioritisation** to distinguish essential functionalit
 
 ### MoSCoW Prioritisation
 
-| User Story                     | Priority    | Purpose                                                                                      |
-| ------------------------------ | ----------- | -------------------------------------------------------------------------------------------- |
-| Browse Available Koi           | Must Have   | Display koi available for reservation.                                                       |
-| View Koi Details               | Must Have   | Provide detailed product information and photographs.                                        |
-| Filter Koi by Category         | Must Have   | Allow visitors to browse koi by category.                                                    |
-| Manage Shopping Cart           | Must Have   | Allow visitors to manage selected koi.                                                       |
-| Shopping Cart Indicator        | Should Have | Display the number of selected products and provide quick access to the cart across devices. |
-| Submit a Reservation Request   | Must Have   | Process customer reservation requests.                                                       |
-| Prevent Duplicate Reservations | Must Have   | Prevent unavailable koi from being reserved again.                                           |
-| Manage Products                | Must Have   | Provide authenticated product administration.                                                |
-| Manage Orders                  | Must Have   | Provide authenticated reservation management.                                                |
-| Responsive Navigation          | Must Have   | Provide accessible navigation across screen sizes.                                           |
-| Responsive Catalogue           | Must Have   | Display product cards appropriately on different devices.                                    |
-| Delivery Information           | Should Have | Explain delivery arrangements and conditions.                                                |
-| Contact Information            | Should Have | Provide an email address and a direct email contact option.                                  |
-| Search Koi                     | Should Have | Help visitors find koi using search terms.                                                   |
-| Frequently Asked Questions     | Could Have  | Answer common customer questions.                                                            |
-| Reservation Confirmation Email | Could Have  | Send customers confirmation of their reservation request.                                    |
-| Featured Koi Carousel          | Could Have  | Highlight selected products on the home page.                                                |
+| User Story                     | Priority    | Status      | Purpose                                                                                      |
+| ------------------------------ | ----------- | ----------- | -------------------------------------------------------------------------------------------- |
+| Browse Available Koi           | Must Have   | Implemented | Display koi available for reservation.                                                       |
+| View Koi Details               | Must Have   | Implemented | Provide detailed product information and photographs.                                        |
+| Filter Koi by Category         | Must Have   | Implemented | Allow visitors to browse koi by category.                                                    |
+| Manage Shopping Cart           | Must Have   | Implemented | Allow visitors to manage selected koi.                                                       |
+| Shopping Cart Indicator        | Should Have | Implemented | Display the number of selected products and provide quick access to the cart across devices. |
+| Submit a Reservation Request   | Must Have   | Implemented | Process customer reservation requests.                                                       |
+| Prevent Duplicate Reservations | Must Have   | Implemented | Prevent unavailable koi from being reserved again.                                           |
+| Manage Products                | Must Have   | Implemented | Provide authenticated product administration.                                                |
+| Manage Orders                  | Must Have   | Implemented | Provide authenticated reservation management.                                                |
+| Responsive Navigation          | Must Have   | Implemented | Provide accessible navigation across screen sizes.                                           |
+| Responsive Catalogue           | Must Have   | Implemented | Display product cards appropriately on different devices.                                    |
+| Delivery Information           | Should Have | Implemented | Explain delivery arrangements and conditions.                                                |
+| Contact Information            | Should Have | Implemented | Provide an email address and a direct email contact option.                                  |
+| Search Koi                     | Should Have | Implemented | Help visitors find koi using search terms.                                                   |
+| Frequently Asked Questions     | Could Have  | Planned     | Answer common customer questions.                                                            |
+| Reservation Confirmation Email | Could Have  | Planned     | Send customers confirmation of their reservation request.                                    |
+| Featured Koi Carousel          | Could Have  | Planned     | Highlight selected products on the home page.                                                |
+
+All Must Have and Should Have user stories have been implemented.
+
+The three Could Have user stories remain planned for future development
+and are not included in the current release.
+
+Final verification of implemented features is documented in
+[TESTING.md](TESTING.md).
 
 ### Core User Stories
 
@@ -232,7 +242,7 @@ As a **customer**, I want to submit my contact details and selected koi so that 
 - Required customer information is collected through a form.
 - Submitted information is validated on the server.
 - Product availability is checked before creating the reservation.
-- Successful submission creates related customer and order records.
+- Successful submission creates an order containing the customer's contact details.
 - Selected products are associated with the created order.
 - Successfully reserved products change from `available` to `reserved`.
 - Confirmation explains that a reservation request has been received.
@@ -271,7 +281,7 @@ As an **authorised administrator**, I want to manage reservation requests so tha
 - Orders and associated customer information can be viewed.
 - Products associated with an order can be identified.
 - Order status can be updated.
-- Product availability remains consistent with reservation rules.
+- Cancelling an order restores its reserved products to `available`.
 
 #### Responsive Navigation
 
@@ -343,7 +353,8 @@ As a **visitor**, I want to see how many koi are in my shopping cart without ope
 
 - The header displays the number of products currently in the cart.
 - The indicator updates immediately when products are added or removed.
-- The indicator is hidden when the cart is empty.
+- The cart icon remains visible when the cart is empty.
+- The item counter is hidden when the cart contains no products.
 - The cart icon remains visible on mobile devices when the navigation menu is collapsed.
 - The cart icon provides direct access to the shopping cart.
 - The indicator remains accurate after reloading the page.
@@ -488,7 +499,8 @@ These features improve product discovery, navigation and communication.
 - Reservation Confirmation Email.
 - Featured Koi Carousel.
 
-These enhancements provide additional value but should not delay completion of the essential functionality.
+These features are planned as potential future enhancements
+and are not included in the current release.
 
 #### Content Requirements
 
@@ -544,10 +556,8 @@ Koi4Sale
 │
 ├── Delivery Information
 │
-├── Contact
-│   └── Email Contact
-│
-└── Frequently Asked Questions (Optional)
+└── Contact
+    └── Email Contact
 ```
 
 Administrative functionality is accessed separately through authenticated Django Admin.
@@ -624,7 +634,38 @@ Users should receive clear feedback when:
 
 The Contact page does not perform server-side enquiry validation because it does not submit a web form.
 
-<!-- TODO: Add the final user-flow diagram. -->
+#### Reservation User Flow Diagram
+
+The diagram illustrates the main reservation process,
+including successful submission and validation failures.
+
+```mermaid
+flowchart TD
+    A["Home / Catalogue"] --> B["Browse, Search or Filter Koi"]
+    B --> C["View Product Details"]
+    C --> D["Add to Cart"]
+    D --> E["Review Cart"]
+    E --> F["Enter Contact Details"]
+    F --> G["Submit Reservation Request"]
+    G --> H{"Form Valid?"}
+
+    H -->|No| I["Display Validation Errors"]
+    I --> F
+
+    H -->|Yes| J{"Products Available?"}
+
+    J -->|No| K["Display Availability Error"]
+    K --> E
+
+    J -->|Yes| L["Create Order and Order Items"]
+    L --> M["Mark Products as Reserved"]
+    M --> N["Display Reservation Confirmation"]
+
+    style A fill:#1f2937,color:#ffffff,stroke:#fe5a08
+    style N fill:#1f2937,color:#ffffff,stroke:#fe5a08
+    style I fill:#7f1d1d,color:#ffffff
+    style K fill:#7f1d1d,color:#ffffff
+```
 
 ### 4. Skeleton — Where Do Elements Go?
 
@@ -778,7 +819,7 @@ The home page should guide attention through:
 2. Main value proposition.
 3. Primary Shop Koi action.
 4. Koi photography.
-5. Available or featured products.
+5. Clear navigation towards the product catalogue.
 
 Informational pages use a consistent heading hierarchy, supporting text and clearly identified actions.
 
@@ -899,6 +940,9 @@ The reservation workflow changes a successfully reserved product from:
     available → reserved
 
 The application does not require a duplicate availability boolean.
+
+When an order is cancelled, its reserved products are returned
+to `available`, allowing them to be reserved again.
 
 ### Database Constraints
 
@@ -1074,6 +1118,17 @@ This scope adjustment preserves a clear way for customers to contact the seller 
 
 The corresponding GitHub Issue and acceptance criteria were updated to reflect the implemented feature.
 
+### Optional Feature Scope Review
+
+During development, the project scope was reviewed to prioritise
+the completion and testing of the core reservation functionality.
+
+The Frequently Asked Questions page and Featured Koi Carousel
+were deferred to future development.
+
+Both remain classified as Could Have features under MoSCoW
+prioritisation and are not required for the current release.
+
 ### Reusable Frontend Components
 
 The frontend uses reusable Django template components to maintain consistency across pages.
@@ -1084,6 +1139,7 @@ Shared components include:
 - `includes/header.html` — branding and responsive navigation.
 - `includes/footer.html` — branding and copyright information.
 - `includes/breadcrumbs.html` — contextual page navigation.
+- `includes/hero.html` — reusable hero section for informational pages.
 
 Individual pages extend the base template and include shared components where appropriate.
 
@@ -1093,182 +1149,231 @@ The frontend follows a mobile-first approach, with layouts progressively adaptin
 
 ### Development Milestones
 
-<!-- TODO: Add the final GitHub milestone names, descriptions and completion status. -->
+Development was organised into five GitHub milestones to track
+implementation progress and maintain a structured workflow.
 
-**Current Development Stage:** Frontend refinement, testing and documentation.
+| Milestone                                  | Description                                                                                                                 | GitHub Progress          |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| Milestone 1 — Project Setup & Deployment   | Configure the Django project, development environment, database and initial Heroku deployment.                              | 100% — 1/1 issues closed |
+| Milestone 2 — Database & Product Catalogue | Implement the relational database, product models, catalogue, category filtering and product administration.                | 100% — 5/5 issues closed |
+| Milestone 3 — Reservation System           | Implement the shopping cart, reservation processing, validation, duplicate reservation prevention and order management.     | 100% — 6/6 issues closed |
+| Milestone 4 — Frontend & User Experience   | Develop responsive Django templates, navigation, search, contact information, delivery information and frontend components. | 100% — 7/7 issues closed |
+| Milestone 5 — Testing & Documentation      | Verify application functionality, test user stories and prepare assessment documentation.                                   | 100% — 3/3 issues closed |
+
+GitHub milestone percentages reflect the completion of assigned issues
+rather than independent verification of every application requirement.
+
+Although all issues assigned to Milestone 5 are closed, final
+cross-browser testing, validation and documentation review are
+being completed separately.
+
+The remaining work includes final frontend refinement,
+responsive testing and preparation of assessment evidence.
 
 ---
 
 ## Features
 
-This section describes the implemented functionality and remaining work.
+This section presents the main features implemented in Koi4Sale.
 
-### Implemented / Under Verification
+Each feature is linked to the relevant user stories described in
+[User Stories and Prioritisation](#user-stories-and-prioritisation).
 
-- Django models and relational data storage.
-- Product catalogue backend.
-- Category filtering functionality.
-- Product search functionality.
-- Product image storage using Cloudinary.
-- Customer and reservation records.
-- Server-side reservation processing.
-- Reservation form validation.
-- Duplicate reservation prevention.
-- Client-side shopping cart.
-- Responsive shopping cart icon with a live item counter.
-- Persistent cart count based on browser localStorage.
-- Direct access to the cart from the mobile header without opening the navigation menu.
-- JavaScript cart tests.
-- Shared Django base template.
-- Responsive header with custom SVG branding.
-- Bootstrap collapsible mobile navigation.
-- Reusable breadcrumb navigation.
-- Responsive home page hero with koi photography.
-- Home page navigation to the catalogue and delivery information.
-- Responsive product catalogue grid.
-- Shared responsive footer with SVG branding.
-- Sticky footer layout for pages with limited content.
-- Self-hosted Inter variable font.
-- Custom dark colour scheme and orange brand accent.
-- Automated tests for shared template assets.
-- Automated tests for navigation markup.
-- Primary product image selection with a database uniqueness constraint.
-- Primary Cloudinary images in the catalogue, cart and reservation confirmation.
-- Static placeholder images when no primary image is available.
+Screenshots demonstrate the implemented interface, while functional
+verification and test results are documented in [TESTING.md](TESTING.md).
 
-### Delivery Information Page
+### Home Page
 
-The Delivery page provides visitors with information about the process of transporting koi.
+The home page introduces Koi4Sale and explains the purpose of the website.
 
-Implemented features include:
+A responsive hero section features koi photography and provides direct
+navigation to the product catalogue and delivery information.
 
-- A dedicated `/delivery/` route.
-- A responsive hero section.
-- A delivery-related image.
-- A button linking to the delivery steps.
-- Four numbered delivery information cards.
-- Integration with the main navigation.
-- Automated Django tests.
+**Related User Stories:** Responsive Navigation.
 
-The delivery information explains the process without promising unverified delivery times or services.
+![Koi4Sale Home Page](assets/readme/images/home.png)
 
-### Contact Information Page
+### Product Catalogue
 
-The Contact page provides a simple way for visitors to contact the seller.
+The catalogue displays individual koi available for reservation.
 
-Implemented features include:
+Visitors can search for products, filter by category and navigate
+to individual product detail pages. The responsive grid adapts
+to different screen sizes.
 
-- A dedicated `/contact/` route.
-- A **Get in Touch** heading.
-- A short introductory description.
-- A contact information card.
-- A visible email address.
-- A clickable `mailto:` link.
-- A **Send an Email** button.
-- Integration with the main navigation.
-- Responsive layout for mobile and desktop devices.
-- Automated Django tests for the page and its content.
+**Related User Stories:** Browse Available Koi, Filter Koi by Category,
+Search Koi, Responsive Catalogue.
 
-The page does not include a Django enquiry form.
+![Product Catalogue](assets/readme/images/catalogue.png)
 
-General enquiries are handled through the visitor's email application.
+### Product Details
 
-### In Progress
+Each product has a dedicated page displaying its photographs,
+price, description and available characteristics.
 
-- Final catalogue styling.
-- Product detail page styling.
-- Cart and reservation form presentation.
-- Complete responsive and accessibility testing.
-- Final testing documentation.
-- Final README documentation.
+Visitors can examine an individual koi and add it to their
+shopping cart when the product is available.
 
-### Optional Features
+**Related User Stories:** View Koi Details.
+
+![Product Details](assets/readme/images/product-details.png)
+
+### Shopping Cart
+
+The shopping cart allows visitors to review selected koi,
+remove products and view the total price before submitting
+a reservation request.
+
+Cart contents are stored in browser localStorage, allowing
+selections to persist while navigating between pages.
+
+**Related User Stories:** Manage Shopping Cart.
+
+![Shopping Cart](assets/readme/images/cart.png)
+
+### Reservation Form
+
+The reservation form collects customer contact information
+without requiring registration or online payment.
+
+Submitted information and product availability are validated
+on the server. Successful reservations are stored in the
+database, and selected products are marked as reserved.
+
+**Related User Stories:** Submit a Reservation Request,
+Prevent Duplicate Reservations.
+
+![Reservation Form](assets/readme/images/reservation-form.png)
+
+### Reservation Confirmation
+
+After a successful reservation, customers are shown a
+confirmation page containing their reservation number,
+selected products and total price.
+
+The page explains that the request has been received and
+that no online payment has been taken.
+
+**Related User Stories:** Submit a Reservation Request.
+
+![Reservation Confirmation](assets/readme/images/reservation-confirmation.png)
+
+### Delivery Information
+
+The Delivery page explains the koi transportation process
+through four clearly organised stages.
+
+A Browse Our Koi button provides a direct route back to
+the product catalogue.
+
+**Related User Stories:** Delivery Information.
+
+![Delivery Page](assets/readme/images/delivery.png)
+
+### Contact Information
+
+The Contact page displays the seller's email address and
+provides a direct email contact option.
+
+Visitors can use the clickable email address or the
+Send an Email button to open their preferred email application.
+
+**Related User Stories:** Contact Information.
+
+![Contact Page](assets/readme/images/contact.png)
+
+### Responsive Navigation
+
+The shared header provides navigation across desktop,
+tablet and mobile devices.
+
+A shopping cart icon remains accessible on mobile when
+the navigation menu is collapsed. Its counter updates
+when products are added or removed.
+
+**Related User Stories:** Responsive Navigation,
+Shopping Cart Indicator.
+
+![Responsive Navigation](assets/readme/images/responsive-navigation.png)
+
+### Django Administration
+
+Django Admin provides authenticated administrative
+management of products, categories, product images
+and reservation requests.
+
+Administrators can create, view, update and delete
+records where permitted, manage product availability
+and update reservation statuses.
+
+**Related User Stories:** Manage Products, Manage Orders.
+
+![Django Administration](assets/readme/images/django-admin.png)
+
+### Planned Future Enhancements
+
+The following optional features remain planned for future development:
 
 - Frequently Asked Questions page.
 - Reservation confirmation email.
 - Featured koi carousel.
 
-Features will be moved into the implemented section only after they have been completed and verified.
-
-<!-- TODO: Add screenshots and descriptions of completed features. -->
+These features are classified as Could Have in the
+MoSCoW prioritisation and are not part of the current release.
 
 ---
 
 ## Testing
 
-Testing is performed throughout development.
+Koi4Sale was developed using automated and manual testing to verify
+application functionality, database integrity, usability and
+responsive behaviour.
 
-Automated tests verify important application behaviour, while manual testing checks complete user journeys and visual presentation.
+Automated tests cover Django models, views, forms, reservation
+processing and JavaScript shopping cart functionality.
 
-Detailed test cases, expected and actual results, screenshots and bug retesting are documented in a separate **TESTING.md** file.
+Manual testing evaluates complete user journeys, responsive layouts,
+browser compatibility and accessibility.
+
+Detailed test cases, expected and actual results, validation reports,
+screenshots and bug fixes are documented in [TESTING.md](TESTING.md).
 
 ### Automated Testing
 
 #### Django Tests
 
-Django tests cover:
+Django's built-in testing framework is used to verify:
 
-- Models.
-- Views.
-- Forms.
-- Business rules.
-- Reservation processing.
-- Authentication and authorisation.
-- Rendered template output.
-- Delivery page rendering.
-- Contact page rendering and contact information.
+- Database models and relationships.
+- Product catalogue and filtering.
+- Product search.
+- Product image handling.
+- Reservation form validation.
+- Reservation creation and cancellation.
+- Duplicate reservation prevention.
+- Administrative access and permissions.
+- Rendered templates and navigation.
+- Delivery and Contact pages.
 
-Run the Django test suite:
+Run the complete Django test suite:
 
 ```bash
 python3 manage.py test
 ```
 
-Shared template tests are located in:
-
-```text
-tests/django/
-```
-
-Run the base template tests:
-
-```bash
-python3 manage.py test tests.django.test_base
-```
-
-Run the navigation tests:
-
-```bash
-python3 manage.py test tests.django.test_header
-```
-
-Run the Delivery page tests:
-
-```bash
-python3 manage.py test tests.django.test_delivery
-```
-
-Run the Contact page tests:
-
-```bash
-python3 manage.py test tests.django.test_contact
-```
-
-These tests verify rendered HTML and expected attributes.
-
-They do not establish that Bootstrap assets load successfully in a real browser or that responsive components behave correctly.
-
 #### JavaScript Tests
 
-Jest is used to test client-side cart functionality.
+Jest is used to test client-side shopping cart functionality,
+including product selection, localStorage persistence and
+cart interactions.
 
-Install JavaScript dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Run JavaScript tests:
+Run the JavaScript test suite:
 
 ```bash
 npm test
@@ -1276,109 +1381,55 @@ npm test
 
 ### Manual Testing
 
-Manual testing covers:
+Manual testing covers the main customer journeys:
 
-- Navigation between pages.
-- Mobile navigation behaviour.
-- Product browsing.
-- Category filtering.
-- Product search.
-- Product details.
-- Cart interactions.
-- Reservation form submission.
-- Validation errors.
-- Reservation confirmation.
-- Unavailable product handling.
-- Breadcrumb navigation and parent-page links.
-- Logo links in the header and footer.
-- Footer positioning on pages with limited content.
-- Delivery page navigation and content.
-- Contact page navigation and content.
-- Contact email links.
-- Contact page layout across screen sizes.
+- Browsing, searching and filtering available koi.
+- Viewing product details and photographs.
+- Adding and removing products from the cart.
+- Submitting valid and invalid reservation requests.
+- Preventing reservations of unavailable products.
+- Viewing reservation confirmation.
+- Navigating between website pages.
+- Using the Delivery and Contact pages.
+- Managing products and reservations through Django Admin.
 
-### Contact Page Testing
+### Responsive and Accessibility Testing
 
-The Contact page is tested against its revised acceptance criteria.
+The application is tested across mobile, tablet and desktop
+viewport sizes.
 
-| Test                             | Expected Result                                        |
-| -------------------------------- | ------------------------------------------------------ |
-| Open `/contact/`                 | Contact page loads successfully.                       |
-| Select Contact in the navigation | Contact page opens.                                    |
-| View active navigation state     | Contact navigation link is highlighted.                |
-| View contact information         | Email address is displayed.                            |
-| Select email address             | A `mailto:` link is activated.                         |
-| Select Send an Email             | A `mailto:` link is activated.                         |
-| Use keyboard navigation          | Email links and navigation are keyboard accessible.    |
-| View on mobile                   | Content remains readable without horizontal scrolling. |
-| View on desktop                  | Content aligns with the main page container.           |
+Testing includes:
 
-The browser's response to a `mailto:` link depends on the user's operating system and email application configuration.
-
-The website does not send the email directly.
-
-### Responsive Testing
-
-The website is tested at mobile, tablet and desktop viewport widths.
-
-Testing verifies:
-
-- Layout adaptation.
-- Readable text.
-- Appropriate image scaling.
-- Accessible navigation.
-- Usable forms.
+- Responsive layouts and navigation.
+- Image scaling and content readability.
+- Keyboard navigation and visible focus.
+- Form labels and validation feedback.
+- Colour contrast and semantic HTML.
 - Absence of unintended horizontal scrolling.
-- Hero image and text stacking on mobile devices.
-- Header logo scaling across viewport widths.
-- Footer layout adaptation.
-- Breadcrumb readability on narrow screens.
-- Delivery page card layout.
-- Contact page content alignment and readability.
 
-### Accessibility Testing
+### Code Validation
 
-Accessibility checks include:
-
-- Keyboard navigation.
-- Focus visibility.
-- Image alternative text.
-- Form labels.
-- Colour contrast.
-- Semantic HTML.
-- Accessible navigation controls.
-- Breadcrumb navigation landmarks and current-page identification.
-- Contact email link accessibility.
-
-### Code Validation and Quality
-
-Planned checks include:
+The final application is checked using appropriate validation
+and code-quality tools, including:
 
 - HTML validation.
 - CSS validation.
-- JavaScript code quality.
-- Python code quality.
-- Browser compatibility.
+- Python code-quality checks.
+- JavaScript code-quality checks.
 - Chrome DevTools Lighthouse.
 
-### Testing Evidence
+### Test Results
 
-<!-- TODO: Add final test results, screenshots, validator reports and browser coverage. -->
+Final automated test counts, manual testing outcomes,
+browser compatibility results and validation reports
+are recorded in [TESTING.md](TESTING.md).
 
----
+### Bugs and Fixes
 
-## Bugs
+Issues identified during development are documented together
+with their causes, resolutions and retesting results.
 
-Significant bugs discovered during development are documented with:
-
-1. Description of the problem.
-2. Cause of the problem.
-3. Steps taken to resolve it.
-4. Retesting results.
-
-### Known Bugs
-
-<!-- TODO: Add verified bugs and fixes. -->
+See [TESTING.md](TESTING.md) for detailed bug reports.
 
 ---
 

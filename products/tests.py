@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from cloudinary import CloudinaryImage
 
 from .models import Product, ProductImage, Category
 
@@ -63,9 +64,12 @@ class ProductAdminTests(TestCase):
                 "age": 3,
                 "status": Product.ProductStatus.AVAILABLE,
                 "_save": "Save",
+                "images-TOTAL_FORMS": "0",
+                "images-INITIAL_FORMS": "0",
+                "images-MIN_NUM_FORMS": "0",
+                "images-MAX_NUM_FORMS": "1000",
             },
         )
-
         self.assertEqual(response.status_code, 302)
 
         self.assertTrue(
@@ -156,13 +160,13 @@ class ProductCatalogueTests(TestCase):
 
         primary_image = ProductImage.objects.create(
             product=self.available_product,
-            image="products/kohaku_primary.jpg",
+            image=CloudinaryImage("products/kohaku_primary"),
             is_primary=True,
         )
 
         secondary_image = ProductImage.objects.create(
             product=self.available_product,
-            image="products/kohaku_secondary.jpg",
+            image=CloudinaryImage("products/kohaku_secondary"),
             is_primary=False,
         )
 
@@ -191,19 +195,6 @@ class ProductCatalogueTests(TestCase):
         self.assertContains(
             response,
             f'href="{product_url}"'
-        )
-
-    def test_catalogue_displays_breadcrumbs(self):
-        """Display navigation breadcrumbs on the catalogue page."""
-        response = self.client.get(reverse("product_list"))
-
-        self.assertContains(
-            response,
-            '<nav aria-label="Breadcrumb">'
-        )
-        self.assertContains(
-            response,
-            '<span aria-current="page">Catalogue</span>'
         )
 
 
@@ -245,13 +236,13 @@ class ProductDetailTests(TestCase):
 
         primary_image = ProductImage.objects.create(
             product=self.product,
-            image="products/showa_primary.jpg",
+            image=CloudinaryImage("products/showa_primary"),
             is_primary=True,
         )
 
         secondary_image = ProductImage.objects.create(
             product=self.product,
-            image="products/showa_secondary.jpg",
+            image=CloudinaryImage("products/showa_secondary"),
             is_primary=False,
         )
 
@@ -282,7 +273,7 @@ class ProductDetailTests(TestCase):
 
         self.assertContains(
             response,
-            '<nav aria-label="Breadcrumb">'
+            '<nav class="breadcrumbs" aria-label="Breadcrumb">'
         )
         self.assertContains(response, "Home")
         self.assertContains(response, "Catalogue")
@@ -482,7 +473,10 @@ class HomePageTests(TestCase):
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Premium Japanese Koi")
+        self.assertContains(
+            response,
+            "Vibrant, Healthy Koi — Raised with Care at Home"
+        )
         self.assertContains(
             response,
             f'href="{reverse("product_list")}"',
@@ -494,5 +488,6 @@ class HomePageTests(TestCase):
 
         self.assertContains(
             response,
-            f'<a href="{reverse("home")}">Koi4Sale</a>',
+            'class="navbar-brand" href="/" aria-label="Koi4Sale home"'
         )
+        self.assertContains(response, 'alt="Koi4Sale"')

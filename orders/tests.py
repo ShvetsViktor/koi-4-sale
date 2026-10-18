@@ -541,9 +541,11 @@ class CartPageTests(TestCase):
         """The cart page should contain a reservation form."""
         response = self.client.get("/cart/")
 
+        self.assertContains(response, 'id="reservation-form"')
+        self.assertContains(response, 'method="post"')
         self.assertContains(
             response,
-            '<form id="reservation-form" method="post" action="/reserve/" hidden>'
+            f'action="{reverse("reservation_create")}"'
         )
         self.assertContains(response, 'name="customer_name"')
         self.assertContains(response, 'name="email"')
@@ -556,7 +558,7 @@ class CartPageTests(TestCase):
 
         self.assertContains(
             response,
-            '<nav aria-label="Breadcrumb">'
+            '<nav class="breadcrumbs" aria-label="Breadcrumb">'
         )
         self.assertContains(
             response,

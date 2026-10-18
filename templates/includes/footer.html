@@ -3,12 +3,13 @@
 <footer class="site-footer">
   <div class="container">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-      <img
+      <a href="{% url 'home' %}" aria-label="Koi4Sale — Home">
+        <img
           src="{% static 'images/logo.svg' %}"
           alt="Koi4Sale"
-          width="160"
-          height="48"
+          width="140"
         >
+      </a>
 
       <p class="mb-0">
         &copy; {% now "Y" %} Koi4Sale. All rights reserved.

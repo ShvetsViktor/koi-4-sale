@@ -1,6 +1,6 @@
 # Koi4Sale – Django Koi Reservation Website
 
-<!-- mockup goes here -->
+<!-- TODO: Add responsive website mockup. -->
 
 **Live Website:** https://koi-for-sale-2e89f5c55c63.herokuapp.com/
 
@@ -20,7 +20,7 @@ The project is developed incrementally using GitHub Issues, milestones and autom
 
 The previous Koi4Sale website, developed using Next.js, React and TypeScript, serves as a visual and UX reference. This project is a separate implementation using Django Templates, HTML, CSS, Bootstrap and vanilla JavaScript.
 
-> **Project Status:** The backend and reservation functionality have been developed. The responsive frontend interface is currently being implemented and refined. Features are not considered complete until implemented and verified.
+> **Project Status:** The backend and reservation functionality have been developed. The responsive frontend interface is being completed and refined. The Delivery and Contact pages have been implemented. Final testing and documentation are ongoing.
 
 ---
 
@@ -56,6 +56,7 @@ The previous Koi4Sale website, developed using Next.js, React and TypeScript, se
 - Submit a reservation request without creating an account.
 - Receive clear confirmation or validation feedback.
 - Access delivery information and contact details.
+- Contact the seller directly by email.
 - Use the website comfortably on mobile, tablet and desktop devices.
 
 ### Site Owner Goals
@@ -66,6 +67,7 @@ The previous Koi4Sale website, developed using Next.js, React and TypeScript, se
 - Manage products and reservation requests through authenticated administration.
 - Prevent duplicate reservations.
 - Preserve historical order information.
+- Provide customers with a straightforward way to make enquiries.
 - Keep the application secure, maintainable and suitable for future development.
 
 ### Assessment Goals
@@ -94,6 +96,8 @@ When a reservation is successfully created, the selected koi must become unavail
 
 Django Admin provides authenticated administrative functionality for managing application records.
 
+The reservation form demonstrates server-side form processing and validation. A separate contact form is not required for the application's core reservation functionality.
+
 ---
 
 ## Target Audience
@@ -121,7 +125,8 @@ Customers need:
 - Simple navigation.
 - An understandable reservation process.
 - Confidence that unavailable koi cannot be reserved.
-- Clear delivery and contact information.
+- Clear delivery information.
+- An accessible email address for enquiries.
 
 The site owner needs:
 
@@ -129,6 +134,7 @@ The site owner needs:
 - Persistent customer and reservation records.
 - Straightforward product administration.
 - Protection against duplicate reservations.
+- A simple way for customers to initiate contact.
 - A maintainable application.
 
 These requirements inform the project's functionality and UX decisions.
@@ -161,7 +167,7 @@ The project uses **MoSCoW prioritisation** to distinguish essential functionalit
 | Responsive Navigation          | Must Have   | Provide accessible navigation across screen sizes.                                           |
 | Responsive Catalogue           | Must Have   | Display product cards appropriately on different devices.                                    |
 | Delivery Information           | Should Have | Explain delivery arrangements and conditions.                                                |
-| Contact Information            | Should Have | Provide contact details and enquiry options.                                                 |
+| Contact Information            | Should Have | Provide an email address and a direct email contact option.                                  |
 | Search Koi                     | Should Have | Help visitors find koi using search terms.                                                   |
 | Frequently Asked Questions     | Could Have  | Answer common customer questions.                                                            |
 | Reservation Confirmation Email | Could Have  | Send customers confirmation of their reservation request.                                    |
@@ -299,18 +305,33 @@ As a **visitor**, I want to understand the delivery arrangements so that I can d
 **Acceptance Criteria**
 
 - Delivery information is accessible through the website.
-- Available delivery or collection arrangements are explained.
-- Relevant limitations or conditions are clearly communicated.
+- The page explains the delivery process.
+- The main delivery stages are presented clearly.
+- Visitors can navigate to the Delivery page from the main navigation.
+- The page is responsive on mobile and desktop devices.
 
 #### Contact Information
 
-As a **visitor**, I want to contact the seller so that I can ask questions before submitting a reservation.
+As a **visitor**, I want to find the seller's contact details so that I can ask questions about koi, delivery or reservations.
 
 **Acceptance Criteria**
 
-- Contact information is easy to locate.
-- Visitors have a clear method of contacting the seller.
-- Any contact form includes appropriate validation and feedback.
+- Visitors can access a dedicated Contact page.
+- The seller's email address is clearly displayed.
+- The email address is a clickable `mailto:` link.
+- A **Send an Email** button provides a direct email contact option.
+- The Contact page is accessible through the main navigation.
+- The page displays correctly on mobile, tablet and desktop devices.
+
+**Implementation Notes**
+
+The Contact page provides a direct email contact method rather than a web-based enquiry form.
+
+Visitors can copy the displayed email address or use the email links to open their preferred email application.
+
+This approach was selected to keep the initial application focused on its core reservation functionality and avoid introducing an additional form-processing workflow.
+
+A dedicated Django contact form may be considered as a future enhancement.
 
 ### Additional User Stories
 
@@ -399,7 +420,8 @@ The purpose of Koi4Sale is to make browsing and reserving individual koi straigh
 
 - Present individual koi professionally.
 - Make currently available fish easy to discover.
-- Receive reservation enquiries from interested customers.
+- Receive reservation requests from interested customers.
+- Provide a direct email contact option for general enquiries.
 - Maintain accurate product availability.
 - Manage customer and reservation information efficiently.
 
@@ -410,6 +432,7 @@ The purpose of Koi4Sale is to make browsing and reserving individual koi straigh
 - Access reliable product information.
 - Understand the reservation process.
 - Submit a reservation request with confidence.
+- Contact the seller when additional information is needed.
 
 #### Design Principles
 
@@ -428,6 +451,8 @@ Reservation requests must be validated on the server, and unavailable products m
 **Simplicity**
 
 The initial application does not require customer registration or online payment.
+
+General enquiries are handled through direct email links rather than an additional web form.
 
 ### 2. Scope — What Must the Website Provide?
 
@@ -453,8 +478,9 @@ These functions form the core of the application.
 - Delivery Information.
 - Contact Information.
 - Search Koi.
+- Shopping Cart Indicator.
 
-These features improve product discovery and help visitors make informed reservation decisions.
+These features improve product discovery, navigation and communication.
 
 #### Could Have — Optional Enhancements
 
@@ -477,6 +503,19 @@ The website should provide:
 - Contact information.
 - Reservation guidance.
 
+#### Scope Exclusions
+
+The initial application does not include:
+
+- Customer registration.
+- Online payments.
+- A dedicated web-based contact form.
+- Automated processing of general email enquiries.
+
+Customer reservation requests are processed through the Django reservation form.
+
+General enquiries are handled through the seller's displayed email address and `mailto:` links.
+
 The scope is managed using MoSCoW prioritisation and GitHub Issues.
 
 A feature is not considered complete solely because its backend functionality exists. User-facing behaviour must also be implemented and verified.
@@ -487,7 +526,7 @@ The Structure plane defines the information architecture and user interaction fl
 
 #### Information Architecture
 
-The planned customer-facing structure is:
+The customer-facing structure is:
 
 ```text
 Koi4Sale
@@ -506,24 +545,23 @@ Koi4Sale
 ├── Delivery Information
 │
 ├── Contact
+│   └── Email Contact
 │
-└── Frequently Asked Questions
+└── Frequently Asked Questions (Optional)
 ```
 
 Administrative functionality is accessed separately through authenticated Django Admin.
 
 #### Breadcrumb Navigation
 
-Breadcrumb navigation provides an additional way for visitors to understand
-their location within the website.
+Breadcrumb navigation provides an additional way for visitors to understand their location within the website.
 
 The breadcrumbs follow the page hierarchy:
 
 - Catalogue: Home → Catalogue
 - Product Details: Home → Catalogue → Product Name
 
-Parent pages are displayed as links, allowing visitors to navigate backwards
-through the website hierarchy.
+Parent pages are displayed as links, allowing visitors to navigate backwards through the website hierarchy.
 
 The current page is displayed as text rather than a link.
 
@@ -531,8 +569,9 @@ Breadcrumbs are implemented using a reusable Django template:
 
 `templates/includes/breadcrumbs.html`
 
-The component receives the current page label and optional parent page
-information through Django template context.
+The component receives the current page label and optional parent page information through Django template context.
+
+Breadcrumbs are used where they improve navigation within the product catalogue. They are not required on every informational page.
 
 #### Primary User Flow — Reservation
 
@@ -547,6 +586,17 @@ The main customer journey follows these steps:
 7. Enter contact information.
 8. Submit a reservation request.
 9. Receive confirmation or validation feedback.
+
+#### Secondary User Flow — General Enquiry
+
+Visitors who need additional information can:
+
+1. Open the Contact page from the main navigation.
+2. Read the displayed email address.
+3. Copy the address or select **Send an Email**.
+4. Compose their enquiry using their preferred email application.
+
+The website does not collect or store general enquiries through a separate contact form.
 
 #### Reservation Terminology
 
@@ -565,12 +615,14 @@ The application should not suggest that payment has been completed when no payme
 
 Users should receive clear feedback when:
 
-- Required form information is missing.
-- Submitted information is invalid.
+- Required reservation information is missing.
+- Submitted reservation information is invalid.
 - A selected koi is no longer available.
 - A reservation cannot be completed.
 - A requested product does not exist.
 - A search or category filter returns no results.
+
+The Contact page does not perform server-side enquiry validation because it does not submit a web form.
 
 <!-- TODO: Add the final user-flow diagram. -->
 
@@ -614,15 +666,15 @@ The footer is implemented as a reusable Django template.
 - A prominent hero section introduces the website.
 - The main heading and description appear beside a large koi photograph.
 - A primary **Shop Koi** button leads to the catalogue.
+- A secondary **Shipping Info** link leads to the Delivery page.
 - The hero uses a two-column layout with text on the left and a koi photograph on the right.
-- The primary call-to-action links directly to the product catalogue.
 
 **Mobile Layout**
 
 - Hero content is arranged vertically.
 - The main heading and calls-to-action appear before the image.
 - Text remains readable without horizontal scrolling.
-- Buttons are large enough for comfortable touch interaction.
+- Interactive elements are suitable for touch interaction.
 
 #### Catalogue
 
@@ -650,6 +702,36 @@ The footer is implemented as a reusable Django template.
 - Validation errors appear near relevant inputs where appropriate.
 - Confirmation explains the next steps.
 
+#### Delivery Page
+
+The Delivery page provides a dedicated informational layout.
+
+- A prominent hero introduces the delivery process.
+- Supporting text explains the importance of careful handling.
+- A delivery-related image supports the content.
+- A primary button links to the delivery steps.
+- Four numbered cards explain the main stages:
+  1. Order Confirmation.
+  2. Preparation.
+  3. Packing and Shipping.
+  4. Receiving Your Koi.
+- The layout adapts to mobile and desktop devices.
+
+#### Contact Page
+
+The Contact page uses a simple, responsive layout.
+
+- A **Get in Touch** heading identifies the page.
+- A short introductory paragraph explains its purpose.
+- A contact information card displays the seller's email address.
+- The email address is clickable.
+- A prominent **Send an Email** button provides a second contact option.
+- The content is aligned with the main page container.
+- The content width is limited on larger screens to improve readability.
+- On smaller screens, the content uses the available width.
+
+The page deliberately avoids a separate enquiry form to keep the contact process straightforward.
+
 <!-- TODO: Add desktop and mobile wireframes. -->
 
 ### 5. Surface — What Does the Interface Look Like?
@@ -674,11 +756,9 @@ These colours represent the intended design and will be reviewed during accessib
 
 The website uses the Inter variable font, self-hosted in WOFF2 format.
 
-Inter was selected for its readability, clean appearance and suitability
-for responsive interfaces.
+Inter was selected for its readability, clean appearance and suitability for responsive interfaces.
 
-The font is applied consistently across headings, body text, navigation
-and interface components.
+The font is applied consistently across headings, body text, navigation and interface components.
 
 The project includes the font's SIL Open Font License 1.1.
 
@@ -700,6 +780,8 @@ The home page should guide attention through:
 4. Koi photography.
 5. Available or featured products.
 
+Informational pages use a consistent heading hierarchy, supporting text and clearly identified actions.
+
 #### Responsive Design
 
 Bootstrap 5.3 provides the responsive grid and navigation components.
@@ -714,16 +796,15 @@ The current navigation uses Bootstrap's `lg` breakpoint at 992px.
 
 The breakpoint may be adjusted if testing shows that another layout works better.
 
-The home page hero uses a two-column layout on larger screens and stacks
-its content vertically on smaller screens.
+The home page hero uses a two-column layout on larger screens and stacks its content vertically on smaller screens.
 
-The catalogue uses Bootstrap's responsive grid utilities to adjust the
-number of product columns according to viewport width.
+The catalogue uses Bootstrap's responsive grid utilities to adjust the number of product columns according to viewport width.
 
-Mobile container spacing was customised to provide more comfortable
-horizontal padding.
+Mobile container spacing was customised to provide more comfortable horizontal padding.
 
 The shared footer adapts its layout to the available screen width.
+
+The Contact page uses a constrained content width on larger screens while maintaining alignment with the main page container.
 
 #### Accessibility
 
@@ -737,6 +818,7 @@ The interface should include:
 - Appropriate colour contrast.
 - Clear validation messages.
 - Responsive content without unnecessary horizontal scrolling.
+- Descriptive links and buttons.
 
 <!-- TODO: Add final screenshots and visual testing evidence. -->
 
@@ -792,7 +874,7 @@ Each koi is represented by one `Product` record.
 
 Product status determines whether a koi is available for reservation.
 
-The planned status values are:
+The status values are:
 
 - `available`
 - `reserved`
@@ -807,13 +889,13 @@ The reservation workflow changes a successfully reserved product from:
 available → reserved
 ```
 
-The application should not maintain a duplicate availability boolean without a specific requirement.
+The application does not require a duplicate availability boolean.
 
 ### Reservation Integrity
 
 Product availability is checked on the server when a reservation request is submitted.
 
-The reservation process must ensure that:
+The reservation process ensures that:
 
 - Unavailable products are rejected.
 - Related customer and order records are created consistently.
@@ -879,12 +961,9 @@ A successful Django template test does not by itself prove that the interface be
 
 #### Unplanned UX Improvements
 
-During responsive testing, an additional usability issue was identified:
-the shopping cart link was hidden inside the collapsed mobile navigation,
-making it difficult for visitors to see whether products had been added.
+During responsive testing, an additional usability issue was identified: the shopping cart link was hidden inside the collapsed mobile navigation, making it difficult for visitors to see whether products had been added.
 
-To address this issue, a shopping cart indicator was introduced as an
-additional Should Have feature.
+To address this issue, a shopping cart indicator was introduced as an additional Should Have feature.
 
 The implementation uses:
 
@@ -896,13 +975,35 @@ The implementation uses:
 
 The same cart indicator is used on desktop and mobile.
 
-This improvement was added during development in response to usability
-testing rather than being part of the original project scope.
+This improvement was added during development in response to usability testing rather than being part of the original project scope.
+
+#### Contact Page Scope Adjustment
+
+The initial Contact user story proposed a Django enquiry form with server-side validation and submission processing.
+
+During development, the scope was reviewed against the project's primary objectives and available development time.
+
+The decision was made to provide direct email contact instead of introducing a separate enquiry-processing workflow.
+
+The revised implementation includes:
+
+- A dedicated Contact page.
+- A visible email address.
+- A clickable `mailto:` email link.
+- A **Send an Email** button.
+- Responsive styling.
+- Integration with the main navigation.
+- Automated tests for page rendering and contact information.
+
+The reservation form remains the application's primary example of customer-facing Django form processing and server-side validation.
+
+This scope adjustment preserves a clear way for customers to contact the seller while prioritising completion and testing of the core reservation functionality.
+
+The corresponding GitHub Issue and acceptance criteria were updated to reflect the implemented feature.
 
 ### Reusable Frontend Components
 
-The frontend uses reusable Django template components to maintain
-consistency across pages.
+The frontend uses reusable Django template components to maintain consistency across pages.
 
 Shared components include:
 
@@ -911,28 +1012,23 @@ Shared components include:
 - `includes/footer.html` — branding and copyright information.
 - `includes/breadcrumbs.html` — contextual page navigation.
 
-Individual pages extend the base template and include shared components
-where appropriate.
+Individual pages extend the base template and include shared components where appropriate.
 
-Bootstrap 5.3 provides responsive layout utilities, while custom CSS
-defines the website's visual identity.
+Bootstrap 5.3 provides responsive layout utilities, while custom CSS defines the website's visual identity.
 
-The frontend follows a mobile-first approach, with layouts progressively
-adapting to larger viewport widths.
+The frontend follows a mobile-first approach, with layouts progressively adapting to larger viewport widths.
 
 ### Development Milestones
 
 <!-- TODO: Add the final GitHub milestone names, descriptions and completion status. -->
 
-**Current Development Stage:** Frontend and User Experience.
-
-The current focus is responsive navigation, shared layout and page presentation.
+**Current Development Stage:** Frontend refinement, testing and documentation.
 
 ---
 
 ## Features
 
-This section will be expanded as functionality is implemented and verified.
+This section describes the implemented functionality and remaining work.
 
 ### Implemented / Under Verification
 
@@ -943,6 +1039,8 @@ This section will be expanded as functionality is implemented and verified.
 - Product image storage using Cloudinary.
 - Customer and reservation records.
 - Server-side reservation processing.
+- Reservation form validation.
+- Duplicate reservation prevention.
 - Client-side shopping cart.
 - Responsive shopping cart icon with a live item counter.
 - Persistent cart count based on browser localStorage.
@@ -953,6 +1051,7 @@ This section will be expanded as functionality is implemented and verified.
 - Bootstrap collapsible mobile navigation.
 - Reusable breadcrumb navigation.
 - Responsive home page hero with koi photography.
+- Home page navigation to the catalogue and delivery information.
 - Responsive product catalogue grid.
 - Shared responsive footer with SVG branding.
 - Sticky footer layout for pages with limited content.
@@ -964,16 +1063,55 @@ This section will be expanded as functionality is implemented and verified.
 - Primary Cloudinary images in the catalogue, cart and reservation confirmation.
 - Static placeholder images when no primary image is available.
 
+### Delivery Information Page
+
+The Delivery page provides visitors with information about the process of transporting koi.
+
+Implemented features include:
+
+- A dedicated `/delivery/` route.
+- A responsive hero section.
+- A delivery-related image.
+- A button linking to the delivery steps.
+- Four numbered delivery information cards.
+- Integration with the main navigation.
+- Automated Django tests.
+
+The delivery information explains the process without promising unverified delivery times or services.
+
+### Contact Information Page
+
+The Contact page provides a simple way for visitors to contact the seller.
+
+Implemented features include:
+
+- A dedicated `/contact/` route.
+- A **Get in Touch** heading.
+- A short introductory description.
+- A contact information card.
+- A visible email address.
+- A clickable `mailto:` link.
+- A **Send an Email** button.
+- Integration with the main navigation.
+- Responsive layout for mobile and desktop devices.
+- Automated Django tests for the page and its content.
+
+The page does not include a Django enquiry form.
+
+General enquiries are handled through the visitor's email application.
+
 ### In Progress
 
 - Final catalogue styling.
 - Product detail page styling.
 - Cart and reservation form presentation.
-- Delivery, contact and FAQ page presentation.
 - Complete responsive and accessibility testing.
+- Final testing documentation.
+- Final README documentation.
 
 ### Optional Features
 
+- Frequently Asked Questions page.
 - Reservation confirmation email.
 - Featured koi carousel.
 
@@ -989,7 +1127,7 @@ Testing is performed throughout development.
 
 Automated tests verify important application behaviour, while manual testing checks complete user journeys and visual presentation.
 
-Detailed test cases, expected and actual results, screenshots and bug retesting will be documented in a separate **TESTING.md** file.
+Detailed test cases, expected and actual results, screenshots and bug retesting are documented in a separate **TESTING.md** file.
 
 ### Automated Testing
 
@@ -1004,6 +1142,8 @@ Django tests cover:
 - Reservation processing.
 - Authentication and authorisation.
 - Rendered template output.
+- Delivery page rendering.
+- Contact page rendering and contact information.
 
 Run the Django test suite:
 
@@ -1029,6 +1169,18 @@ Run the navigation tests:
 python3 manage.py test tests.django.test_header
 ```
 
+Run the Delivery page tests:
+
+```bash
+python3 manage.py test tests.django.test_delivery
+```
+
+Run the Contact page tests:
+
+```bash
+python3 manage.py test tests.django.test_contact
+```
+
 These tests verify rendered HTML and expected attributes.
 
 They do not establish that Bootstrap assets load successfully in a real browser or that responsive components behave correctly.
@@ -1051,7 +1203,7 @@ npm test
 
 ### Manual Testing
 
-Manual testing will cover:
+Manual testing covers:
 
 - Navigation between pages.
 - Mobile navigation behaviour.
@@ -1067,12 +1219,36 @@ Manual testing will cover:
 - Breadcrumb navigation and parent-page links.
 - Logo links in the header and footer.
 - Footer positioning on pages with limited content.
+- Delivery page navigation and content.
+- Contact page navigation and content.
+- Contact email links.
+- Contact page layout across screen sizes.
+
+### Contact Page Testing
+
+The Contact page is tested against its revised acceptance criteria.
+
+| Test                             | Expected Result                                        |
+| -------------------------------- | ------------------------------------------------------ |
+| Open `/contact/`                 | Contact page loads successfully.                       |
+| Select Contact in the navigation | Contact page opens.                                    |
+| View active navigation state     | Contact navigation link is highlighted.                |
+| View contact information         | Email address is displayed.                            |
+| Select email address             | A `mailto:` link is activated.                         |
+| Select Send an Email             | A `mailto:` link is activated.                         |
+| Use keyboard navigation          | Email links and navigation are keyboard accessible.    |
+| View on mobile                   | Content remains readable without horizontal scrolling. |
+| View on desktop                  | Content aligns with the main page container.           |
+
+The browser's response to a `mailto:` link depends on the user's operating system and email application configuration.
+
+The website does not send the email directly.
 
 ### Responsive Testing
 
-The website will be tested at mobile, tablet and desktop viewport widths.
+The website is tested at mobile, tablet and desktop viewport widths.
 
-Testing will verify:
+Testing verifies:
 
 - Layout adaptation.
 - Readable text.
@@ -1084,10 +1260,12 @@ Testing will verify:
 - Header logo scaling across viewport widths.
 - Footer layout adaptation.
 - Breadcrumb readability on narrow screens.
+- Delivery page card layout.
+- Contact page content alignment and readability.
 
 ### Accessibility Testing
 
-Accessibility checks will include:
+Accessibility checks include:
 
 - Keyboard navigation.
 - Focus visibility.
@@ -1097,6 +1275,7 @@ Accessibility checks will include:
 - Semantic HTML.
 - Accessible navigation controls.
 - Breadcrumb navigation landmarks and current-page identification.
+- Contact email link accessibility.
 
 ### Code Validation and Quality
 
@@ -1111,13 +1290,13 @@ Planned checks include:
 
 ### Testing Evidence
 
-<!-- TODO: Add actual test results, screenshots, validator reports and browser coverage. -->
+<!-- TODO: Add final test results, screenshots, validator reports and browser coverage. -->
 
 ---
 
 ## Bugs
 
-Significant bugs discovered during development will be documented with:
+Significant bugs discovered during development are documented with:
 
 1. Description of the problem.
 2. Cause of the problem.
@@ -1320,6 +1499,7 @@ Static assets include:
 - JavaScript.
 - Favicons.
 - Default product images.
+- Home and delivery page images.
 
 The project uses the following Django settings:
 
@@ -1390,7 +1570,7 @@ A product can have multiple photographs.
 
 One image may be designated as the primary image.
 
-Each product can have one primary image, identified by is_primary=True. A database constraint prevents multiple primary images from being assigned to the same product.
+Each product can have one primary image, identified by `is_primary=True`. A database constraint prevents multiple primary images from being assigned to the same product.
 
 The primary image is displayed in the catalogue, shopping cart and reservation confirmation. The product detail page displays all available photographs.
 
@@ -1465,7 +1645,8 @@ External code, tutorials, documentation, images and other resources will be attr
 
 The project is organised as follows:
 
-```koi-4-sale/
+```text
+koi-4-sale/
 ├── config/                 # Django project configuration
 ├── orders/                 # Cart and reservation functionality
 ├── products/               # Product catalogue and images
@@ -1480,9 +1661,13 @@ The project is organised as follows:
 │   │   ├── footer.html
 │   │   └── header.html
 │   ├── base.html
+│   ├── contact.html
+│   ├── delivery.html
 │   └── home.html
 ├── tests/
-│   └── django/             # Django template tests
+│   └── django/
+│       ├── test_contact.py
+│       └── test_delivery.py
 ├── manage.py
 ├── requirements.txt
 ├── package.json
@@ -1491,6 +1676,8 @@ The project is organised as follows:
 └── TESTING.md
 ```
 
+The diagram shows the principal directories and selected files rather than every file in the repository.
+
 The repository excludes local virtual environments, generated static files, database files and sensitive configuration.
 
 ---
@@ -1498,6 +1685,21 @@ The repository excludes local virtual environments, generated static files, data
 ## Future Improvements
 
 The following features may be considered after the MVP has been completed.
+
+### Contact Form
+
+Introduce a dedicated Django contact form to allow visitors to submit enquiries directly through the website.
+
+Possible functionality includes:
+
+- Name, email, subject and message fields.
+- Server-side validation.
+- Email delivery or database storage.
+- Success and error messages.
+- Spam protection.
+- Automated submission tests.
+
+The current Contact page already provides direct email contact, so this enhancement is not required for the initial release.
 
 ### Advanced Search and Filtering
 

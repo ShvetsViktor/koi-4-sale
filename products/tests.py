@@ -487,7 +487,7 @@ class HomePageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response,
-            "Vibrant, Healthy Koi — Raised with Care at Home"
+            "Beautiful Koi, Raised with Care"
         )
         self.assertContains(
             response,

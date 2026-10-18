@@ -47,14 +47,19 @@
     </form>
 
     <!-- Category filters -->
-    <nav
-      class="category-filters d-flex flex-wrap gap-3 mb-4"
-      aria-label="Filter koi by variety"
-    >
-      <a href="{% url 'product_list' %}">All Koi</a>
+    <nav aria-label="Filter koi by variety" class="category-filters d-flex flex-wrap gap-3 mb-4">
+      <a
+        href="{% url 'product_list' %}"
+        {% if not request.GET.category %}class="active" aria-current="page"{% endif %}
+      >
+        All Koi
+      </a>
 
       {% for category in categories %}
-      <a href="?category={{ category.pk }}">
+      <a
+        href="?category={{ category.pk }}"
+        {% if request.GET.category == category.pk|stringformat:"s" %}class="active" aria-current="page"{% endif %}
+      >
         {{ category.name }}
       </a>
       {% endfor %}

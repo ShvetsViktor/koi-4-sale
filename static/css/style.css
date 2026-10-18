@@ -167,6 +167,11 @@ main {
   color: var(--koi-accent);
 }
 
+.category-filters a.active {
+  color: var(--koi-accent);
+  font-weight: 600;
+}
+
 /* Shopping cart */
 .cart-page {
   padding-block: 32px 80px;

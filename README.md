@@ -941,7 +941,6 @@ This section will be expanded as functionality is implemented and verified.
 - Category filtering functionality.
 - Product search functionality.
 - Product image storage using Cloudinary.
-- Default placeholder images.
 - Customer and reservation records.
 - Server-side reservation processing.
 - Client-side shopping cart.
@@ -961,6 +960,9 @@ This section will be expanded as functionality is implemented and verified.
 - Custom dark colour scheme and orange brand accent.
 - Automated tests for shared template assets.
 - Automated tests for navigation markup.
+- Primary product image selection with a database uniqueness constraint.
+- Primary Cloudinary images in the catalogue, cart and reservation confirmation.
+- Static placeholder images when no primary image is available.
 
 ### In Progress
 
@@ -1388,7 +1390,11 @@ A product can have multiple photographs.
 
 One image may be designated as the primary image.
 
-The primary image is used in the catalogue, while additional images can be displayed on the product detail page.
+Each product can have one primary image, identified by is_primary=True. A database constraint prevents multiple primary images from being assigned to the same product.
+
+The primary image is displayed in the catalogue, shopping cart and reservation confirmation. The product detail page displays all available photographs.
+
+If no primary image is available, the application displays a static placeholder.
 
 #### Fallback Images
 

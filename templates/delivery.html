@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Delivery Information | Koi4Sale{% endblock %}
+
+{% block content %}
+<section class="delivery-page py-5" aria-labelledby="delivery-title">
+  <div class="container">
+
+    {% include "includes/breadcrumbs.html" with current_label="Delivery" only %}
+
+    <h1 id="delivery-title" class="mb-4">Delivery Information</h1>
+
+    <p>
+      Please contact us to discuss delivery arrangements
+      before reserving your koi.
+    </p>
+
+    <h2 class="h4 mt-4">Delivery Arrangements</h2>
+    <p>
+      Delivery availability, costs, and estimated delivery times
+      are confirmed individually.
+    </p>
+
+    <h2 class="h4 mt-4">Fish Welfare</h2>
+    <p>
+      The welfare of our koi is a priority.
+      Transportation arrangements must be suitable for live fish.
+    </p>
+
+  </div>
+</section>
+{% endblock %}

@@ -74,6 +74,16 @@
             </a>
           </li>
 
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.resolver_match.url_name == 'delivery' %}active{% endif %}"
+              href="{% url 'delivery' %}"
+              {% if request.resolver_match.url_name == 'delivery' %}aria-current="page"{% endif %}
+            >
+              Delivery
+            </a>
+          </li>
+
           <li class="nav-item d-none d-lg-block">
             <a
               class="nav-link desktop-cart {% if request.resolver_match.url_name == 'cart' %}active{% endif %}"

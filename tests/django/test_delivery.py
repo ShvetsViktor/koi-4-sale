@@ -19,3 +19,22 @@ class DeliveryPageTests(TestCase):
         response = self.client.get(reverse("delivery"))
 
         self.assertContains(response, "Delivery Information")
+
+    def test_delivery_page_displays_hero_image(self):
+        """Delivery page should display its hero image."""
+        response = self.client.get(reverse("delivery"))
+
+        self.assertContains(response, 'alt="Delivery worker standing beside a van with packages"')
+        self.assertContains(response, "/static/images/delivery.")
+
+    def test_delivery_page_displays_delivery_steps(self):
+        """Delivery page should display all four delivery steps."""
+        response = self.client.get(reverse("delivery"))
+
+        for heading in [
+            "Order Confirmation",
+            "Preparation",
+            "Packing and Shipping",
+            "Receiving Your Koi",
+        ]:
+            self.assertContains(response, heading)

@@ -3,30 +3,86 @@
 {% block title %}Delivery Information | Koi4Sale{% endblock %}
 
 {% block content %}
-<section class="delivery-page py-5" aria-labelledby="delivery-title">
+
+{% include "includes/hero.html" with variant="delivery" title_id="delivery-title" title="Safe & Reliable Koi Delivery" description="Transporting live koi requires careful preparation and handling. Our delivery process is designed to prioritise fish welfare and minimise stress during transportation." image="images/delivery.jpg" image_alt="Delivery worker standing beside a van with packages" primary_url="#delivery-steps" primary_text="View Delivery Steps" only %}
+
+<section class="delivery-page py-5">
   <div class="container">
 
-    {% include "includes/breadcrumbs.html" with current_label="Delivery" only %}
+    <!-- Delivery steps -->
+    <section id="delivery-steps" aria-labelledby="delivery-steps-title">
+      <h2 id="delivery-steps-title" class="mb-4">Delivery Steps</h2>
 
-    <h1 id="delivery-title" class="mb-4">Delivery Information</h1>
+      <div class="row g-4">
+        
+        <!-- Step 1 -->
+        <div class="col-md-6">
+          <article class="delivery-step h-100">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <span class="delivery-step-icon" aria-hidden="true">01</span>
+              <h3 class="h5 mb-0">Order Confirmation</h3>
+            </div>
 
-    <p>
-      Please contact us to discuss delivery arrangements
-      before reserving your koi.
-    </p>
+            <p class="mb-0">
+              After receiving your reservation request, we contact
+              you to confirm availability and discuss suitable
+              delivery arrangements.
+            </p>
+          </article>
+        </div>
 
-    <h2 class="h4 mt-4">Delivery Arrangements</h2>
-    <p>
-      Delivery availability, costs, and estimated delivery times
-      are confirmed individually.
-    </p>
+        <!-- Step 2 -->
+        <div class="col-md-6">
+          <article class="delivery-step h-100">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <span class="delivery-step-icon" aria-hidden="true">02</span>
+              <h3 class="h5 mb-0">Preparation</h3>
+            </div>
 
-    <h2 class="h4 mt-4">Fish Welfare</h2>
-    <p>
-      The welfare of our koi is a priority.
-      Transportation arrangements must be suitable for live fish.
-    </p>
+            <p class="mb-0">
+              Before transportation, koi are prepared for their journey.
+              Appropriate handling and preparation help reduce stress
+              during delivery.
+            </p>
+          </article>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="col-md-6">
+          <article class="delivery-step h-100">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <span class="delivery-step-icon" aria-hidden="true">03</span>
+              <h3 class="h5 mb-0">Packing and Shipping</h3>
+            </div>
+
+            <p class="mb-0">
+              Koi require suitable packaging and transportation
+              conditions. Delivery arrangements are confirmed
+              individually before dispatch.
+            </p>
+          </article>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="col-md-6">
+          <article class="delivery-step h-100">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <span class="delivery-step-icon" aria-hidden="true">04</span>
+              <h3 class="h5 mb-0">Receiving Your Koi</h3>
+            </div>
+
+            <p class="mb-0">
+              Customers should be available to receive their koi
+              and prepare an appropriate environment before arrival.
+              Please inspect your fish upon delivery.
+            </p>
+          </article>
+        </div>
+
+      </div>
+    </section>
 
   </div>
 </section>
+
 {% endblock %}

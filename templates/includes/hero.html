@@ -1,0 +1,70 @@
+{% load static %}
+
+<section class="{% if variant == 'delivery' %}delivery-hero{% else %}hero{% endif %}"
+         aria-labelledby="{{ title_id }}">
+  <div class="container">
+    <div class="row {% if variant == 'delivery' %}align-items-center g-5{% endif %}">
+
+      <!-- Hero content -->
+      <div class="{% if variant == 'delivery' %}col-lg-6{% else %}col-lg-5 hero-content{% endif %}">
+
+        <h1 id="{{ title_id }}"
+            {% if variant == 'delivery' %}class="mb-4"{% endif %}>
+          {{ title }}
+        </h1>
+
+        <p {% if variant == 'delivery' %}class="lead text-body-secondary"{% endif %}>
+          {{ description }}
+        </p>
+
+        <div class="d-flex flex-wrap align-items-center gap-3">
+          <a href="{{ primary_url }}" class="btn btn-primary">
+            {{ primary_text }}
+          </a>
+
+          {% if secondary_url %}
+            <a href="{{ secondary_url }}" class="hero-secondary-link">
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+                aria-hidden="true"
+                >
+                <path d="M0 3.5A.5.5 0 0 1 .5 3h8a.5.5 0 0 1 .5.5V4h2.293a1 1 0 0 1 .707.293l2.707 2.707A1 1 0 0 1 15 7.707V11a1 1 0 0 1-1 1h-.05a2.5 2.5 0 0 1-4.9 0h-3.1a2.5 2.5 0 0 1-4.9 0H.5a.5.5 0 0 1-.5-.5zm1 1V11h.05a2.5 2.5 0 0 1 4.9 0h3.1a2.5 2.5 0 0 1 4.9 0H14V7.707L11.293 5H9v6h.05a2.5 2.5 0 0 1 4.9 0H14V7.707L11.293 5H9v6H1z"/>
+                </svg>
+                <span>{{ secondary_text }}</span>
+            </a>
+            {% endif %}
+        </div>
+      </div>
+
+      {% if variant != 'delivery' %}
+        <div class="d-none d-lg-block col-lg-1"></div>
+      {% endif %}
+
+      <!-- Hero image -->
+      <div class="col-lg-6 {% if variant != 'delivery' %}hero-image{% endif %}">
+        {% if variant == 'delivery' %}
+          <img
+            src="{% static image %}"
+            alt="{{ image_alt }}"
+            class="img-fluid rounded"
+          >
+        {% else %}
+          <div class="hero-image-wrapper">
+            <img
+              src="{% static image %}"
+              alt="{{ image_alt }}"
+              width="1200"
+              height="800"
+              fetchpriority="high"
+            >
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</section>

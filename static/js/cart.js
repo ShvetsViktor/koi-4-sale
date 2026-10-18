@@ -31,6 +31,7 @@ function removeFromCart(cart, productId) {
  */
 function saveCart(cart) {
   localStorage.setItem('koi4sale_cart', JSON.stringify(cart));
+  updateCartCount();
 }
 
 /**
@@ -38,6 +39,7 @@ function saveCart(cart) {
  */
 function clearCart() {
   localStorage.removeItem('koi4sale_cart');
+  updateCartCount();
 }
 
 /**
@@ -47,6 +49,22 @@ function clearCart() {
  */
 function getCart() {
   return JSON.parse(localStorage.getItem('koi4sale_cart') || '[]');
+}
+
+/**
+ * Update the cart item count displayed in the header.
+ */
+function updateCartCount() {
+  const badge = document.querySelector('#cart-count');
+
+  if (!badge) {
+    return;
+  }
+
+  const count = getCart().length;
+
+  badge.textContent = count;
+  badge.hidden = count === 0;
 }
 
 /**

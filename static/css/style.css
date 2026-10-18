@@ -62,6 +62,26 @@ main {
   color: var(--koi-accent);
 }
 
+/* Cart count badge */
+.cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding-inline: 5px;
+  margin-left: 4px;
+  border-radius: 50px;
+  background-color: var(--koi-accent);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cart-count[hidden] {
+  display: none;
+}
+
 /* Breadcrumbs */
 .breadcrumbs {
   color: var(--koi-text-muted);

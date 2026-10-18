@@ -80,6 +80,38 @@ main {
   color: var(--koi-text);
 }
 
+/* Buttons */
+.btn-primary {
+  --bs-btn-color: #ffffff;
+  --bs-btn-bg: var(--koi-accent);
+  --bs-btn-border-color: var(--koi-accent);
+
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-hover-bg: #e64f07;
+  --bs-btn-hover-border-color: #e64f07;
+
+  --bs-btn-active-color: #ffffff;
+  --bs-btn-active-bg: #c2410c;
+  --bs-btn-active-border-color: #c2410c;
+
+  --bs-btn-disabled-color: #ffffff;
+  --bs-btn-disabled-bg: var(--koi-accent);
+  --bs-btn-disabled-border-color: var(--koi-accent);
+}
+
+.btn-outline-secondary {
+  --bs-btn-color: var(--koi-text-muted);
+  --bs-btn-border-color: var(--koi-text-muted);
+
+  --bs-btn-hover-color: var(--koi-text);
+  --bs-btn-hover-bg: var(--koi-surface);
+  --bs-btn-hover-border-color: var(--koi-text);
+
+  --bs-btn-active-color: var(--koi-text);
+  --bs-btn-active-bg: var(--koi-surface);
+  --bs-btn-active-border-color: var(--koi-text);
+}
+
 /* Product links */
 .product-card a {
   color: var(--koi-text);
@@ -116,23 +148,11 @@ main {
   margin-bottom: 32px;
 }
 
-/* Primary CTA */
-.hero-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--koi-accent);
-  color: #ffffff;
+/* Hero CTA */
+.hero .btn-primary {
   padding: 12px 24px;
   font-size: 16px;
   font-weight: 500;
-  border-radius: 6px;
-  text-decoration: none;
-}
-
-.hero-btn-primary:hover {
-  background-color: #c2410c;
-  color: #ffffff;
 }
 
 /* Hero image */
@@ -192,16 +212,6 @@ main {
 .cart-page .form-control:focus {
   border-color: var(--koi-accent);
   box-shadow: 0 0 0 0.2rem rgb(254 90 8 / 20%);
-}
-
-.cart-page .btn-primary {
-  background-color: var(--koi-accent);
-  border-color: var(--koi-accent);
-}
-
-.cart-page .btn-primary:hover {
-  background-color: #e64f07;
-  border-color: #e64f07;
 }
 
 /* Cart items */
@@ -269,14 +279,6 @@ main {
   border-bottom: 1px solid var(--koi-bg);
 }
 
-.reservation-item-image {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 8px;
-  flex-shrink: 0;
-}
-
 .confirmation-total {
   display: flex;
   justify-content: space-between;
@@ -289,14 +291,12 @@ main {
   color: var(--koi-text-muted);
 }
 
-.reservation-confirmation .btn-primary {
-  background-color: var(--koi-accent);
-  border-color: var(--koi-accent);
-}
-
-.reservation-confirmation .btn-primary:hover {
-  background-color: #e64f07;
-  border-color: #e64f07;
+.reservation-item-image {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
 }
 
 /* Footer */

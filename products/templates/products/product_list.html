@@ -47,7 +47,10 @@
     </form>
 
     <!-- Category filters -->
-    <nav aria-label="Filter koi by variety" class="d-flex flex-wrap gap-3 mb-4">
+    <nav
+      class="category-filters d-flex flex-wrap gap-3 mb-4"
+      aria-label="Filter koi by variety"
+    >
       <a href="{% url 'product_list' %}">All Koi</a>
 
       {% for category in categories %}

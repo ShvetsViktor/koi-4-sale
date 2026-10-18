@@ -167,6 +167,109 @@ main {
   color: var(--koi-accent);
 }
 
+/* Shopping cart */
+.cart-page {
+  padding-block: 32px 80px;
+}
+
+.reservation-form {
+  padding: 24px;
+  background-color: var(--koi-surface);
+  border-radius: 8px;
+}
+
+.cart-page .form-control {
+  background-color: var(--koi-bg);
+  color: var(--koi-text);
+  border: 1px solid var(--koi-text-muted);
+}
+
+.cart-page .form-control:focus {
+  border-color: var(--koi-accent);
+  box-shadow: 0 0 0 0.2rem rgb(254 90 8 / 20%);
+}
+
+.cart-page .btn-primary {
+  background-color: var(--koi-accent);
+  border-color: var(--koi-accent);
+}
+
+.cart-page .btn-primary:hover {
+  background-color: #e64f07;
+  border-color: #e64f07;
+} /* Shopping cart */
+.cart-page {
+  padding-block: 32px 80px;
+}
+
+.reservation-form {
+  padding: 24px;
+  background-color: var(--koi-surface);
+  border-radius: 8px;
+}
+
+.cart-page .form-control {
+  background-color: var(--koi-bg);
+  color: var(--koi-text);
+  border: 1px solid var(--koi-text-muted);
+}
+
+.cart-page .form-control:focus {
+  border-color: var(--koi-accent);
+  box-shadow: 0 0 0 0.2rem rgb(254 90 8 / 20%);
+}
+
+.cart-page .btn-primary {
+  background-color: var(--koi-accent);
+  border-color: var(--koi-accent);
+}
+
+.cart-page .btn-primary:hover {
+  background-color: #e64f07;
+  border-color: #e64f07;
+}
+
+/* Cart items */
+.cart-item {
+  display: flex;
+  gap: 24px;
+  padding: 20px;
+  margin-bottom: 16px;
+  background-color: var(--koi-surface);
+  border-radius: 8px;
+}
+
+.cart-item-image {
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.cart-item-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cart-item-name {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.cart-item-price {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.cart-item .btn-outline-secondary {
+  margin-top: auto;
+}
+
 /* Footer */
 .site-footer {
   padding-block: 32px;
@@ -186,6 +289,19 @@ main {
 .site-footer p {
   color: var(--koi-text-muted);
   font-size: 14px;
+}
+
+/* Mobile cart layout */
+@media (max-width: 575.98px) {
+  .cart-item {
+    flex-direction: column;
+  }
+
+  .cart-item-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
 }
 
 /* Mobile footer */

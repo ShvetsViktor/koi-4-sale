@@ -4,39 +4,87 @@
 {% block title %}Shopping Cart | Koi4Sale{% endblock %}
 
 {% block content %}
-      {% include "includes/breadcrumbs.html" with current_label="Cart" only %}
-      
-      <h1>Shopping Cart</h1>
-      <div id="cart-items"></div>
-      <div id="empty-cart" hidden>
-        <p>Your cart is empty.</p>
-        <a href="{% url 'product_list' %}">Browse Koi</a>
+<section class="cart-page" aria-labelledby="cart-title">
+  <div class="container">
+
+    {% include "includes/breadcrumbs.html" with current_label="Cart" only %}
+
+    <h1 id="cart-title" class="mb-4">Shopping Cart</h1>
+
+    <div class="row g-4">
+
+      <!-- Cart items -->
+      <div class="col-lg-7">
+        <div id="cart-items"></div>
+
+        <div id="empty-cart" hidden>
+          <p>Your cart is empty.</p>
+          <a href="{% url 'product_list' %}" class="btn btn-primary">
+            Browse Koi
+          </a>
+        </div>
       </div>
-      <form id="reservation-form" method="post" action="{% url 'reservation_create' %}" hidden>
-        {% csrf_token %}
 
-        <div>
-          <label for="customer-name">Name</label>
-          <input type="text" id="customer-name" name="customer_name" required />
-        </div>
+      <!-- Reservation form -->
+      <div class="col-lg-5">
+        <form
+          id="reservation-form"
+          method="post"
+          action="{% url 'reservation_create' %}"
+          class="reservation-form"
+          hidden
+        >
+          {% csrf_token %}
 
-        <div>
-          <label for="customer-email">Email</label>
-          <input type="email" id="customer-email" name="email" required />
-        </div>
+          <h2 class="h4 mb-4">Reservation Details</h2>
 
-        <div>
-          <label for="customer-phone">Phone</label>
-          <input type="tel" id="customer-phone" name="phone" required />
-        </div>
+          <div class="mb-3">
+            <label for="customer-name" class="form-label">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="customer-name"
+              name="customer_name"
+              required
+            >
+          </div>
 
-        <button type="submit">Submit Reservation</button>
-      </form>
+          <div class="mb-3">
+            <label for="customer-email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="customer-email"
+              name="email"
+              required
+            >
+          </div>
+
+          <div class="mb-4">
+            <label for="customer-phone" class="form-label">Phone</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="customer-phone"
+              name="phone"
+              required
+            >
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">
+            Submit Reservation
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'js/cart.js' %}"></script>
-    <script>
-      initCartPage();
-    </script>
+<script src="{% static 'js/cart.js' %}"></script>
+<script>
+  initCartPage();
+</script>
 {% endblock %}

@@ -106,21 +106,29 @@ function renderCart(products) {
   cartItems.innerHTML = '';
 
   products.forEach((product) => {
-    const item = document.createElement('div');
+    const item = document.createElement('article');
+    const image = document.createElement('img');
+    const details = document.createElement('div');
     const name = document.createElement('h2');
     const price = document.createElement('p');
     const removeButton = document.createElement('button');
-    const image = document.createElement('img');
 
+    item.className = 'cart-item';
+
+    image.className = 'cart-item-image';
     image.src = product.image_url;
     image.alt = product.name;
-    image.width = 150;
-    image.height = 150;
     image.loading = 'lazy';
 
+    details.className = 'cart-item-details';
+
+    name.className = 'cart-item-name';
     name.textContent = product.name;
+
+    price.className = 'cart-item-price';
     price.textContent = `£${product.price}`;
 
+    removeButton.className = 'btn btn-outline-secondary btn-sm';
     removeButton.type = 'button';
     removeButton.textContent = 'Remove';
     removeButton.dataset.removeId = product.id;
@@ -134,7 +142,8 @@ function renderCart(products) {
       updateCartEmptyState();
     });
 
-    item.append(image, name, price, removeButton);
+    details.append(name, price, removeButton);
+    item.append(image, details);
     cartItems.appendChild(item);
   });
 }

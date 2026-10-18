@@ -130,6 +130,7 @@ function renderCart(products) {
 
     removeButton.className = 'btn btn-outline-secondary btn-sm';
     removeButton.type = 'button';
+    removeButton.className = 'btn btn-outline-secondary';
     removeButton.textContent = 'Remove';
     removeButton.dataset.removeId = product.id;
 

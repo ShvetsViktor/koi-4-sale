@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.http import HttpResponseBadRequest, JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import DetailView, TemplateView
 from django.db.models import Prefetch
@@ -19,7 +19,11 @@ class ReservationCreate(View):
         form = ReservationForm(request.POST)
 
         if not form.is_valid():
-            return HttpResponseBadRequest("Invalid contact details.")
+            return render(
+                request,
+                "orders/cart.html",
+                {"form": form},
+            )
 
         product_ids = request.POST.getlist("product_ids")
 

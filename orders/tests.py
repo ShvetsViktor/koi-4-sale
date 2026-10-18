@@ -364,7 +364,8 @@ class ReservationViewTests(TestCase):
         self.assertEqual(Order.objects.count(), 0)
 
     def test_reservation_rejects_invalid_contact_details(self):
-        """Invalid customer details must not create a reservation."""
+        """Invalid contact details must not create a reservation."""
+
         response = self.client.post(
             reverse("reservation_create"),
             {
@@ -375,7 +376,9 @@ class ReservationViewTests(TestCase):
             },
         )
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Please correct the errors below.")
+        self.assertContains(response, "Enter a valid email address.")
         self.assertEqual(Order.objects.count(), 0)
 
     def test_successful_reservation_redirects_to_confirmation(self):
@@ -396,6 +399,64 @@ class ReservationViewTests(TestCase):
         self.assertRedirects(
             response,
             reverse("reservation_confirmation", args=[order.pk]),
+        )
+
+    def test_invalid_contact_details_display_form_errors(self):
+        """Invalid contact details should display errors
+        without losing input."""
+
+        response = self.client.post(
+            reverse("reservation_create"),
+            {
+                "customer_name": "John Smith",
+                "email": "invalid-email",
+                "phone": "07123456789",
+                "product_ids": [str(self.product_one.pk)],
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Enter a valid email address.")
+        self.assertContains(response, "John Smith")
+        self.assertContains(response, "07123456789")
+        self.assertEqual(Order.objects.count(), 0)
+
+    def test_reservation_succeeds_after_correcting_invalid_email(self):
+        """Customers can correct invalid details and complete a reservation."""
+
+        data = {
+            "customer_name": "John Smith",
+            "email": "invalid-email",
+            "phone": "07123456789",
+            "product_ids": [str(self.product_one.pk)],
+        }
+
+        # First submission contains an invalid email.
+        response = self.client.post(
+            reverse("reservation_create"),
+            data,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Order.objects.count(), 0)
+
+        # Customer corrects the email and submits again.
+        data["email"] = "john@example.com"
+
+        response = self.client.post(
+            reverse("reservation_create"),
+            data,
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Order.objects.count(), 1)
+
+        order = Order.objects.get()
+
+        self.assertEqual(order.items.count(), 1)
+        self.assertEqual(
+            order.items.first().product,
+            self.product_one,
         )
 
 

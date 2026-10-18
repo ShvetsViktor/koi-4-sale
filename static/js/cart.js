@@ -101,7 +101,7 @@ function updateCartEmptyState() {
   const hasProducts = getCart().length > 0;
 
   if (form) {
-    form.hidden = !hasProducts;
+    form.hidden = !hasProducts && !form.querySelector('.alert-danger');
   }
 
   if (emptyCart) {

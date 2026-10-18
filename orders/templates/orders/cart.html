@@ -11,6 +11,14 @@
 
     <h1 id="cart-title" class="mb-4">Shopping Cart</h1>
 
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
     <div class="row g-4">
 
       <!-- Cart items -->

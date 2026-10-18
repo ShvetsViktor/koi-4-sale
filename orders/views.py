@@ -5,6 +5,7 @@ from django.views import View
 from django.views.generic import DetailView, TemplateView
 from django.db.models import Prefetch
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.contrib import messages
 
 from products.models import Product, ProductImage
 
@@ -54,9 +55,12 @@ class ReservationCreate(View):
                 product.status != Product.ProductStatus.AVAILABLE
                 for product in products
             ):
-                return HttpResponseBadRequest(
-                    "One or more selected koi are unavailable."
+                messages.error(
+                    request,
+                    "One or more selected koi are no longer available. "
+                    "Please review your cart."
                 )
+                return redirect("cart")
 
             order = form.save(commit=False)
             order.total_price = sum(

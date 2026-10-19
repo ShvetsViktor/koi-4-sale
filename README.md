@@ -709,7 +709,7 @@ flowchart TD
 
 The Skeleton plane defines the arrangement of navigation, content and interactive elements before final visual styling.
 
-Wireframes will be used to document the layout of important pages.
+Wireframes were created to document the layout of important pages.
 
 #### Global Navigation
 
@@ -868,7 +868,9 @@ The previous Koi4Sale website serves as a visual reference, while the Django imp
 | Secondary Text     | `#9ca3af` | Supporting descriptions.                       |
 | Surface Background | `#1f2937` | Cards, form controls and contrasting surfaces. |
 
-These colours represent the intended design and will be reviewed during accessibility and contrast testing.
+These colours define the website's visual identity.
+Accessibility and contrast testing results are documented in
+[TESTING.md](TESTING.md).
 
 #### Typography
 
@@ -937,8 +939,6 @@ The interface should include:
 - Clear validation messages.
 - Responsive content without unnecessary horizontal scrolling.
 - Descriptive links and buttons.
-
-<!-- TODO: Add final screenshots and visual testing evidence. -->
 
 ### UX Review Checklist
 
@@ -1240,13 +1240,6 @@ implementation progress and maintain a structured workflow.
 GitHub milestone percentages reflect the completion of assigned issues
 rather than independent verification of every application requirement.
 
-Although all issues assigned to Milestone 5 are closed, final
-cross-browser testing, validation and documentation review are
-being completed separately.
-
-The remaining work includes final frontend refinement,
-responsive testing and preparation of assessment evidence.
-
 ---
 
 ## Features
@@ -1495,7 +1488,7 @@ and code-quality tools, including:
 ### Lighthouse Testing
 
 Google Lighthouse was used to assess the deployed website's
-performance, accessibility, best practices and SEO on both
+performance, accessibility and best practices on both
 desktop and mobile devices.
 
 The results and supporting screenshots are documented in
@@ -1794,20 +1787,35 @@ The following steps describe how to deploy the application.
 
 #### 2. Configure PostgreSQL
 
-1. Open the application's **Resources** section.
-2. Add a Heroku Postgres database.
-3. Select an appropriate database plan.
+Koi4Sale uses an external PostgreSQL database hosted by Neon.
 
-Heroku automatically provides the `DATABASE_URL` configuration
-variable when the database is attached to the application.
+The database is hosted independently of Heroku and connected
+to the Django application using the `DATABASE_URL`
+environment variable.
 
-Django uses this variable to establish the database connection:
+To configure the database:
 
-    DATABASES = {
-        "default": dj_database_url.parse(
-            os.environ.get("DATABASE_URL")
-        )
-    }
+1. Create a PostgreSQL database using Neon.
+2. Open the Neon dashboard and obtain the database connection string.
+3. Open the Heroku application dashboard.
+4. Navigate to **Settings → Config Vars**.
+5. Add `DATABASE_URL` with the PostgreSQL connection string.
+
+Django uses `dj_database_url` to configure the database connection:
+
+```python
+DATABASES = {
+    "default": dj_database_url.parse(
+        os.environ.get("DATABASE_URL")
+    )
+}
+```
+
+Database credentials are stored in environment variables
+and are not committed to the repository.
+
+The external PostgreSQL database provides persistent storage
+independently of Heroku's application filesystem.
 
 #### 3. Configure Environment Variables
 
@@ -1819,7 +1827,7 @@ Configure the following variables:
 | ---------------- | --------------------------------------------------------------------------------------- |
 | `SECRET_KEY`     | Secret key used by Django.                                                              |
 | `CLOUDINARY_URL` | Cloudinary API credentials for image storage.                                           |
-| `DATABASE_URL`   | PostgreSQL connection URL, normally provided automatically by Heroku Postgres.          |
+| `DATABASE_URL`   | PostgreSQL connection URL provided by Neon.                                             |
 | `DEBUG`          | Set to `False` for production, or leave unset because debugging is disabled by default. |
 
 Sensitive values must not be committed to the repository.
@@ -2045,9 +2053,10 @@ The Django project is a separate implementation using server-rendered templates,
 
 ### Code Attribution
 
-Custom application code is written and adapted for this project.
+Custom application code was written and adapted for this project.
 
-External code, tutorials, documentation, images and other resources will be attributed where applicable.
+Third-party frameworks, libraries, fonts, icons, photography
+and development tools are acknowledged in the sections below.
 
 ### Fonts
 
@@ -2094,7 +2103,9 @@ koi-4-sale/
 ├── assets/
 │   ├── readme/
 │   │   ├── images/              # README images and ERD
+│   │   ├── lighthouse/          # Lighthouse test results
 │   │   ├── screenshots/         # User story implementation evidence
+│   │   ├── validation/          # Code validation screenshots
 │   │   └── wireframes/          # Desktop and mobile wireframes
 │   └── sample_products/         # Sample koi photographs
 ├── config/

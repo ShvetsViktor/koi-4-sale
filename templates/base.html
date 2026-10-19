@@ -6,6 +6,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- SEO metadata -->
+    <meta
+      name="description"
+      content="{% block meta_description %}Browse our collection of Japanese koi for sale in the UK. Explore individual koi, compare prices and request a reservation online.{% endblock %}"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#111827" />
+
+    <!-- Open Graph metadata -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Koi4Sale" />
+    <meta
+      property="og:title"
+      content="{% block og_title %}Koi4Sale | Japanese Koi for Sale{% endblock %}"
+    />
+    <meta
+      property="og:description"
+      content="{% block og_description %}Discover Japanese koi for sale in the UK. Browse available fish and submit a reservation request online.{% endblock %}"
+    />
+
     <title>{% block title %}Koi4Sale{% endblock %}</title>
 
     <!-- Favicons -->

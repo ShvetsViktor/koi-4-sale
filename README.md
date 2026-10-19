@@ -1,6 +1,6 @@
 # Koi4Sale – Japanese Koi Reservation Website
 
-![Koi4Sale Responsive Website Mockup](assets/readme/images/apple-responsive-devices-mockup.png)
+![Koi4Sale Responsive Website Mockup](assets/readme/images/apple-responsive-devices-mockup.webp)
 
 **Live Website:** https://koi-for-sale-2e89f5c55c63.herokuapp.com/
 
@@ -210,7 +210,7 @@ As a **visitor**, I want to view photographs and detailed information about an i
 - Available koi can be added to the cart.
 - Invalid product URLs return an appropriate 404 response.
 
-![View Koi Details](assets/readme/screenshots/us02-koi-details.png)
+![View Koi Details](assets/readme/screenshots/us02-koi-details.webp)
 
 #### Filter Koi by Category
 
@@ -399,6 +399,16 @@ As a **visitor**, I want to search available koi using relevant information so t
 - Visitors can return to the complete available catalogue.
 
 ![Search Koi](assets/readme/screenshots/us04-search-koi.png)
+
+### Future Development
+
+The following user stories were identified during project planning
+
+but were not implemented in the current release.
+
+They are classified as **Could Have** features under MoSCoW
+
+prioritisation and may be considered for future development.
 
 #### Frequently Asked Questions
 
@@ -801,7 +811,46 @@ The Contact page uses a simple, responsive layout.
 
 The page deliberately avoids a separate enquiry form to keep the contact process straightforward.
 
-<!-- TODO: Add desktop and mobile wireframes. -->
+#### Wireframes
+
+Low-fidelity wireframes illustrate the layout and responsive structure
+of the main Koi4Sale pages.
+
+The wireframes cover desktop (1440px) and mobile (375px) layouts.
+
+##### Home Page
+
+| Desktop (1440px)                                           | Mobile (375px)                                           |
+| ---------------------------------------------------------- | -------------------------------------------------------- |
+| ![Home Desktop](assets/readme/wireframes/home-desktop.png) | ![Home Mobile](assets/readme/wireframes/home-mobile.png) |
+
+##### Catalogue
+
+| Desktop (1440px)                                                     | Mobile (375px)                                                     |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| ![Catalogue Desktop](assets/readme/wireframes/catalogue-desktop.png) | ![Catalogue Mobile](assets/readme/wireframes/catalogue-mobile.png) |
+
+##### Product Details
+
+| Desktop (1440px)                                                 | Mobile (375px)                                                 |
+| ---------------------------------------------------------------- | -------------------------------------------------------------- |
+| ![Product Desktop](assets/readme/wireframes/product-desktop.png) | ![Product Mobile](assets/readme/wireframes/product-mobile.png) |
+
+##### Shopping Cart
+
+| Desktop (1440px)                                           | Mobile (375px)                                           |
+| ---------------------------------------------------------- | -------------------------------------------------------- |
+| ![Cart Desktop](assets/readme/wireframes/cart-desktop.png) | ![Cart Mobile](assets/readme/wireframes/cart-mobile.png) |
+
+##### Delivery
+
+| Desktop (1440px)                                                   | Mobile (375px)                                                   |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| ![Delivery Desktop](assets/readme/wireframes/delivery-desktop.png) | ![Delivery Mobile](assets/readme/wireframes/delivery-mobile.png) |
+
+##### Contact
+
+![Contact Mobile](assets/readme/wireframes/contact-mobile.png)
 
 ### 5. Surface — What Does the Interface Look Like?
 
@@ -927,7 +976,7 @@ Customer contact information is stored directly in the `Order` model. A separate
 
 ### Entity Relationship Diagram
 
-![Koi4Sale Entity Relationship Diagram](assets/readme/images/erd.png)
+![Koi4Sale Entity Relationship Diagram](assets/readme/images/erd.webp)
 
 ### Database Relationships
 
@@ -1207,8 +1256,11 @@ This section presents the main features implemented in Koi4Sale.
 Each feature is linked to the relevant user stories described in
 [User Stories and Prioritisation](#user-stories-and-prioritisation).
 
-Screenshots demonstrate the implemented interface, while functional
-verification and test results are documented in [TESTING.md](TESTING.md).
+Screenshots of the implemented functionality are provided under
+the corresponding user stories.
+
+Functional verification and test results are documented in
+[TESTING.md](TESTING.md).
 
 ### Home Page
 
@@ -1218,8 +1270,6 @@ A responsive hero section features koi photography and provides direct
 navigation to the product catalogue and delivery information.
 
 **Related User Stories:** Responsive Navigation.
-
-![Koi4Sale Home Page](assets/readme/images/home.png)
 
 ### Product Catalogue
 
@@ -1232,8 +1282,6 @@ to different screen sizes.
 **Related User Stories:** Browse Available Koi, Filter Koi by Category,
 Search Koi, Responsive Catalogue.
 
-![Product Catalogue](assets/readme/images/catalogue.png)
-
 ### Product Details
 
 Each product has a dedicated page displaying its photographs,
@@ -1243,8 +1291,6 @@ Visitors can examine an individual koi and add it to their
 shopping cart when the product is available.
 
 **Related User Stories:** View Koi Details.
-
-![Product Details](assets/readme/images/product-details.png)
 
 ### Shopping Cart
 
@@ -1256,8 +1302,6 @@ Cart contents are stored in browser localStorage, allowing
 selections to persist while navigating between pages.
 
 **Related User Stories:** Manage Shopping Cart.
-
-![Shopping Cart](assets/readme/images/cart.png)
 
 ### Reservation Form
 
@@ -1271,7 +1315,37 @@ database, and selected products are marked as reserved.
 **Related User Stories:** Submit a Reservation Request,
 Prevent Duplicate Reservations.
 
-![Reservation Form](assets/readme/images/reservation-form.png)
+### Delivery Information
+
+The Delivery page explains the koi transportation process
+through four clearly organised stages.
+
+A Browse Our Koi button provides a direct route back to
+the product catalogue.
+
+**Related User Stories:** Delivery Information.
+
+### Contact Information
+
+The Contact page displays the seller's email address and
+provides a direct email contact option.
+
+Visitors can use the clickable email address or the
+Send an Email button to open their preferred email application.
+
+**Related User Stories:** Contact Information.
+
+### Responsive Navigation
+
+The shared header provides navigation across desktop,
+tablet and mobile devices.
+
+A shopping cart icon remains accessible on mobile when
+the navigation menu is collapsed. Its counter updates
+when products are added or removed.
+
+**Related User Stories:** Responsive Navigation,
+Shopping Cart Indicator.
 
 ### Reservation Confirmation
 
@@ -1286,30 +1360,6 @@ that no online payment has been taken.
 
 ![Reservation Confirmation](assets/readme/images/reservation-confirmation.png)
 
-### Delivery Information
-
-The Delivery page explains the koi transportation process
-through four clearly organised stages.
-
-A Browse Our Koi button provides a direct route back to
-the product catalogue.
-
-**Related User Stories:** Delivery Information.
-
-![Delivery Page](assets/readme/images/delivery.png)
-
-### Contact Information
-
-The Contact page displays the seller's email address and
-provides a direct email contact option.
-
-Visitors can use the clickable email address or the
-Send an Email button to open their preferred email application.
-
-**Related User Stories:** Contact Information.
-
-![Contact Page](assets/readme/images/contact.png)
-
 ### Custom 404 Page
 
 A custom 404 page is displayed when visitors navigate to a URL
@@ -1319,20 +1369,6 @@ The page follows the website's design and provides a
 Back to Home button to help visitors return to the homepage.
 
 ![Custom 404 Page](assets/readme/images/404.png)
-
-### Responsive Navigation
-
-The shared header provides navigation across desktop,
-tablet and mobile devices.
-
-A shopping cart icon remains accessible on mobile when
-the navigation menu is collapsed. Its counter updates
-when products are added or removed.
-
-**Related User Stories:** Responsive Navigation,
-Shopping Cart Indicator.
-
-![Responsive Navigation](assets/readme/images/responsive-navigation.png)
 
 ### Django Administration
 
@@ -1456,18 +1492,59 @@ and code-quality tools, including:
 - JavaScript code-quality checks.
 - Chrome DevTools Lighthouse.
 
+### Lighthouse Testing
+
+Google Lighthouse was used to assess the deployed website's
+performance, accessibility, best practices and SEO on both
+desktop and mobile devices.
+
+The results and supporting screenshots are documented in
+[TESTING.md](TESTING.md#lighthouse-testing).
+
 ### Test Results
 
-Final automated test counts, manual testing outcomes,
-browser compatibility results and validation reports
-are recorded in [TESTING.md](TESTING.md).
+All 90 automated tests passed successfully.
 
-### Bugs and Fixes
+| Test Framework | Test Suites | Tests Passed | Result   |
+| -------------- | ----------- | ------------ | -------- |
+| Django         | —           | 71/71        | PASS     |
+| Jest           | 3           | 19/19        | PASS     |
+| **Total**      | —           | **90/90**    | **PASS** |
 
-Issues identified during development are documented together
-with their causes, resolutions and retesting results.
+The Django test suite completed without errors or system check issues.
 
-See [TESTING.md](TESTING.md) for detailed bug reports.
+All three Jest test suites passed, including the regression test
+for restoring shopping cart button states after a page reload.
+
+Detailed test cases, manual testing results and bug fixes are
+documented in [TESTING.md](TESTING.md).
+
+## Bugs
+
+### Bug #1 — Cart Button State Resets After Page Reload
+
+**Status:** Fixed
+
+**Related User Story:** Manage Shopping Cart
+
+When a customer added a koi to the shopping cart, the button
+correctly changed from "Add to Cart" to "Added to Cart".
+
+However, refreshing the page reset the button to "Add to Cart",
+even though the product remained in localStorage.
+
+The issue was caused by `initCartButtons()` not restoring button
+states from existing cart data during page initialisation.
+
+The function was updated to check localStorage and display
+the correct button state when the page loads.
+
+A Jest regression test was added to verify that products already
+in the cart display "✓ Added to Cart".
+
+**Verification:** All 19 Jest tests passed.
+
+Further details are documented in [TESTING.md](TESTING.md).
 
 ---
 
@@ -1509,6 +1586,26 @@ See [TESTING.md](TESTING.md) for detailed bug reports.
 - GitHub Milestones
 - Photopea — SVG image editing.
 
+### Image Optimisation
+
+Images were optimised to improve website performance and reduce
+unnecessary file sizes.
+
+- **Product photographs:** Converted from PNG to WebP using Pillow,
+  with a quality setting of 85. Original image dimensions were preserved.
+- **Home and Delivery images:** Converted from JPEG to WebP,
+  reducing file sizes by approximately 85–87%.
+- **README screenshots and wireframes:** Optimised using lossless
+  PNG compression to preserve text clarity and image quality.
+- **Large documentation images:** The responsive mockup,
+  product details screenshot and ERD were converted to lossless WebP
+  for additional file size reductions.
+- **Icons and placeholders:** SVG logos, favicons and small
+  placeholder images were retained in their original formats.
+
+Image optimisation was performed using Python and Pillow.
+The temporary optimisation scripts were removed after processing.
+
 ### Bootstrap
 
 Bootstrap 5.3 is loaded through a Content Delivery Network.
@@ -1525,7 +1622,13 @@ Bootstrap provides:
 
 Custom CSS is used to establish the visual identity of Koi4Sale.
 
-<!-- TODO: Add exact dependency versions from requirements.txt and package.json. -->
+### Dependencies
+
+Python dependencies and their exact versions are listed in
+[`requirements.txt`](requirements.txt).
+
+JavaScript development dependencies are defined in
+[`package.json`](package.json).
 
 ---
 
@@ -1568,19 +1671,45 @@ pip install -r requirements.txt
 
 #### 4. Configure Environment Variables
 
-The application uses environment variables for sensitive configuration.
+Create an `env.py` file in the project root directory.
 
-Required values include:
+Add the following configuration, replacing the placeholder values
+with your own credentials:
 
-- Django secret key.
-- Database connection information.
-- Cloudinary credentials.
+```python
+import os
 
-Local configuration uses `env.py` according to the project's Django settings.
+os.environ.setdefault(
+    "DATABASE_URL",
+    "your_database_connection_url"
+)
 
-Sensitive configuration must not be committed to Git.
+os.environ.setdefault(
+    "CLOUDINARY_URL",
+    "cloudinary://API_KEY:API_SECRET@CLOUD_NAME"
+)
 
-Production configuration is managed through Heroku Config Vars.
+os.environ.setdefault(
+    "SECRET_KEY",
+    "your_django_secret_key"
+)
+```
+
+The application uses three environment variables:
+
+- `DATABASE_URL` — database connection string.
+- `CLOUDINARY_URL` — Cloudinary credentials for image storage.
+- `SECRET_KEY` — Django secret key.
+
+The `env.py` file must be excluded from version control
+because it contains sensitive credentials.
+
+For production deployment, configure the same three variables
+in **Heroku → Settings → Config Vars**.
+
+The `DEBUG` variable controls Django debugging and is disabled
+by default. It can be enabled locally when starting the
+development server.
 
 #### 5. Apply Database Migrations
 
@@ -1588,7 +1717,24 @@ Production configuration is managed through Heroku Config Vars.
 python3 manage.py migrate
 ```
 
-#### 6. Start the Development Server
+#### 6. Create an Administrator Account
+
+Create a Django superuser to manage products, categories,
+product images and reservation requests through Django Admin.
+
+```bash
+python3 manage.py createsuperuser
+```
+
+Follow the prompts to enter a username, email address and password.
+
+Once the development server is running, access Django Admin at:
+
+`http://127.0.0.1:8000/admin/`
+
+Sign in using the superuser credentials.
+
+#### 7. Start the Development Server
 
 ```bash
 DEBUG=True python3 manage.py runserver
@@ -1604,18 +1750,7 @@ Setting `DEBUG=True` enables debugging for the current command without modifying
 
 Debugging must remain disabled in production.
 
-### Sample Product Images
-
-Sample koi photographs are provided in `assets/sample_products/`
-for development and testing purposes.
-
-After setting up the local database, developers can create sample
-products through Django Admin and upload these images.
-
-Product images are stored using Cloudinary, while product information
-is stored in the relational database.
-
-#### 7. Run Automated Tests
+#### 8. Run Automated Tests
 
 Django:
 
@@ -1630,23 +1765,143 @@ npm install
 npm test
 ```
 
+### Sample Product Images
+
+Sample koi photographs are provided in `assets/sample_products/`
+for development and testing purposes.
+
+After setting up the local database, developers can create sample
+products through Django Admin and upload these images.
+
+Product images are stored using Cloudinary, while product information
+is stored in the relational database.
+
 ### Production Deployment — Heroku
 
-The final deployment guide will document the exact steps used to deploy the application.
+Koi4Sale is deployed to Heroku using a PostgreSQL database,
+Gunicorn as the production web server, WhiteNoise for static files
+and Cloudinary for uploaded product images.
 
-The process includes:
+The following steps describe how to deploy the application.
 
-1. Creating a Heroku application.
-2. Configuring a production PostgreSQL database.
-3. Setting the required environment variables.
-4. Configuring production security settings.
-5. Installing application dependencies.
-6. Starting Gunicorn using the Procfile.
-7. Applying database migrations.
-8. Collecting static files.
-9. Verifying the deployed application.
+#### 1. Create a Heroku Application
 
-<!-- TODO: Add the complete, reproducible Heroku deployment instructions. -->
+1. Sign in to the Heroku Dashboard.
+2. Select **New → Create new app**.
+3. Enter a unique application name.
+4. Select the appropriate region.
+5. Click **Create app**.
+
+#### 2. Configure PostgreSQL
+
+1. Open the application's **Resources** section.
+2. Add a Heroku Postgres database.
+3. Select an appropriate database plan.
+
+Heroku automatically provides the `DATABASE_URL` configuration
+variable when the database is attached to the application.
+
+Django uses this variable to establish the database connection:
+
+    DATABASES = {
+        "default": dj_database_url.parse(
+            os.environ.get("DATABASE_URL")
+        )
+    }
+
+#### 3. Configure Environment Variables
+
+Open **Settings → Config Vars** in the Heroku Dashboard.
+
+Configure the following variables:
+
+| Variable         | Description                                                                             |
+| ---------------- | --------------------------------------------------------------------------------------- |
+| `SECRET_KEY`     | Secret key used by Django.                                                              |
+| `CLOUDINARY_URL` | Cloudinary API credentials for image storage.                                           |
+| `DATABASE_URL`   | PostgreSQL connection URL, normally provided automatically by Heroku Postgres.          |
+| `DEBUG`          | Set to `False` for production, or leave unset because debugging is disabled by default. |
+
+Sensitive values must not be committed to the repository.
+
+#### 4. Configure the Production Web Server
+
+The project uses Gunicorn to run Django in production.
+
+Gunicorn is included in `requirements.txt`.
+
+The root directory contains a `Procfile` with the following command:
+
+    web: gunicorn config.wsgi
+
+This instructs Heroku to start the Django WSGI application
+using Gunicorn.
+
+#### 5. Deploy the Application
+
+1. Open the **Deploy** section in the Heroku Dashboard.
+2. Select **GitHub** as the deployment method.
+3. Connect the GitHub account.
+4. Search for and select the `koi-4-sale` repository.
+5. Connect the repository to the Heroku application.
+6. Select the branch to deploy.
+7. Click **Deploy Branch**.
+
+Heroku installs the Python dependencies from `requirements.txt`
+during the build process.
+
+#### 6. Configure Static Files
+
+Koi4Sale uses WhiteNoise to serve static files in production.
+
+The application includes:
+
+- `WhiteNoiseMiddleware` in Django's middleware configuration.
+- `CompressedManifestStaticFilesStorage` for compressed and versioned static assets.
+- `STATIC_ROOT` as the destination for collected static files.
+
+Static files can be collected using:
+
+    python3 manage.py collectstatic
+
+The deployment build collects static files for production.
+
+#### 7. Apply Database Migrations
+
+After deployment, open **More → Run console** in the Heroku Dashboard.
+
+Run:
+
+    python manage.py migrate
+
+This creates or updates the required database tables
+in the production PostgreSQL database.
+
+#### 8. Create a Production Administrator
+
+To create an administrator account, open the Heroku console and run:
+
+    python manage.py createsuperuser
+
+Follow the prompts to create the administrator credentials.
+
+The administration interface is available at:
+
+    /admin/
+
+#### 9. Verify the Deployment
+
+Open the deployed application and verify that:
+
+- The home page loads successfully.
+- Static files and images are displayed correctly.
+- The catalogue displays available koi.
+- Product detail pages are accessible.
+- Shopping cart functionality works.
+- Reservation requests can be submitted.
+- Successfully reserved products become unavailable.
+- Django Admin is accessible to authorised users.
+- Cloudinary images load over HTTPS.
 
 ### Development and Production Environments
 
@@ -1741,9 +1996,8 @@ Uploaded images are organised under the configured Cloudinary folder.
 
 A product can have multiple photographs.
 
-One image may be designated as the primary image.
-
-Each product can have one primary image, identified by `is_primary=True`. A database constraint prevents multiple primary images from being assigned to the same product.
+Each product can have only one primary image, identified by
+`is_primary=True`. A database constraint enforces this restriction.
 
 The primary image is displayed in the catalogue, shopping cart and reservation confirmation. The product detail page displays all available photographs.
 
@@ -1808,6 +2062,11 @@ External code, tutorials, documentation, images and other resources will be attr
 
 - **Bootstrap Icons** — The `cart3` SVG icon used in the responsive navigation is provided by Bootstrap Icons and licensed under the MIT License. [Bootstrap Icons](https://icons.getbootstrap.com/icons/cart3/).
 
+### Photography
+
+- **Unsplash** — source of koi photographs and images used
+  on the Home and Delivery pages.
+
 ### Graphics
 
 - [Photopea](https://www.photopea.com/) — used to edit SVG graphics.
@@ -1815,13 +2074,14 @@ External code, tutorials, documentation, images and other resources will be attr
 ### AI-Assisted Content
 
 ChatGPT (OpenAI) was used to assist with the creation and
-visual styling of the Entity Relationship Diagram (ERD).
+visual styling of the Entity Relationship Diagram (ERD)
+and the design of website wireframes.
 
-The diagram represents the database models and relationships
+The ERD represents the database models and relationships
 implemented in the Django application.
 
 The decorative koi illustrations were generated as part
-of the diagram and were not sourced from external websites.
+of the ERD and were not sourced from external websites.
 
 ---
 
@@ -1831,38 +2091,82 @@ The project is organised as follows:
 
 ```text
 koi-4-sale/
-├── config/                 # Django project configuration
-├── orders/                 # Cart and reservation functionality
-├── products/               # Product catalogue and images
+├── assets/
+│   ├── readme/
+│   │   ├── images/              # README images and ERD
+│   │   ├── screenshots/         # User story implementation evidence
+│   │   └── wireframes/          # Desktop and mobile wireframes
+│   └── sample_products/         # Sample koi photographs
+├── config/
+│   ├── settings.py              # Django project settings
+│   ├── urls.py                  # Main URL configuration
+│   ├── asgi.py                  # ASGI entry point
+│   └── wsgi.py                  # WSGI entry point
+├── orders/
+│   ├── migrations/              # Database migrations
+│   ├── templates/orders/
+│   │   ├── cart.html
+│   │   └── reservation_confirmation.html
+│   ├── admin.py                 # Reservation administration
+│   ├── forms.py                 # Reservation form
+│   ├── models.py                # Order and OrderItem models
+│   ├── tests.py                 # Reservation tests
+│   ├── urls.py                  # Order URLs
+│   └── views.py                 # Cart and reservation views
+├── products/
+│   ├── migrations/              # Database migrations
+│   ├── templates/products/
+│   │   ├── product_detail.html
+│   │   └── product_list.html
+│   ├── admin.py                 # Product and image administration
+│   ├── models.py                # Product, Category and ProductImage
+│   ├── tests.py                 # Product and catalogue tests
+│   ├── urls.py                  # Product URLs
+│   └── views.py                 # Catalogue and product detail views
 ├── static/
-│   ├── css/                # Custom styles
-│   ├── fonts/              # Self-hosted Inter font and licence
-│   ├── images/             # Logo, hero and placeholder images
-│   └── js/                 # Client-side JavaScript
+│   ├── css/
+│   │   └── style.css            # Custom CSS
+│   ├── favicon/                 # Website favicons
+│   ├── fonts/                   # Inter font and licence
+│   ├── images/                  # Logo, hero and fallback images
+│   └── js/
+│       └── cart.js              # Client-side shopping cart
 ├── templates/
 │   ├── includes/
 │   │   ├── breadcrumbs.html
 │   │   ├── footer.html
-│   │   └── header.html
-│   ├── base.html
-│   ├── contact.html
-│   ├── delivery.html
-│   └── home.html
+│   │   ├── header.html
+│   │   └── hero.html
+│   ├── 404.html                 # Custom 404 page
+│   ├── base.html                # Base template
+│   ├── contact.html             # Contact page
+│   ├── delivery.html            # Delivery information
+│   └── home.html                # Homepage
 ├── tests/
-│   └── django/
-│       ├── test_contact.py
-│       └── test_delivery.py
-├── manage.py
-├── requirements.txt
-├── package.json
-├── Procfile
-├── README.md
-└── TESTING.md
+│   ├── django/
+│   │   ├── test_base.py
+│   │   ├── test_contact.py
+│   │   ├── test_delivery.py
+│   │   └── test_header.py
+│   ├── cart-page.test.js
+│   ├── cart-ui.test.js
+│   └── cart.test.js
+├── .gitignore                   # Git exclusions
+├── .python-version             # Python version for deployment
+├── manage.py                    # Django management utility
+├── package.json                # JavaScript testing dependencies
+├── package-lock.json           # Locked npm dependencies
+├── Procfile                    # Heroku process configuration
+├── requirements.txt            # Python dependencies
+├── README.md                    # Project documentation
+└── TESTING.md                   # Testing documentation
 ```
 
-The diagram shows the principal directories and selected files rather than every file in the repository.
+The diagram shows the principal directories and selected files rather
+than every file in the repository.
 
-The repository excludes local virtual environments, generated static files, database files and sensitive configuration.
+Local virtual environments, generated static files, database files
+and sensitive configuration are excluded from version control.
 
 ---
 
@@ -1884,10 +2188,6 @@ Possible functionality includes:
 - Automated submission tests.
 
 The current Contact page already provides direct email contact, so this enhancement is not required for the initial release.
-
-### Advanced Search and Filtering
-
-Extend the existing catalogue search and category filtering with additional options such as size, price and other product characteristics.
 
 ### Featured Koi Carousel
 

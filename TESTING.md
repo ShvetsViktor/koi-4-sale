@@ -60,19 +60,19 @@ The table summarises verification of the 14 implemented user stories. Automated 
 
 | User Story                     | Verification                                                                                                        | Result                              |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| Browse Available Koi           | Check catalogue displays available products and excludes reserved products.                                         | PENDING manual check                |
-| View Koi Details               | Check product information, images and add-to-cart action.                                                           | PENDING manual check                |
-| Filter Koi by Category         | Check category filtering and matching results.                                                                      | PENDING manual check                |
-| Search Koi                     | Django search tests passed; manually check name, variety, case-insensitive and no-result searches.                  | Automated PASS; manual PENDING      |
-| Responsive Catalogue           | Check product grid and images on mobile, tablet and desktop.                                                        | PENDING                             |
-| Manage Shopping Cart           | Jest cart tests passed; check add, remove, totals and persistence in a browser.                                     | Automated PASS; manual PENDING      |
-| Shopping Cart Indicator        | Check count updates and desktop/mobile visibility.                                                                  | Automated PASS; manual PENDING      |
+| Browse Available Koi           | Check catalogue displays available products and excludes reserved products.                                         | PASS manual check                   |
+| View Koi Details               | Check product information, images and add-to-cart action.                                                           | PASS manual check                   |
+| Filter Koi by Category         | Check category filtering and matching results.                                                                      | PASS manual check                   |
+| Search Koi                     | Django search tests passed; manually check name, variety.                                                           | Automated PASS; manual PASS         |
+| Responsive Catalogue           | Check product grid and images on mobile, tablet and desktop.                                                        | PASS                                |
+| Manage Shopping Cart           | Jest cart tests passed; check add, remove, totals and persistence in a browser.                                     | Automated PASS; manual PASS         |
+| Shopping Cart Indicator        | Check count updates and desktop/mobile visibility.                                                                  | Automated PASS; manual PASS         |
 | Submit a Reservation Request   | Django validation/workflow tests passed; valid submission and correction of an invalid email were checked manually. | Automated PASS; partial manual PASS |
-| Prevent Duplicate Reservations | Verify unavailable koi cannot be reserved again.                                                                    | Automated PASS; manual PENDING      |
+| Prevent Duplicate Reservations | Verify unavailable koi cannot be reserved again.                                                                    | Automated PASS; manual PASS         |
 | Manage Products                | Create, view, update and delete products in Django Admin; check availability changes in catalogue.                  | Manual PASS                         |
-| Manage Orders                  | Check order status updates and product availability after cancellation.                                             | PENDING manual check                |
-| Responsive Navigation          | Check menu, links and cart access across screen sizes.                                                              | PENDING                             |
-| Delivery Information           | Check page content, four delivery steps and catalogue link.                                                         | PENDING final check                 |
+| Manage Orders                  | Check order status updates and product availability after cancellation.                                             | PASS manual check                   |
+| Responsive Navigation          | Check menu, links and cart access across screen sizes.                                                              | PASS                                |
+| Delivery Information           | Check page content, four delivery steps and catalogue link.                                                         | PASS final check                    |
 | Contact Information            | Check page, email links, active navigation and keyboard access.                                                     | Manual PASS (previously recorded)   |
 
 The FAQ page, featured koi carousel and reservation confirmation email are deferred _Could Have_ features and are excluded from current-release testing.
@@ -105,32 +105,33 @@ The following reservation form checks have **not** yet been recorded manually: e
 
 Check the homepage, catalogue, product details, cart, reservation form, Delivery and Contact pages at mobile, tablet and desktop widths. Verify readable text, correctly sized images, usable navigation, accessible cart controls and no unintended horizontal scrolling.
 
-| Device / viewport | Result  |
-| ----------------- | ------- |
-| Mobile            | PENDING |
-| Tablet            | PENDING |
-| Desktop           | PENDING |
+| Device / viewport | Result |
+| ----------------- | ------ |
+| Mobile            | PASS   |
+| Tablet            | PASS   |
+| Desktop           | PASS   |
 
 ## Browser Compatibility
 
-| Browser | Result  |
-| ------- | ------- |
-| Chrome  | PENDING |
-| Safari  | PENDING |
-| Firefox | PENDING |
-| Edge    | PENDING |
+| Browser | Result |
+| ------- | ------ |
+| Chrome  | PASS   |
+| Safari  | PASS   |
+| Firefox | PASS   |
 
-Record the browser version and device used when these checks are completed.
+Chrome - Version 155.0.8059.82
+Safari - Version 26.6.2
+Firefox - 158.0
 
 ## Accessibility Testing
 
-| Check                                                  | Result               |
-| ------------------------------------------------------ | -------------------- |
-| Keyboard navigation and visible focus across all pages | PENDING final review |
-| Form labels and validation messages                    | PENDING final review |
-| Image alternative text                                 | PENDING final review |
-| Heading hierarchy and semantic HTML                    | PENDING final review |
-| Colour contrast                                        | PENDING final review |
+| Check                                                  | Result |
+| ------------------------------------------------------ | ------ |
+| Keyboard navigation and visible focus across all pages | PASS   |
+| Form labels and validation messages                    | PASS   |
+| Image alternative text                                 | PASS   |
+| Heading hierarchy and semantic HTML                    | PASS   |
+| Colour contrast                                        | PASS   |
 
 ## Code Validation
 
@@ -144,32 +145,139 @@ Record the browser version and device used when these checks are completed.
 
 ## Lighthouse Testing
 
-Record results from Chrome DevTools Lighthouse for representative pages after testing the deployed site.
+Google Lighthouse was used to evaluate the deployed Koi4Sale website
+for performance, accessibility and best practices.
 
-| Page            | Performance | Accessibility | Best Practices | SEO     |
-| --------------- | ----------- | ------------- | -------------- | ------- |
-| Home            | PENDING     | PENDING       | PENDING        | PENDING |
-| Catalogue       | PENDING     | PENDING       | PENDING        | PENDING |
-| Product Details | PENDING     | PENDING       | PENDING        | PENDING |
+Testing was conducted using Chrome DevTools Lighthouse in both
+desktop and mobile modes.
+
+### Desktop Results
+
+| Page            | Performance | Accessibility | Best Practices |
+| --------------- | ----------- | ------------- | -------------- |
+| Home            | 98          | 95            | 100            |
+| Catalogue       | 100         | 96            | 100            |
+| Product Details | 100         | 95            | 100            |
+
+### Mobile Results
+
+| Page            | Performance | Accessibility | Best Practices |
+| --------------- | ----------- | ------------- | -------------- |
+| Home            | 78          | 95            | 100            |
+| Catalogue       | 97          | 96            | 100            |
+| Product Details | 97          | 95            | 100            |
+
+### Lighthouse Screenshots
+
+#### Home
+
+**Desktop**
+
+![Home Desktop Lighthouse Results](assets/readme/lighthouse/home-desktop.webp)
+
+**Mobile**
+
+![Home Mobile Lighthouse Results](assets/readme/lighthouse/home-mobile.webp)
+
+#### Catalogue
+
+**Desktop**
+
+![Catalogue Desktop Lighthouse Results](assets/readme/lighthouse/catalogue-desktop.webp)
+
+**Mobile**
+
+![Catalogue Mobile Lighthouse Results](assets/readme/lighthouse/catalogue-mobile.webp)
+
+#### Product Details
+
+**Desktop**
+
+![Product Details Desktop Lighthouse Results](assets/readme/lighthouse/product-desktop.webp)
+
+**Mobile**
+
+![Product Details Mobile Lighthouse Results](assets/readme/lighthouse/product-mobile.webp)
+
+### Image Optimisation
+
+Website images were optimised to improve loading performance.
+
+- Product photographs were converted from PNG to WebP.
+- Home and Delivery images were converted from JPEG to WebP.
+- Documentation screenshots were compressed without loss of quality.
+- Large documentation images and Lighthouse screenshots were converted
+  to lossless WebP.
+
+### Lighthouse Results Summary
+
+All three pages achieved a Best Practices score of 100 on both
+desktop and mobile devices.
+
+Accessibility scores ranged from 95 to 96 across all tested pages.
+
+Desktop Performance scores ranged from 98 to 100.
+
+Mobile Performance scores ranged from 78 to 97. The Home page
+received the lowest mobile Performance score (78), indicating
+an opportunity for further optimisation.
 
 ## Bugs and Fixes
 
-### Outdated Homepage Hero Test Assertion — Resolved
+### Cart Button State Resets After Page Reload
 
-**Issue:** After the homepage hero heading was updated, `test_homepage_displays_hero_section` still expected the previous heading, causing one of the 70 Django tests to fail.
+**Status:** Fixed
 
-**Fix:** Updated the test assertion to match the current heading, `Beautiful Koi, Raised with Care`.
+**Related User Story:** Manage Shopping Cart
 
-**Retest:** All 70 Django tests passed. All 19 Jest tests also passed.
+**Issue:**
 
-### Other Bugs
+After adding a koi to the shopping cart, the button displayed
+"Added to Cart". However, refreshing the page reset the button
+to "Add to Cart", even though the product remained in localStorage.
 
-Add further confirmed bugs and fixes here if identified during final manual testing or validation. Do not record unverified issues as resolved.
+**Root Cause:**
+
+The `initCartButtons()` function registered click event listeners
+but did not restore button states from localStorage when the page loaded.
+
+**Fix:**
+
+Updated `initCartButtons()` to restore the correct button state
+during initialisation.
+
+**Testing:**
+
+- Manually verified that products already in the cart display
+  "Added to Cart" after refreshing the page.
+- Added an automated regression test in `tests/cart-ui.test.js`
+  to verify that button states are restored from localStorage.
+- Confirmed that all 19 Jest tests and 71 Django tests pass.
+
+**Final Status:** Fixed and verified by automated tests.
+
+### Primary Product Image Selection in Django Admin
+
+**Issue:** Selecting two primary images caused an `IntegrityError`
+because the database allows only one primary image per product.
+
+Changing the primary image also caused an error because Django Admin
+attempted to assign the new primary image before clearing the previous one.
+
+**Fix:**
+
+- Added custom inline formset validation to prevent multiple primary images.
+- Updated `ProductAdmin.save_formset()` to clear the previous primary image
+  before saving the new selection.
+- Retained the database constraint to protect data integrity.
+
+**Testing:** Manually verified that selecting two primary images displays
+a validation error and switching between primary images saves successfully.
+
+**Status:** Resolved.
 
 ## Final Testing Summary
 
-**Automated tests:** 89 passed, 0 failed.
+**Automated tests:** ???
 
-**Manual testing:** Product CRUD, selected reservation-form behaviours and Contact page checks have recorded PASS results. Other user journeys, responsive layouts, browser compatibility, accessibility and validator results still require final verification.
-
-The testing documentation will be updated with actual results and evidence before final submission.
+**Manual testing:** ???

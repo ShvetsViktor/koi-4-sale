@@ -17,9 +17,9 @@ python3 manage.py test
 Latest result:
 
 ```text
-Found 70 test(s).
+Found 71 test(s).
 System check identified no issues (0 silenced).
-Ran 70 tests in 28.658s
+Ran 71 tests
 OK
 ```
 
@@ -50,9 +50,9 @@ Snapshots:   0 total
 
 | Test suite | Passed | Failed | Result   |
 | ---------- | -----: | -----: | -------- |
-| Django     |     70 |      0 | PASS     |
+| Django     |     71 |      0 | PASS     |
 | Jest       |     19 |      0 | PASS     |
-| **Total**  | **89** |  **0** | **PASS** |
+| **Total**  | **90** |  **0** | **PASS** |
 
 ## User Story Testing
 
@@ -135,13 +135,78 @@ Firefox - 158.0
 
 ## Code Validation
 
-| Tool / check                                                  | Result  | Evidence                                                 |
-| ------------------------------------------------------------- | ------- | -------------------------------------------------------- |
-| HTML validation                                               | PENDING | Add result or screenshot                                 |
-| CSS validation                                                | PENDING | Add result or screenshot                                 |
-| Python linting / style checks                                 | PENDING | Add command and result                                   |
-| JavaScript linting / style checks                             | PENDING | Add command and result                                   |
-| Django deployment checks (`python3 manage.py check --deploy`) | PENDING | Add result and explain any environment-specific warnings |
+The project's HTML, CSS, JavaScript and Python code was validated
+using appropriate validation tools.
+
+### HTML Validation
+
+The deployed website was checked using the W3C Nu HTML Checker.
+
+All seven tested pages passed HTML validation without errors.
+
+| Page            | Result | Evidence                                                   |
+| --------------- | ------ | ---------------------------------------------------------- |
+| Home            | PASS   | [Screenshot](assets/readme/validation/html-home.webp)      |
+| Catalogue       | PASS   | [Screenshot](assets/readme/validation/html-catalogue.webp) |
+| Product Details | PASS   | [Screenshot](assets/readme/validation/html-product.webp)   |
+| Shopping Cart   | PASS   | [Screenshot](assets/readme/validation/html-cart.webp)      |
+| Delivery        | PASS   | [Screenshot](assets/readme/validation/html-delivery.webp)  |
+| Contact         | PASS   | [Screenshot](assets/readme/validation/html-contact.webp)   |
+| Custom 404      | PASS   | [Screenshot](assets/readme/validation/html-404.webp)       |
+
+### CSS Validation
+
+The stylesheet was checked using the W3C CSS Validation Service.
+
+**Result:** PASS — 0 errors and 2 warnings.
+
+![CSS Validation Results](assets/readme/validation/css-styles.webp)
+
+### JavaScript Validation
+
+The shopping cart JavaScript was checked using JSHint 2.13.6.
+
+The following JSHint configuration was used:
+
+```javascript
+/* jshint esversion: 8, node: true */
+```
+
+**Result:** PASS — 0 errors and 0 warnings.
+
+![JavaScript Validation Results](assets/readme/validation/js-cart.webp)
+
+### Python PEP 8 Validation
+
+Python code was checked using `pycodestyle`.
+
+The following command was executed:
+
+```bash
+pycodestyle --exclude=.venv,migrations,staticfiles --max-line-length=79 config/ products/ orders/
+```
+
+The initial validation identified four E501 line-length violations
+in `config/settings.py`.
+
+These were corrected by splitting long string literals across
+multiple lines without changing their values.
+
+The validation was repeated successfully.
+
+**Result:** PASS — 0 violations.
+
+![Python PEP 8 Validation Results](assets/readme/validation/python-pep8.webp)
+
+### Django System Check
+
+Django's built-in system check was executed:
+
+```bash
+python3 manage.py check
+```
+
+**Result:** PASS — No issues identified.
 
 ## Lighthouse Testing
 
@@ -278,6 +343,19 @@ a validation error and switching between primary images saves successfully.
 
 ## Final Testing Summary
 
-**Automated tests:** ???
+**Automated testing:** PASS — All 90 automated tests passed
+(71 Django tests and 19 Jest tests).
 
-**Manual testing:** ???
+**Manual testing:** PASS for the recorded checks, including
+product management, shopping cart functionality, reservations,
+navigation, responsive layouts and browser compatibility.
+
+Some additional reservation form edge cases have not yet been
+verified manually and are documented above.
+
+**Code validation:** PASS — HTML, CSS, JavaScript and Python
+validation completed successfully.
+
+**Lighthouse:** Best Practices scored 100 across all six
+desktop and mobile tests. Accessibility scores ranged from
+95 to 96, while Performance scores ranged from 78 to 100.

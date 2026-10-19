@@ -77,7 +77,8 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImageInline]
 
     def save_formset(self, request, form, formset, change):
-        """Save product images without violating the primary image constraint."""
+        """Save product images without violating the primary
+        image constraint."""
 
         if formset.model == ProductImage:
             instances = formset.save(commit=False)

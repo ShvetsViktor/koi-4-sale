@@ -6,23 +6,22 @@
 
 ## Overview
 
-Koi4Sale is a full-stack web application for browsing individual Japanese koi and submitting reservation requests without creating a customer account or making an online payment.
+Koi4Sale is a full-stack web application for browsing and reserving
+individual Japanese koi in the UK. Visitors can explore available fish,
+search and filter the catalogue, view product details and manage a
+shopping cart before submitting a reservation request without creating
+an account or making an online payment.
 
-The project is developed for the **Code Institute Level 5 Diploma in Web Application Development – Unit 3: Back End Development** assessment. It uses **Django**, a relational database, Django Templates, **Bootstrap 5.3**, custom CSS and vanilla JavaScript.
+Built with Django, PostgreSQL, Bootstrap 5.3 and vanilla JavaScript,
+the application uses a relational database to manage products,
+reservations and customer information. Server-side validation prevents
+duplicate reservations, while Django Admin provides authenticated
+product and order management.
 
-Each koi is represented as a unique product rather than a variation of a stock item. Visitors can browse available koi, view detailed product information and images, search and filter the catalogue, manage a client-side shopping cart and submit a reservation request.
+The project was developed for the **Code Institute Level 5 Diploma in
+Web Application Development – Unit 3: Back End Development** assessment.
 
-The server validates product availability before creating an order and its associated order items, storing customer contact details directly in the order. When a reservation is successfully submitted, the selected koi are marked as reserved to prevent duplicate reservations.
-
-Customer registration and authentication are intentionally excluded from the initial project scope. Authorised administrators manage products, images and reservation
-requests, including customer contact information, through Django Admin.
-
-The project is developed incrementally using GitHub Issues, milestones and automated testing. Testable functionality follows the **RED → GREEN → REFACTOR** development cycle where appropriate.
-
-The previous Koi4Sale website, developed using Next.js, React and TypeScript, serves as a visual and UX reference. This project is a separate implementation using Django Templates, HTML, CSS, Bootstrap and vanilla JavaScript.
-
-> **Project Status:** Completed and deployed. Core reservation functionality,
-> responsive layouts, automated testing and project documentation have been finalised.
+> **Project Status:** Completed and deployed.
 
 ---
 

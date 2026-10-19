@@ -302,7 +302,7 @@ class ReservationViewTests(TestCase):
             },
         )
 
-        self.assertEqual(response.status_code, 400)
+        self.assertRedirects(response, reverse("cart"))
 
         # No order should be created.
         self.assertEqual(Order.objects.count(), 0)
@@ -343,7 +343,7 @@ class ReservationViewTests(TestCase):
             },
         )
 
-        self.assertEqual(second_response.status_code, 400)
+        self.assertRedirects(second_response, reverse("cart"))
 
         # Only the first reservation should exist.
         self.assertEqual(Order.objects.count(), 1)

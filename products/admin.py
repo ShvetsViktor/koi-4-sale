@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.utils.html import format_html
 from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
+from django.utils.html import format_html
 
 from .models import Product, Category, ProductImage
 
@@ -69,32 +69,37 @@ class ProductAdmin(admin.ModelAdmin):
         "status",
         "created_on",
     )
-
     list_filter = ("category", "status")
     search_fields = ("name", "category__name")
     list_editable = ("status",)
-
     inlines = [ProductImageInline]
 
     def save_formset(self, request, form, formset, change):
-        """Save product images without violating the primary
-        image constraint."""
+        """Save product images while preserving the primary selection."""
 
-        if formset.model == ProductImage:
-            instances = formset.save(commit=False)
+        instances = formset.save(commit=False)
 
-            # Clear the existing primary image before assigning a new one.
+        primary_image = next(
+            (
+                image_form.instance
+                for image_form in formset.forms
+                if image_form.cleaned_data
+                and not image_form.cleaned_data.get("DELETE")
+                and image_form.cleaned_data.get("is_primary")
+            ),
+            None,
+        )
+
+        if primary_image is not None:
             ProductImage.objects.filter(
                 product=form.instance,
                 is_primary=True,
+            ).exclude(
+                pk=primary_image.pk,
             ).update(is_primary=False)
 
-            for obj in formset.deleted_objects:
-                obj.delete()
+        for obj in formset.deleted_objects:
+            obj.delete()
 
-            for instance in instances:
-                instance.save()
-
-            formset.save_m2m()
-        else:
-            super().save_formset(request, form, formset, change)
+        for instance in instances:
+            instance.save()

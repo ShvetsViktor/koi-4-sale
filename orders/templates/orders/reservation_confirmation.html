@@ -23,7 +23,7 @@
 
           <ul class="list-unstyled mb-4">
             {% for item in order.items.all %}
-            <div class="reservation-item d-flex align-items-center gap-3 py-3">
+            <li class="reservation-item d-flex align-items-center gap-3 py-3">
 
               {% with image=item.product.primary_image %}
                 <img
@@ -41,7 +41,7 @@
                 £{{ item.price }}
               </span>
 
-            </div>
+            </li>
             {% endfor %}
           </ul>
 

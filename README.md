@@ -1636,6 +1636,8 @@ The production environment uses a relational database, Cloudinary for uploaded i
 
 Follow these steps to run the application locally.
 
+The following setup instructions are intended for macOS and Linux environments. Windows users may need to adjust certain commands, particularly virtual environment activation.
+
 #### 1. Clone the Repository
 
 ```bash

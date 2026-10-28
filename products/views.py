@@ -1,5 +1,7 @@
 from django.db.models import Prefetch, Q
 from django.views.generic import ListView, DetailView, TemplateView
+from django.shortcuts import get_object_or_404
+from django.http import Http404
 
 from .models import Product, ProductImage, Category
 
@@ -22,7 +24,13 @@ class ProductList(ListView):
         category_id = self.request.GET.get("category")
 
         if category_id:
-            queryset = queryset.filter(category_id=category_id)
+            try:
+                category_id = int(category_id)
+            except ValueError:
+                raise Http404("Invalid category ID.")
+
+            category = get_object_or_404(Category, pk=category_id)
+            queryset = queryset.filter(category=category)
 
         query = self.request.GET.get("q", "").strip()
 

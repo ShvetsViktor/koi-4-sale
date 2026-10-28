@@ -408,6 +408,26 @@ class ProductFilteringTests(TestCase):
         self.assertNotContains(response, self.kohaku.name)
         self.assertNotContains(response, self.showa.name)
 
+    def test_invalid_category_id_returns_404(self):
+        """Return HTTP 404 for a non-numeric category ID."""
+
+        response = self.client.get(
+            reverse("product_list"),
+            {"category": "abc"},
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_nonexistent_category_id_returns_404(self):
+        """Return HTTP 404 for a category that does not exist."""
+
+        response = self.client.get(
+            reverse("product_list"),
+            {"category": 99999},
+        )
+
+        self.assertEqual(response.status_code, 404)
+
 
 class ProductSearchTests(TestCase):
     """Tests for searching available koi by name or category."""

@@ -107,20 +107,28 @@ class CartProductsView(View):
         """Retrieve products matching the requested IDs."""
         product_ids = request.GET.getlist("ids")
 
-        # Fetch primary images separately to avoid additional database
-        # queries for each product when building the JSON response.
-        products = Product.objects.filter(
-            pk__in=product_ids
-        ).prefetch_related(
-            Prefetch(
-                "images",
-                queryset=ProductImage.objects.filter(is_primary=True),
-                to_attr="primary_images",
+        try:
+            product_ids = [int(pk) for pk in product_ids]
+        except ValueError:
+            return HttpResponseBadRequest("Invalid product IDs.")
+
+        products = list(
+            Product.objects.filter(
+                pk__in=product_ids
+            ).prefetch_related(
+                Prefetch(
+                    "images",
+                    queryset=ProductImage.objects.filter(is_primary=True),
+                    to_attr="primary_images",
+                )
             )
         )
 
-        # Use the primary Cloudinary image when available.
-        # Otherwise, return the static placeholder image.
+        if len(products) != len(set(product_ids)):
+            return HttpResponseBadRequest(
+                "One or more products do not exist."
+            )
+
         product_data = [
             {
                 "id": product.pk,

@@ -841,3 +841,43 @@ class CartProductsTests(TestCase):
             product_data["image_url"],
             staticfiles_storage.url("images/default.png"),
         )
+
+    def test_invalid_product_id_returns_400(self):
+        """Return HTTP 400 when a product ID is not numeric."""
+
+        response = self.client.get(
+            reverse("cart_products"),
+            {"ids": ["abc"]},
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_nonexistent_product_id_returns_400(self):
+        """Return HTTP 400 when a product does not exist."""
+
+        response = self.client.get(
+            reverse("cart_products"),
+            {"ids": ["999999"]},
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_mixed_valid_and_nonexistent_product_ids_returns_400(self):
+        """Reject a cart request containing nonexistent product IDs."""
+
+        category = Category.objects.create(name="Kohaku")
+
+        product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=category,
+            price=Decimal("150.00"),
+            size=30,
+            age=2,
+        )
+
+        response = self.client.get(
+            reverse("cart_products"),
+            {"ids": [str(product.pk), "999999"]},
+        )
+
+        self.assertEqual(response.status_code, 400)

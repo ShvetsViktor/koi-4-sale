@@ -391,3 +391,33 @@ class UserProfileUpdateTests(TestCase):
         self.assertEqual(self.user.first_name, "")
         self.assertEqual(self.user.last_name, "")
         self.assertEqual(self.user.email, "old@example.com")
+
+    def test_user_cannot_update_another_users_profile(self):
+        """Ensure profile updates affect only the authenticated user."""
+        another_user = User.objects.create_user(
+            username="anotheruser",
+            email="another@example.com",
+            password="SecurePassword123!",
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("profile_edit"),
+            {
+                "first_name": "Viktor",
+                "last_name": "Shvets",
+                "email": "new@example.com",
+            },
+        )
+
+        self.user.refresh_from_db()
+        another_user.refresh_from_db()
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.user.first_name, "Viktor")
+        self.assertEqual(self.user.email, "new@example.com")
+
+        self.assertEqual(another_user.first_name, "")
+        self.assertEqual(another_user.last_name, "")
+        self.assertEqual(another_user.email, "another@example.com")

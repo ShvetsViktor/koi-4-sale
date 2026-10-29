@@ -776,6 +776,74 @@ class OrderAdminTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn("/admin/login/", response.url)
 
+    def test_deleting_order_releases_reserved_product(self):
+        """Deleting a reservation should release its reserved koi."""
+        self.order.delete()
+
+        self.product.refresh_from_db()
+
+        self.assertEqual(
+            self.product.status,
+            Product.ProductStatus.AVAILABLE,
+        )
+
+    def test_bulk_deleting_orders_releases_reserved_products(self):
+        """Bulk deletion should release all reserved koi."""
+        second_product = Product.objects.create(
+            name="Japanese Showa",
+            category=self.category,
+            price=Decimal("350.00"),
+            size=35,
+            age=3,
+            status=Product.ProductStatus.RESERVED,
+        )
+
+        second_order = Order.objects.create(
+            customer_name="Jane Smith",
+            email="jane@example.com",
+            phone="07987654321",
+            total_price=Decimal("350.00"),
+        )
+
+        OrderItem.objects.create(
+            order=second_order,
+            product=second_product,
+            price=second_product.price,
+        )
+
+        Order.objects.filter(
+            pk__in=[self.order.pk, second_order.pk],
+        ).delete()
+
+        self.product.refresh_from_db()
+        second_product.refresh_from_db()
+
+        self.assertEqual(
+            self.product.status,
+            Product.ProductStatus.AVAILABLE,
+        )
+        self.assertEqual(
+            second_product.status,
+            Product.ProductStatus.AVAILABLE,
+        )
+
+    def test_deleting_cancelled_order_does_not_change_product_status(self):
+        """Deleting a cancelled order should not affect product availability."""
+        self.order.status = Order.OrderStatus.CANCELLED
+        self.order.save()
+
+        self.product.status = Product.ProductStatus.AVAILABLE
+        self.product.save()
+
+        self.order.delete()
+
+        self.product.refresh_from_db()
+
+        self.assertEqual(
+            self.product.status,
+            Product.ProductStatus.AVAILABLE,
+        )
+
 
 class CartPageTests(TestCase):
     """Tests for the shopping cart page."""

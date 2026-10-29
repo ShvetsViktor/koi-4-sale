@@ -343,3 +343,51 @@ class UserProfileUpdateTests(TestCase):
         self.assertEqual(self.user.first_name, "Viktor")
         self.assertEqual(self.user.last_name, "Shvets")
         self.assertEqual(self.user.email, "new@example.com")
+
+    def test_invalid_email_does_not_update_profile(self):
+        """Reject invalid email and preserve existing user details."""
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("profile_edit"),
+            {
+                "first_name": "Viktor",
+                "last_name": "Shvets",
+                "email": "invalid-email",
+            },
+        )
+
+        # Reload the user from the database to verify that changes were saved.
+        self.user.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(
+            response.context["form"],
+            "email",
+            "Enter a valid email address.",
+        )
+        self.assertEqual(self.user.first_name, "")
+        self.assertEqual(self.user.last_name, "")
+        self.assertEqual(self.user.email, "old@example.com")
+
+    def test_anonymous_user_cannot_update_profile(self):
+        """Redirect anonymous users without modifying account details."""
+        response = self.client.post(
+            reverse("profile_edit"),
+            {
+                "first_name": "Viktor",
+                "last_name": "Shvets",
+                "email": "new@example.com",
+            },
+        )
+
+        self.user.refresh_from_db()
+
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('profile_edit')}",
+            fetch_redirect_response=False,
+        )
+        self.assertEqual(self.user.first_name, "")
+        self.assertEqual(self.user.last_name, "")
+        self.assertEqual(self.user.email, "old@example.com")

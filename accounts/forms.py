@@ -14,3 +14,11 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "email", "password1", "password2")
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    """Allow users to update their account details."""
+
+    class Meta:
+        model = User
+        fields = ("first_name", "last_name", "email")

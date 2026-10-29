@@ -310,3 +310,36 @@ class UserProfileTests(TestCase):
         self.assertContains(response, "testuser")
         self.assertNotContains(response, "anotheruser")
         self.assertNotContains(response, "another@example.com")
+
+
+class UserProfileUpdateTests(TestCase):
+    """Test customer profile editing."""
+
+    def setUp(self):
+        """Create a user for profile update tests."""
+        self.user = User.objects.create_user(
+            username="testuser",
+            email="old@example.com",
+            password="SecurePassword123!",
+        )
+
+    def test_authenticated_user_can_update_profile(self):
+        """Allow authenticated users to update their account details."""
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("profile_edit"),
+            {
+                "first_name": "Viktor",
+                "last_name": "Shvets",
+                "email": "new@example.com",
+            },
+        )
+
+        # Reload the user from the database to verify that changes were saved.
+        self.user.refresh_from_db()
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.user.first_name, "Viktor")
+        self.assertEqual(self.user.last_name, "Shvets")
+        self.assertEqual(self.user.email, "new@example.com")

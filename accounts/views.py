@@ -1,10 +1,10 @@
-from django.contrib.auth import login
-from django.shortcuts import redirect, render
-from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import TemplateView, UpdateView
 
-from .forms import SignUpForm
+from .forms import ProfileUpdateForm, SignUpForm
 
 
 class SignUpView(View):
@@ -37,3 +37,15 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     """Display the authenticated user's profile."""
 
     template_name = "accounts/profile.html"
+
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    """Allow authenticated users to edit their own profile."""
+
+    form_class = ProfileUpdateForm
+    template_name = "accounts/profile_edit.html"
+    success_url = reverse_lazy("profile")
+
+    def get_object(self, queryset=None):
+        """Return the currently authenticated user."""
+        return self.request.user

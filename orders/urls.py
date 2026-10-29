@@ -14,7 +14,7 @@ urlpatterns = [
         name="reservation_create",
     ),
     path(
-        "reservation-confirmation/<int:pk>/",
+        "reservation-confirmation/<uuid:access_token>/",
         ReservationConfirmation.as_view(),
         name="reservation_confirmation",
     ),

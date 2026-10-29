@@ -91,6 +91,27 @@ class OrderModelTests(TestCase):
 
         self.assertEqual(self.order.items.count(), 2)
 
+    def test_orders_have_unique_access_tokens(self):
+        """Each reservation should have a unique access token."""
+        first_order = Order.objects.create(
+            customer_name="John Smith",
+            email="john@example.com",
+            phone="07123456789",
+        )
+
+        second_order = Order.objects.create(
+            customer_name="Jane Smith",
+            email="jane@example.com",
+            phone="07987654321",
+        )
+
+        self.assertIsNotNone(first_order.access_token)
+        self.assertIsNotNone(second_order.access_token)
+        self.assertNotEqual(
+            first_order.access_token,
+            second_order.access_token,
+        )
+
 
 class ReservationFormTests(TestCase):
     """Tests for customer reservation form validation."""
@@ -465,7 +486,10 @@ class ReservationViewTests(TestCase):
 
         self.assertRedirects(
             response,
-            reverse("reservation_confirmation", args=[order.pk]),
+            reverse(
+                "reservation_confirmation",
+                args=[order.access_token],
+            )
         )
 
     def test_invalid_contact_details_display_form_errors(self):
@@ -545,7 +569,7 @@ class ReservationConfirmationTests(TestCase):
         response = self.client.get(
             reverse(
                 "reservation_confirmation",
-                args=[self.order.pk],
+                args=[self.order.access_token],
             )
         )
 
@@ -556,11 +580,12 @@ class ReservationConfirmationTests(TestCase):
         response = self.client.get(
             reverse(
                 "reservation_confirmation",
-                args=[self.order.pk],
+                args=[self.order.access_token],
             )
         )
 
-        self.assertContains(response, f"Reservation #{self.order.pk}")
+        self.assertContains(response,
+                            f"Reservation #{self.order.pk}")
         self.assertContains(response, "600.00")
 
     def test_confirmation_page_returns_404_for_missing_order(self):
@@ -568,7 +593,7 @@ class ReservationConfirmationTests(TestCase):
         response = self.client.get(
             reverse(
                 "reservation_confirmation",
-                args=[999999],
+                args=["00000000-0000-4000-8000-000000000000"],
             )
         )
 
@@ -598,7 +623,10 @@ class ReservationConfirmationTests(TestCase):
         )
 
         response = self.client.get(
-            reverse("reservation_confirmation", args=[self.order.pk])
+            reverse(
+                "reservation_confirmation",
+                args=[self.order.access_token],
+            )
         )
 
         self.assertContains(response, primary_image.image.url)
@@ -621,12 +649,48 @@ class ReservationConfirmationTests(TestCase):
         )
 
         response = self.client.get(
-            reverse("reservation_confirmation", args=[self.order.pk])
+            reverse(
+                "reservation_confirmation",
+                args=[self.order.access_token],
+            )
         )
 
         self.assertContains(
             response,
             staticfiles_storage.url("images/default.png"),
+        )
+
+    def test_confirmation_cannot_be_accessed_by_numeric_order_id(self):
+        """Prevent access to reservation details using a numeric order ID."""
+        response = self.client.get(
+            f"/reservation-confirmation/{self.order.pk}/"
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_confirmation_returns_404_for_invalid_access_token(self):
+        """Reject access to a reservation using an incorrect UUID."""
+        import uuid
+
+        invalid_token = uuid.uuid4()
+
+        response = self.client.get(
+            reverse(
+                "reservation_confirmation",
+                args=[invalid_token],
+            )
+        )
+
+        self.assertEqual(response.status_code, 404)
+        self.assertNotContains(
+            response,
+            self.order.customer_name,
+            status_code=404,
+        )
+        self.assertNotContains(
+            response,
+            self.order.email,
+            status_code=404,
         )
 
 

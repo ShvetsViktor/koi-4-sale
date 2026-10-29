@@ -83,7 +83,10 @@ class ReservationCreate(View):
                 status=Product.ProductStatus.RESERVED
             )
 
-        return redirect("reservation_confirmation", pk=order.pk)
+        return redirect(
+            "reservation_confirmation",
+            access_token=order.access_token,
+        )
 
 
 class ReservationConfirmation(DetailView):
@@ -92,6 +95,8 @@ class ReservationConfirmation(DetailView):
     model = Order
     template_name = "orders/reservation_confirmation.html"
     context_object_name = "order"
+    slug_field = "access_token"
+    slug_url_kwarg = "access_token"
 
 
 class CartView(TemplateView):

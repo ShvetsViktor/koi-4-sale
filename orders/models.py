@@ -1,4 +1,6 @@
 from django.db import models
+import uuid
+
 from products.models import Product
 
 
@@ -24,6 +26,11 @@ class Order(models.Model):
         default=0,
     )
     created_on = models.DateTimeField(auto_now_add=True)
+    access_token = models.UUIDField(
+        default=uuid.uuid4,
+        unique=True,
+        editable=False,
+    )
 
     class Meta:
         ordering = ["-created_on"]

@@ -283,3 +283,15 @@ class UserProfileTests(TestCase):
             f"{reverse('login')}?next={reverse('profile')}",
             fetch_redirect_response=False,
         )
+
+    def test_profile_displays_first_and_last_name(self):
+        """Display the authenticated user's first and last name."""
+        self.user.first_name = "Viktor"
+        self.user.last_name = "Shvets"
+        self.user.save()
+
+        self.client.force_login(self.user)
+        response = self.client.get(reverse("profile"))
+
+        self.assertContains(response, "Viktor")
+        self.assertContains(response, "Shvets")

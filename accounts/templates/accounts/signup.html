@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up | Koi4Sale{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+  <h1>Create an Account</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">
+      Sign Up
+    </button>
+  </form>
+</section>
+{% endblock %}

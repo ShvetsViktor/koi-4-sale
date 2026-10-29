@@ -105,6 +105,14 @@ class UserRegistrationTests(TestCase):
             fetch_redirect_response=False,
         )
 
+    def test_signup_form_uses_crispy_bootstrap5(self):
+        """Render the registration form with Bootstrap 5 styling."""
+        response = self.client.get(reverse("signup"))
+
+        self.assertContains(response, 'class="textinput form-control"')
+        self.assertContains(response, 'class="emailinput form-control"')
+        self.assertContains(response, 'class="passwordinput form-control"')
+
 
 class UserLoginTests(TestCase):
     """Test customer login functionality."""
@@ -157,6 +165,13 @@ class UserLoginTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context["form"].errors)
+
+    def test_login_form_uses_crispy_bootstrap5(self):
+        """Render the login form with Bootstrap 5 styling."""
+        response = self.client.get(reverse("login"))
+
+        self.assertContains(response, 'class="textinput form-control"')
+        self.assertContains(response, 'class="passwordinput form-control"')
 
 
 class UserLogoutTests(TestCase):

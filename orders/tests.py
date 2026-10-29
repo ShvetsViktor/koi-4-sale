@@ -550,6 +550,19 @@ class ReservationViewTests(TestCase):
             self.product_one,
         )
 
+    def test_reservation_form_uses_crispy_bootstrap5(self):
+        """Render reservation fields with Bootstrap 5 styling."""
+        response = self.client.get(reverse("cart"))
+
+        self.assertContains(
+            response,
+            'class="textinput form-control"',
+        )
+        self.assertContains(
+            response,
+            'class="emailinput form-control"',
+        )
+
 
 class ReservationConfirmationTests(TestCase):
     """Tests for the reservation confirmation page."""
@@ -828,7 +841,8 @@ class OrderAdminTests(TestCase):
         )
 
     def test_deleting_cancelled_order_does_not_change_product_status(self):
-        """Deleting a cancelled order should not affect product availability."""
+        """Deleting a cancelled order
+        should not affect product availability."""
         self.order.status = Order.OrderStatus.CANCELLED
         self.order.save()
 

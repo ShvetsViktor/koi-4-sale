@@ -103,3 +103,126 @@ class UserRegistrationTests(TestCase):
             reverse("login"),
             fetch_redirect_response=False,
         )
+
+
+class UserLoginTests(TestCase):
+    """Test customer login functionality."""
+
+    def setUp(self):
+        """Create a user for authentication tests."""
+        self.user = User.objects.create_user(
+            username="testuser",
+            password="SecurePassword123!",
+        )
+
+    def test_login_page_returns_200(self):
+        """Display the login page."""
+        response = self.client.get(reverse("login"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "registration/login.html")
+
+    def test_valid_login_authenticates_user(self):
+        """Authenticate a user with valid credentials."""
+        response = self.client.post(
+            reverse("login"),
+            {
+                "username": "testuser",
+                "password": "SecurePassword123!",
+            },
+        )
+
+        self.assertTrue(
+            response.wsgi_request.user.is_authenticated
+        )
+        self.assertRedirects(
+            response,
+            reverse("home"),
+            fetch_redirect_response=False,
+        )
+
+    def test_invalid_login_is_rejected(self):
+        """Reject login with an incorrect password."""
+        response = self.client.post(
+            reverse("login"),
+            {
+                "username": "testuser",
+                "password": "WrongPassword123!",
+            },
+        )
+
+        self.assertFalse(
+            response.wsgi_request.user.is_authenticated
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context["form"].errors)
+
+
+class UserLogoutTests(TestCase):
+    """Test customer logout functionality."""
+
+    def setUp(self):
+        """Create and authenticate a user."""
+        self.user = User.objects.create_user(
+            username="testuser",
+            password="SecurePassword123!",
+        )
+        self.client.force_login(self.user)
+
+    def test_logout_redirects_to_home(self):
+        """Redirect users to the homepage after logout."""
+        response = self.client.post(reverse("logout"))
+
+        self.assertRedirects(
+            response,
+            reverse("home"),
+            fetch_redirect_response=False,
+        )
+
+    def test_logout_ends_authenticated_session(self):
+        """End the authenticated session after logout."""
+        self.client.post(reverse("logout"))
+
+        response = self.client.get(reverse("home"))
+
+        self.assertFalse(
+            response.wsgi_request.user.is_authenticated
+        )
+
+    def test_get_request_does_not_logout_user(self):
+        """Prevent logout through a GET request."""
+        response = self.client.get(reverse("logout"))
+
+        self.assertEqual(response.status_code, 405)
+
+        response = self.client.get(reverse("home"))
+
+        self.assertTrue(
+            response.wsgi_request.user.is_authenticated
+        )
+
+
+class AuthenticationNavigationTests(TestCase):
+    """Test navigation links based on authentication status."""
+
+    def test_guest_sees_login_and_signup(self):
+        """Display login and signup links for guests."""
+        response = self.client.get(reverse("home"))
+
+        self.assertContains(response, 'href="/accounts/login/"')
+        self.assertContains(response, 'href="/accounts/signup/"')
+        self.assertNotContains(response, 'action="/accounts/logout/"')
+
+    def test_authenticated_user_sees_logout(self):
+        """Display logout instead of login and signup."""
+        user = User.objects.create_user(
+            username="testuser",
+            password="SecurePassword123!",
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("home"))
+
+        self.assertContains(response, 'action="/accounts/logout/"')
+        self.assertNotContains(response, 'href="/accounts/login/"')
+        self.assertNotContains(response, 'href="/accounts/signup/"')

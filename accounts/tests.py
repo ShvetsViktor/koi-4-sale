@@ -295,3 +295,18 @@ class UserProfileTests(TestCase):
 
         self.assertContains(response, "Viktor")
         self.assertContains(response, "Shvets")
+
+    def test_profile_does_not_display_another_users_details(self):
+        """Ensure users cannot view another user's profile details."""
+        User.objects.create_user(
+            username="anotheruser",
+            email="another@example.com",
+            password="SecurePassword123!",
+        )
+
+        self.client.force_login(self.user)
+        response = self.client.get(reverse("profile"))
+
+        self.assertContains(response, "testuser")
+        self.assertNotContains(response, "anotheruser")
+        self.assertNotContains(response, "another@example.com")

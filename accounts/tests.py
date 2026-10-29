@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from orders.models import Order
 
 
 User = get_user_model()
@@ -322,6 +323,17 @@ class UserProfileTests(TestCase):
             f'href="{reverse("profile_edit")}"',
         )
 
+    def test_profile_displays_delete_account_link(self):
+        """Display the account deletion link for authenticated users."""
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("profile"))
+
+        self.assertContains(
+            response,
+            f'href="{reverse("account_delete")}"',
+        )
+
 
 class UserProfileUpdateTests(TestCase):
     """Test customer profile editing."""
@@ -457,3 +469,54 @@ class UserAccountDeletionTests(TestCase):
         )
         # Verify that the user is logged out after account deletion.
         self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_get_request_does_not_delete_account(self):
+        """Display confirmation without deleting the user account."""
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("account_delete"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response,
+            "accounts/account_confirm_delete.html",
+        )
+        self.assertTrue(
+            User.objects.filter(pk=self.user.pk).exists()
+        )
+        self.assertIn("_auth_user_id", self.client.session)
+
+    def test_anonymous_user_cannot_delete_account(self):
+        """Prevent anonymous users from deleting accounts."""
+        response = self.client.post(reverse("account_delete"))
+
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('account_delete')}",
+            fetch_redirect_response=False,
+        )
+
+        self.assertTrue(
+            User.objects.filter(pk=self.user.pk).exists()
+        )
+
+    def test_account_deletion_preserves_existing_reservations(self):
+        """Preserve reservation records after account deletion."""
+        order = Order.objects.create(
+            customer_name="Test User",
+            email="test@example.com",
+            phone="07712345678",
+            total_price="100.00",
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.post(reverse("account_delete"))
+
+        self.assertRedirects(response, reverse("home"))
+        self.assertFalse(
+            User.objects.filter(pk=self.user.pk).exists()
+        )
+        self.assertTrue(
+            Order.objects.filter(pk=order.pk).exists()
+        )

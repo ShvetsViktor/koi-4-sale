@@ -12,5 +12,7 @@
   <p><strong>Email:</strong> {{ user.email }}</p>
   <a href="{% url 'profile_edit' %}" class="btn btn-primary mt-3">
   Edit Profile</a>
+  <a href="{% url 'account_delete' %}" class="btn btn-danger mt-3">
+  Delete Account</a>
 </section>
 {% endblock %}

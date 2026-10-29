@@ -311,6 +311,17 @@ class UserProfileTests(TestCase):
         self.assertNotContains(response, "anotheruser")
         self.assertNotContains(response, "another@example.com")
 
+    def test_profile_displays_edit_link(self):
+        """Display the profile editing link for authenticated users."""
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("profile"))
+
+        self.assertContains(
+            response,
+            f'href="{reverse("profile_edit")}"',
+        )
+
 
 class UserProfileUpdateTests(TestCase):
     """Test customer profile editing."""

@@ -21,7 +21,7 @@ product and order management.
 The project was developed for the **Code Institute Level 5 Diploma in
 Web Application Development – Unit 3: Back End Development** assessment.
 
-> **Project Status:** Completed and deployed.
+> **Project Status:** Core functionality completed and deployed. Customer authentication and account management are currently under development following assessment feedback.
 
 ---
 
@@ -170,11 +170,22 @@ The project uses **MoSCoW prioritisation** to distinguish essential functionalit
 | Delivery Information           | Should Have | Implemented | Explain delivery arrangements and conditions.                                                |
 | Contact Information            | Should Have | Implemented | Provide an email address and a direct email contact option.                                  |
 | Search Koi                     | Should Have | Implemented | Help visitors find koi using search terms.                                                   |
+| Customer Registration          | Must Have   | In Progress | Allow visitors to create customer accounts.                                                  |
+| Customer Login and Logout      | Must Have   | Planned     | Allow registered customers to authenticate securely.                                         |
+| View Customer Profile          | Must Have   | Planned     | Allow customers to view their account information.                                           |
+| Edit Customer Profile          | Must Have   | Planned     | Allow customers to update their personal details.                                            |
+| Password Management            | Must Have   | Planned     | Allow customers to change and reset passwords.                                               |
+| Delete Customer Account        | Must Have   | Planned     | Allow customers to delete their accounts.                                                    |
+| Customer Reservation History   | Should Have | Planned     | Allow customers to view their previous reservations.                                         |
+| Secure Reservation Access      | Must Have   | Planned     | Protect reservation details from unauthorised access.                                        |
 | Frequently Asked Questions     | Could Have  | Planned     | Answer common customer questions.                                                            |
 | Reservation Confirmation Email | Could Have  | Planned     | Send customers confirmation of their reservation request.                                    |
 | Featured Koi Carousel          | Could Have  | Planned     | Highlight selected products on the home page.                                                |
 
-All Must Have and Should Have user stories have been implemented.
+All original Must Have and Should Have user stories have been implemented.
+
+Additional user stories were introduced following assessment feedback
+and are currently being developed.
 
 The three Could Have user stories remain planned for future development
 and are not included in the current release.
@@ -398,6 +409,30 @@ As a **visitor**, I want to search available koi using relevant information so t
 - Visitors can return to the complete available catalogue.
 
 ![Search Koi](assets/readme/screenshots/us04-search-koi.png)
+
+### Customer Authentication and Account Management
+
+Following assessment feedback on CRUD requirements (P1.3 and P3.1),
+additional user stories were introduced to implement customer-facing
+account management rather than relying exclusively on Django Admin.
+
+| GitHub Issue | User Story                   | Status      |
+| ------------ | ---------------------------- | ----------- |
+| #28          | Customer Registration        | In Progress |
+| #29          | Customer Login and Logout    | Planned     |
+| #30          | View Customer Profile        | Planned     |
+| #31          | Edit Customer Profile        | Planned     |
+| #32          | Password Management          | Planned     |
+| #33          | Delete Customer Account      | Planned     |
+| #38          | Customer Reservation History | Planned     |
+| #39          | Secure Reservation Access    | Planned     |
+
+Detailed acceptance criteria and implementation tasks are tracked
+in the corresponding GitHub Issues.
+
+Guest reservations remain supported, and the shopping cart continues
+to use localStorage. Database-backed cart functionality (Issues #34–#37)
+was excluded from the reassessment scope.
 
 ### Future Development
 
@@ -1225,8 +1260,9 @@ The frontend follows a mobile-first approach, with layouts progressively adaptin
 
 ### Development Milestones
 
-Development was organised into five GitHub milestones to track
-implementation progress and maintain a structured workflow.
+Development was initially organised into five GitHub milestones.
+A sixth milestone was introduced following assessment feedback
+to implement customer authentication and account management.
 
 | Milestone                                  | Description                                                                                                                 | GitHub Progress          |
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
@@ -1235,6 +1271,7 @@ implementation progress and maintain a structured workflow.
 | Milestone 3 — Reservation System           | Implement the shopping cart, reservation processing, validation, duplicate reservation prevention and order management.     | 100% — 6/6 issues closed |
 | Milestone 4 — Frontend & User Experience   | Develop responsive Django templates, navigation, search, contact information, delivery information and frontend components. | 100% — 7/7 issues closed |
 | Milestone 5 — Testing & Documentation      | Verify application functionality, test user stories and prepare assessment documentation.                                   | 100% — 3/3 issues closed |
+| Milestone 6 — User Authentication & CRUD   | Implement customer registration, authentication, profile CRUD, password management and secure reservation access.           | In Progress              |
 
 GitHub milestone percentages reflect the completion of assigned issues
 rather than independent verification of every application requirement.

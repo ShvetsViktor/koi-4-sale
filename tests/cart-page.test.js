@@ -158,6 +158,30 @@ describe('Shopping Cart Page', () => {
     expect(cartItems.textContent).toContain('Japanese Showa');
   });
 
+  test('updates cart total when a product is removed', () => {
+    document.body.innerHTML = `
+      <div id="cart-items"></div>
+      <div id="cart-total-price"></div>
+    `;
+
+    localStorage.setItem('koi4sale_cart', '[1,2]');
+
+    const products = [
+      { id: 1, name: 'Kohaku', price: '250.00', image_url: '/kohaku.jpg' },
+      { id: 2, name: 'Sanke', price: '175.50', image_url: '/sanke.jpg' },
+    ];
+
+    renderCart(products);
+
+    expect(document.querySelector('#cart-total-price').textContent)
+      .toBe('£425.50');
+
+    document.querySelector('[data-remove-id="1"]').click();
+
+    expect(document.querySelector('#cart-total-price').textContent)
+      .toBe('£175.50');
+  });
+
   test('adds cart product IDs to the reservation form', () => {
     document.body.innerHTML = `
     <form id="reservation-form"></form>
@@ -249,5 +273,27 @@ describe('Shopping Cart Page', () => {
     expect(document.querySelector('#cart-items').children).toHaveLength(0);
     expect(document.querySelector('#reservation-form').hidden).toBe(true);
     expect(document.querySelector('#empty-cart').hidden).toBe(false);
+  });
+
+  test('displays £0.00 after removing the last product', () => {
+    document.body.innerHTML = `
+      <div id="cart-items"></div>
+      <div id="cart-total-price"></div>
+      <div id="empty-cart" hidden></div>
+      <form id="reservation-form"></form>
+    `;
+
+    localStorage.setItem('koi4sale_cart', '[1]');
+
+    const products = [
+      { id: 1, name: 'Kohaku', price: '250.00', image_url: '/kohaku.jpg' },
+    ];
+
+    renderCart(products);
+
+    document.querySelector('[data-remove-id="1"]').click();
+
+    expect(document.querySelector('#cart-total-price').textContent)
+      .toBe('£0.00');
   });
 });

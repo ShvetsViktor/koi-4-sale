@@ -1,4 +1,10 @@
-const { addToCart, removeFromCart, saveCart, getCart } = require('../static/js/cart');
+const {
+  addToCart,
+  removeFromCart,
+  saveCart,
+  getCart,
+  calculateCartTotal,
+} = require('../static/js/cart');
 
 describe('Shopping Cart', () => {
   test('adds a product to an empty cart', () => {
@@ -54,5 +60,21 @@ describe('Shopping Cart', () => {
 
     // Assert: The original array should be restored.
     expect(result).toEqual([1, 2]);
+  });
+});
+
+describe('Cart Total', () => {
+  test('calculates the total price of cart products', () => {
+    const products = [
+      { id: 1, price: '250.00' },
+      { id: 2, price: '175.50' },
+      { id: 3, price: '100.00' },
+    ];
+
+    expect(calculateCartTotal(products)).toBe(525.50);
+  });
+
+  test('returns zero for an empty cart', () => {
+    expect(calculateCartTotal([])).toBe(0);
   });
 });

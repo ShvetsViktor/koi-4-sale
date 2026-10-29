@@ -25,6 +25,32 @@ function removeFromCart(cart, productId) {
 }
 
 /**
+ * Calculate the total price of products in the shopping cart.
+ *
+ * @param {object[]} products - Product details returned by Django.
+ * @returns {number} Total price in GBP.
+ */
+function calculateCartTotal(products) {
+  return products.reduce(
+    (total, product) => total + Math.round(Number(product.price) * 100),
+    0,
+  ) / 100;
+}
+
+/**
+ * Update the displayed shopping cart total.
+ *
+ * @param {object[]} products - Products currently displayed in the cart.
+ */
+function updateCartTotal(products) {
+  const totalElement = document.querySelector('#cart-total-price');
+
+  if (totalElement) {
+    totalElement.textContent = `£${calculateCartTotal(products).toFixed(2)}`;
+  }
+}
+
+/**
  * Save shopping cart contents to localStorage.
  *
  * @param {number[]} cart - Product IDs to save.
@@ -119,6 +145,8 @@ function renderCart(products) {
 
   cartItems.innerHTML = '';
 
+  updateCartTotal(products);
+
   products.forEach((product) => {
     const item = document.createElement('article');
     const image = document.createElement('img');
@@ -153,6 +181,12 @@ function renderCart(products) {
 
       saveCart(updatedCart);
       item.remove();
+
+      const remainingProducts = products.filter(
+        (cartProduct) => updatedCart.includes(cartProduct.id),
+      );
+
+      updateCartTotal(remainingProducts);
       updateCartEmptyState();
     });
 
@@ -250,5 +284,6 @@ if (typeof module !== 'undefined') {
     addCartItemsToForm,
     clearCart,
     updateCartEmptyState,
+    calculateCartTotal,
   };
 }

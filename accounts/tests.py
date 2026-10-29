@@ -226,3 +226,60 @@ class AuthenticationNavigationTests(TestCase):
         self.assertContains(response, 'action="/accounts/logout/"')
         self.assertNotContains(response, 'href="/accounts/login/"')
         self.assertNotContains(response, 'href="/accounts/signup/"')
+
+    def test_authenticated_user_sees_profile_link(self):
+        """Display the profile link for authenticated users."""
+        user = User.objects.create_user(
+            username="testuser",
+            password="SecurePassword123!",
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("home"))
+
+        self.assertContains(
+            response,
+            f'href="{reverse("profile")}"',
+        )
+
+    def test_guest_does_not_see_profile_link(self):
+        """Hide the profile link from anonymous users."""
+        response = self.client.get(reverse("home"))
+
+        self.assertNotContains(
+            response,
+            f'href="{reverse("profile")}"',
+        )
+
+
+class UserProfileTests(TestCase):
+    """Test customer profile access."""
+
+    def setUp(self):
+        """Create a user for profile tests."""
+        self.user = User.objects.create_user(
+            username="testuser",
+            email="test@example.com",
+            password="SecurePassword123!",
+        )
+
+    def test_authenticated_user_can_view_profile(self):
+        """Display the profile page for authenticated users."""
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("profile"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "accounts/profile.html")
+        self.assertContains(response, "testuser")
+        self.assertContains(response, "test@example.com")
+
+    def test_anonymous_user_redirects_to_login(self):
+        """Redirect anonymous users to the login page."""
+        response = self.client.get(reverse("profile"))
+
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('profile')}",
+            fetch_redirect_response=False,
+        )

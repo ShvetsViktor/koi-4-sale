@@ -1,6 +1,8 @@
 from django.contrib.auth import login
 from django.shortcuts import redirect, render
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 
 from .forms import SignUpForm
 
@@ -29,3 +31,9 @@ class SignUpView(View):
             "accounts/signup.html",
             {"form": form},
         )
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    """Display the authenticated user's profile."""
+
+    template_name = "accounts/profile.html"

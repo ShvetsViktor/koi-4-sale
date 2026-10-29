@@ -95,34 +95,43 @@
           </li>
 
           {% if user.is_authenticated %}
-            <li class="nav-item">
-              <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="nav-link">
-                  Logout
-                </button>
-              </form>
-            </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}"
+              href="{% url 'profile' %}"
+              {% if request.resolver_match.url_name == 'profile' %}aria-current="page"{% endif %}
+            >
+              My Account
+            </a>
+          </li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="nav-link">
+                Logout
+              </button>
+            </form>
+          </li>
           {% else %}
-            <li class="nav-item">
-              <a
-                class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}"
-                href="{% url 'login' %}"
-                {% if request.resolver_match.url_name == 'login' %}aria-current="page"{% endif %}
-              >
-                Login
-              </a>
-            </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}"
+              href="{% url 'login' %}"
+              {% if request.resolver_match.url_name == 'login' %}aria-current="page"{% endif %}
+            >
+              Login
+            </a>
+          </li>
 
-            <li class="nav-item">
-              <a
-                class="nav-link {% if request.resolver_match.url_name == 'signup' %}active{% endif %}"
-                href="{% url 'signup' %}"
-                {% if request.resolver_match.url_name == 'signup' %}aria-current="page"{% endif %}
-              >
-                Sign Up
-              </a>
-            </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.resolver_match.url_name == 'signup' %}active{% endif %}"
+              href="{% url 'signup' %}"
+              {% if request.resolver_match.url_name == 'signup' %}aria-current="page"{% endif %}
+            >
+              Sign Up
+            </a>
+          </li>
           {% endif %}
 
           <li class="nav-item d-none d-lg-block">

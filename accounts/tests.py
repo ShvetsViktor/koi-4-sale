@@ -432,3 +432,28 @@ class UserProfileUpdateTests(TestCase):
         self.assertEqual(another_user.first_name, "")
         self.assertEqual(another_user.last_name, "")
         self.assertEqual(another_user.email, "another@example.com")
+
+
+class UserAccountDeletionTests(TestCase):
+    """Test customer account deletion."""
+
+    def setUp(self):
+        """Create a user for account deletion tests."""
+        self.user = User.objects.create_user(
+            username="testuser",
+            email="test@example.com",
+            password="SecurePassword123!",
+        )
+
+    def test_authenticated_user_can_delete_account(self):
+        """Delete the authenticated user's account after POST confirmation."""
+        self.client.force_login(self.user)
+
+        response = self.client.post(reverse("account_delete"))
+
+        self.assertRedirects(response, reverse("home"))
+        self.assertFalse(
+            User.objects.filter(pk=self.user.pk).exists()
+        )
+        # Verify that the user is logged out after account deletion.
+        self.assertNotIn("_auth_user_id", self.client.session)

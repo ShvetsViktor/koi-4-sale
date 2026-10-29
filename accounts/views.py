@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import logout
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import TemplateView, UpdateView, DeleteView
 
 from .forms import ProfileUpdateForm, SignUpForm
 
@@ -49,3 +50,20 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         """Return the currently authenticated user."""
         return self.request.user
+
+
+class AccountDeleteView(LoginRequiredMixin, DeleteView):
+    """Allow authenticated users to delete their own account."""
+
+    template_name = "accounts/account_confirm_delete.html"
+    success_url = reverse_lazy("home")
+
+    def get_object(self, queryset=None):
+        """Return the currently authenticated user."""
+        return self.request.user
+
+    def form_valid(self, form):
+        """Delete the account and terminate the user session."""
+        response = super().form_valid(form)
+        logout(self.request)
+        return response

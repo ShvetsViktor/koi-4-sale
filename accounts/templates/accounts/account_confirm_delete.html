@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Account | Koi4Sale{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+  <h1>Delete Account</h1>
+
+  <p>Are you sure you want to permanently delete your account?</p>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <button type="submit" class="btn btn-danger">
+      Yes, Delete My Account
+    </button>
+
+    <a href="{% url 'profile' %}" class="btn btn-secondary">
+      Cancel
+    </a>
+  </form>
+</section>
+{% endblock %}

@@ -9,11 +9,20 @@ User = get_user_model()
 class SignUpForm(UserCreationForm):
     """Handle customer registration details."""
 
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
 
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2")
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "password1",
+            "password2",
+        )
 
 
 class ProfileUpdateForm(forms.ModelForm):

@@ -23,6 +23,8 @@ class UserRegistrationTests(TestCase):
             reverse("signup"),
             {
                 "username": "testuser",
+                "first_name": "Viktor",
+                "last_name": "Shvets",
                 "email": "test@example.com",
                 "password1": "SecurePassword123!",
                 "password2": "SecurePassword123!",
@@ -35,12 +37,19 @@ class UserRegistrationTests(TestCase):
         )
         self.assertEqual(response.status_code, 302)
 
+        user = User.objects.get(username="testuser")
+
+        self.assertEqual(user.first_name, "Viktor")
+        self.assertEqual(user.last_name, "Shvets")
+
     def test_password_is_hashed(self):
         """Store the user's password securely."""
         self.client.post(
             reverse("signup"),
             {
                 "username": "testuser",
+                "first_name": "Viktor",
+                "last_name": "Shvets",
                 "email": "test@example.com",
                 "password1": "SecurePassword123!",
                 "password2": "SecurePassword123!",
@@ -63,6 +72,8 @@ class UserRegistrationTests(TestCase):
             reverse("signup"),
             {
                 "username": "testuser",
+                "first_name": "Viktor",
+                "last_name": "Shvets",
                 "email": "another@example.com",
                 "password1": "SecurePassword123!",
                 "password2": "SecurePassword123!",
@@ -71,6 +82,7 @@ class UserRegistrationTests(TestCase):
 
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(response.status_code, 200)
+        self.assertIn("username", response.context["form"].errors)
 
     def test_password_mismatch_is_rejected(self):
         """Reject registration when passwords do not match."""
@@ -78,6 +90,8 @@ class UserRegistrationTests(TestCase):
             reverse("signup"),
             {
                 "username": "testuser",
+                "first_name": "Viktor",
+                "last_name": "Shvets",
                 "email": "test@example.com",
                 "password1": "SecurePassword123!",
                 "password2": "DifferentPassword123!",
@@ -86,6 +100,7 @@ class UserRegistrationTests(TestCase):
 
         self.assertEqual(User.objects.count(), 0)
         self.assertEqual(response.status_code, 200)
+        self.assertIn("password2", response.context["form"].errors)
 
     def test_successful_registration_redirects_to_login(self):
         """Redirect newly registered users to the login page."""
@@ -93,6 +108,8 @@ class UserRegistrationTests(TestCase):
             reverse("signup"),
             {
                 "username": "testuser",
+                "first_name": "Viktor",
+                "last_name": "Shvets",
                 "email": "test@example.com",
                 "password1": "SecurePassword123!",
                 "password2": "SecurePassword123!",
@@ -119,6 +136,8 @@ class UserRegistrationTests(TestCase):
             reverse("signup"),
             {
                 "username": "testuser",
+                "first_name": "Viktor",
+                "last_name": "Shvets",
                 "email": "test@example.com",
                 "password1": "SecurePassword123!",
                 "password2": "SecurePassword123!",
@@ -141,6 +160,8 @@ class UserRegistrationTests(TestCase):
             reverse("signup"),
             {
                 "username": "testuser",
+                "first_name": "Viktor",
+                "last_name": "Shvets",
                 "email": "test@example.com",
                 "password1": "SecurePassword123!",
                 "password2": "SecurePassword123!",
@@ -153,6 +174,25 @@ class UserRegistrationTests(TestCase):
             "Your account has been created successfully.",
         )
         self.assertContains(response, 'role="status"')
+
+    def test_registration_requires_first_and_last_name(self):
+        """Reject registration without first and last names."""
+        response = self.client.post(
+            reverse("signup"),
+            {
+                "username": "testuser",
+                "email": "test@example.com",
+                "password1": "SecurePassword123!",
+                "password2": "SecurePassword123!",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(
+            User.objects.filter(username="testuser").exists()
+        )
+        self.assertIn("first_name", response.context["form"].errors)
+        self.assertIn("last_name", response.context["form"].errors)
 
 
 class UserLoginTests(TestCase):

@@ -596,3 +596,21 @@ class UserAccountDeletionTests(TestCase):
         self.assertTrue(
             Order.objects.filter(pk=order.pk).exists()
         )
+
+    def test_successful_account_deletion_displays_success_message(self):
+        """Display a success message after deleting an account."""
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("account_delete"),
+            follow=True,
+        )
+
+        self.assertContains(
+            response,
+            "Your account has been deleted successfully.",
+        )
+        self.assertContains(response, 'role="status"')
+        self.assertFalse(
+            User.objects.filter(pk=self.user.pk).exists()
+        )

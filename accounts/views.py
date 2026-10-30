@@ -76,7 +76,11 @@ class AccountDeleteView(LoginRequiredMixin, DeleteView):
         return self.request.user
 
     def form_valid(self, form):
-        """Delete the account and terminate the user session."""
+        """Delete the account and confirm successful deletion."""
         response = super().form_valid(form)
         logout(self.request)
+        messages.success(
+            self.request,
+            "Your account has been deleted successfully.",
+        )
         return response

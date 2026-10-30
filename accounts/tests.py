@@ -113,6 +113,47 @@ class UserRegistrationTests(TestCase):
         self.assertContains(response, 'class="emailinput form-control"')
         self.assertContains(response, 'class="passwordinput form-control"')
 
+    def test_successful_registration_displays_success_message(self):
+        """Display a success message after successful registration."""
+        response = self.client.post(
+            reverse("signup"),
+            {
+                "username": "testuser",
+                "email": "test@example.com",
+                "password1": "SecurePassword123!",
+                "password2": "SecurePassword123!",
+            },
+            follow=True,
+        )
+
+        messages = list(response.context["messages"])
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(
+            str(messages[0]),
+            "Your account has been created successfully.",
+        )
+
+    def test_registration_success_message_is_displayed_in_html(self):
+        """Display the registration success message on the login page."""
+        response = self.client.post(
+            reverse("signup"),
+            {
+                "username": "testuser",
+                "email": "test@example.com",
+                "password1": "SecurePassword123!",
+                "password2": "SecurePassword123!",
+            },
+            follow=True,
+        )
+
+        self.assertContains(
+            response,
+            "Your account has been created successfully.",
+        )
+        self.assertContains(response, 'role="status"')
+
 
 class UserLoginTests(TestCase):
     """Test customer login functionality."""

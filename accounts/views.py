@@ -56,6 +56,14 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         """Return the currently authenticated user."""
         return self.request.user
 
+    def form_valid(self, form):
+        """Confirm successful profile updates."""
+        messages.success(
+            self.request,
+            "Your profile has been updated successfully.",
+        )
+        return super().form_valid(form)
+
 
 class AccountDeleteView(LoginRequiredMixin, DeleteView):
     """Allow authenticated users to delete their own account."""

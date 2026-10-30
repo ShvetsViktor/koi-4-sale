@@ -501,6 +501,26 @@ class UserProfileUpdateTests(TestCase):
         self.assertEqual(another_user.last_name, "")
         self.assertEqual(another_user.email, "another@example.com")
 
+    def test_successful_profile_update_displays_success_message(self):
+        """Display a success message after updating profile details."""
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("profile_edit"),
+            {
+                "first_name": "Viktor",
+                "last_name": "Shvets",
+                "email": "new@example.com",
+            },
+            follow=True,
+        )
+
+        self.assertContains(
+            response,
+            "Your profile has been updated successfully.",
+        )
+        self.assertContains(response, 'role="status"')
+
 
 class UserAccountDeletionTests(TestCase):
     """Test customer account deletion."""

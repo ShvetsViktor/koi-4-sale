@@ -105,9 +105,19 @@ class CartView(TemplateView):
     template_name = "orders/cart.html"
 
     def get_context_data(self, **kwargs):
-        """Provide the reservation form to the template."""
+        """Provide the reservation form with customer details."""
         context = super().get_context_data(**kwargs)
-        context["form"] = ReservationForm()
+
+        initial = {}
+
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            initial = {
+                "customer_name": user.get_full_name().strip(),
+                "email": user.email,
+            }
+
+        context["form"] = ReservationForm(initial=initial)
         return context
 
 

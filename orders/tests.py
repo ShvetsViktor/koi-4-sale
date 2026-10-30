@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.contrib.admin.sites import AdminSite
+from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.test import TestCase
 from django.urls import reverse
@@ -11,6 +12,8 @@ from products.models import Category, Product, ProductImage
 from .admin import OrderAdmin
 from .forms import ReservationForm
 from .models import Order, OrderItem
+
+User = get_user_model()
 
 
 class OrderModelTests(TestCase):
@@ -1027,3 +1030,76 @@ class CartProductsTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+
+
+class ReservationAutofillTests(TestCase):
+    """Test reservation form autofill for authenticated customers."""
+
+    def setUp(self):
+        """Create a customer with saved contact details."""
+        self.user = User.objects.create_user(
+            username="testuser",
+            first_name="Viktor",
+            last_name="Shvets",
+            email="viktor@example.com",
+            password="SecurePassword123!",
+        )
+
+    def test_authenticated_user_reservation_form_is_prefilled(self):
+        """Prefill reservation form with authenticated user details."""
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("cart"))
+
+        form = response.context["form"]
+
+        self.assertEqual(
+            form["customer_name"].value(),
+            "Viktor Shvets",
+        )
+        self.assertEqual(
+            form["email"].value(),
+            "viktor@example.com",
+        )
+
+    def test_guest_reservation_form_is_empty(self):
+        """Display an empty reservation form for guest customers."""
+        response = self.client.get(reverse("cart"))
+
+        form = response.context["form"]
+
+        self.assertIsNone(form["customer_name"].value())
+        self.assertIsNone(form["email"].value())
+        self.assertIsNone(form["phone"].value())
+
+    def test_authenticated_user_can_edit_reservation_details(self):
+        """Save edited contact details instead of account details."""
+        self.client.force_login(self.user)
+
+        category = Category.objects.create(name="Kohaku")
+
+        product = Product.objects.create(
+            name="Japanese Kohaku",
+            category=category,
+            price=Decimal("250.00"),
+            size=30,
+            age=2,
+        )
+
+        response = self.client.post(
+            reverse("reservation_create"),
+            {
+                "customer_name": "John Smith",
+                "email": "john@example.com",
+                "phone": "07123456789",
+                "product_ids": [str(product.pk)],
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+
+        order = Order.objects.get()
+
+        self.assertEqual(order.customer_name, "John Smith")
+        self.assertEqual(order.email, "john@example.com")
+        self.assertEqual(order.phone, "07123456789")

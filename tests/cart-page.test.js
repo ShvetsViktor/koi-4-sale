@@ -296,4 +296,152 @@ describe('Shopping Cart Page', () => {
     expect(document.querySelector('#cart-total-price').textContent)
       .toBe('£0.00');
   });
+
+  test('displays an error message when fetching cart products fails', async () => {
+    document.body.innerHTML = `
+      <div id="cart-items"></div>
+      <div id="cart-error" hidden></div>
+      <form id="reservation-form"></form>
+    `;
+
+    localStorage.setItem('koi4sale_cart', '[5]');
+
+    // Simulate a network failure by making fetch() return a rejected Promise.
+    global.fetch.mockRejectedValue(new Error('Network error'));
+
+    await initCartPage();
+
+    const errorElement = document.querySelector('#cart-error');
+
+    expect(errorElement.hidden).toBe(false);
+    expect(errorElement.textContent).toContain(
+      'Unable to load your cart'
+    );
+  });
+
+  test('displays an error message when the server returns HTTP 500', async () => {
+    document.body.innerHTML = `
+      <div id="cart-items"></div>
+      <div id="cart-error" hidden></div>
+      <form id="reservation-form"></form>
+    `;
+
+    localStorage.setItem('koi4sale_cart', '[5]');
+
+    // Simulate an HTTP 500 response from the server.
+    global.fetch.mockResolvedValue({
+      ok: false,
+      status: 500,
+    });
+
+    await initCartPage();
+
+    const errorElement = document.querySelector('#cart-error');
+    const form = document.querySelector('#reservation-form');
+
+    expect(errorElement.hidden).toBe(false);
+    expect(errorElement.textContent).toContain('Unable to load your cart');
+    expect(form.hidden).toBe(true);
+  });
+
+  test('retries loading cart products after a network error', async () => {
+    document.body.innerHTML = `
+      <div id="cart-items"></div>
+      <div id="cart-error" hidden></div>
+      <button id="cart-retry" hidden>Retry</button>
+      <form id="reservation-form"></form>
+    `;
+
+    localStorage.setItem('koi4sale_cart', '[5]');
+
+    const products = [
+      {
+        id: 5,
+        name: 'Kohaku',
+        price: '150.00',
+        status: 'available',
+        image_url: '/media/kohaku.jpg',
+      },
+    ];
+
+    // Simulate a network failure followed by a successful response.
+    global.fetch
+      .mockRejectedValueOnce(new Error('Network error'))
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ products }),
+      });
+
+    await initCartPage();
+
+    const errorElement = document.querySelector('#cart-error');
+    const retryButton = document.querySelector('#cart-retry');
+
+    expect(errorElement.hidden).toBe(false);
+    expect(retryButton.hidden).toBe(false);
+
+    retryButton.click();
+
+    // Allow the asynchronous retry request to complete before checking the results.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect(document.querySelector('#cart-items').textContent).toContain('Kohaku');
+    expect(errorElement.hidden).toBe(true);
+    expect(retryButton.hidden).toBe(true);
+  });
+
+  test('does not register duplicate Retry click handlers', async () => {
+    document.body.innerHTML = `
+      <div id="cart-items"></div>
+      <div id="cart-error" hidden></div>
+      <button id="cart-retry" hidden>Retry</button>
+      <form id="reservation-form"></form>
+    `;
+
+    localStorage.setItem('koi4sale_cart', '[5]');
+
+    const products = [
+      {
+        id: 5,
+        name: 'Kohaku',
+        price: '150.00',
+        status: 'available',
+        image_url: '/media/kohaku.jpg',
+      },
+    ];
+
+    // Simulate two network failures followed by a successful response.
+    global.fetch
+      .mockRejectedValueOnce(new Error('Network error'))
+      .mockRejectedValueOnce(new Error('Network error'))
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ products }),
+      });
+
+    await initCartPage();
+
+    const retryButton = document.querySelector('#cart-retry');
+
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(retryButton.hidden).toBe(false);
+
+    retryButton.click();
+
+    // Allow the asynchronous retry request to complete before checking the results.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect(retryButton.hidden).toBe(false);
+
+    retryButton.click();
+
+    // Allow the asynchronous retry request to complete before checking the results.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(global.fetch).toHaveBeenCalledTimes(3);
+    expect(retryButton.hidden).toBe(true);
+    expect(document.querySelector('#cart-items').textContent).toContain('Kohaku');
+  });
 });

@@ -200,15 +200,45 @@ function renderCart(products) {
  * Initialise the shopping cart page.
  */
 async function initCartPage() {
-  const products = await fetchCartProducts();
-
-  renderCart(products);
-  updateCartEmptyState();
-
   const form = document.querySelector('#reservation-form');
+  const errorElement = document.querySelector('#cart-error');
+  const retryButton = document.querySelector('#cart-retry');
 
-  if (form && products.length > 0) {
-    form.addEventListener('submit', addCartItemsToForm);
+  if (retryButton) {
+    retryButton.onclick = initCartPage;
+  }
+
+  try {
+    const products = await fetchCartProducts();
+
+    renderCart(products);
+    updateCartEmptyState();
+
+    if (errorElement) {
+      errorElement.hidden = true;
+    }
+
+    if (retryButton) {
+      retryButton.hidden = true;
+    }
+
+    if (form && products.length > 0) {
+      form.hidden = false;
+      form.onsubmit = addCartItemsToForm;
+    }
+  } catch (error) {
+    if (errorElement) {
+      errorElement.textContent = 'Unable to load your cart. Please try again.';
+      errorElement.hidden = false;
+    }
+
+    if (retryButton) {
+      retryButton.hidden = false;
+    }
+
+    if (form) {
+      form.hidden = true;
+    }
   }
 }
 

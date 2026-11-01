@@ -5,6 +5,8 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, UpdateView, DeleteView
+from django.contrib.auth.views import LogoutView
+
 
 from .forms import ProfileUpdateForm, SignUpForm
 
@@ -83,4 +85,18 @@ class AccountDeleteView(LoginRequiredMixin, DeleteView):
             self.request,
             "Your account has been deleted successfully.",
         )
+        return response
+
+
+class CustomLogoutView(LogoutView):
+    """Log out users and display a success message."""
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+
+        messages.success(
+            request,
+            "You have been logged out successfully.",
+        )
+
         return response

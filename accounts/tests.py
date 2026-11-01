@@ -298,6 +298,42 @@ class UserLogoutTests(TestCase):
             response.wsgi_request.user.is_authenticated
         )
 
+    def test_logout_displays_success_message(self):
+        """Display a success message after logging out."""
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("logout"),
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("home"))
+        self.assertContains(
+            response,
+            "You have been logged out successfully.",
+        )
+        self.assertContains(response, 'role="status"')
+
+    def test_logout_success_message_is_displayed_only_once(self):
+        """Display the logout success message only once."""
+        self.client.force_login(self.user)
+
+        self.client.post(reverse("logout"))
+
+        first_response = self.client.get(reverse("home"))
+
+        self.assertContains(
+            first_response,
+            "You have been logged out successfully.",
+        )
+
+        second_response = self.client.get(reverse("home"))
+
+        self.assertNotContains(
+            second_response,
+            "You have been logged out successfully.",
+        )
+
 
 class AuthenticationNavigationTests(TestCase):
     """Test navigation links based on authentication status."""

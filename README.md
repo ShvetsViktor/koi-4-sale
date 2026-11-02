@@ -23,8 +23,6 @@ login/logout and profile management.
 The project was developed for the **Code Institute Level 5 Diploma in
 Web Application Development – Unit 3: Back End Development** assessment.
 
-> **Project Status:** Completed, tested and deployed. The application supports guest reservations, customer registration and profile management, and UUID-based reservation confirmation links. All 152 automated tests passed.
-
 ---
 
 ## Table of Contents
@@ -155,6 +153,8 @@ User stories describe the needs of visitors, customers and administrators.
 They are organised by functionality rather than assigned additional story numbers.
 
 GitHub Issues and milestones were used flexibly to track tasks, acceptance criteria and progress, not to dictate implementation order. The delivered functionality is described below and verified in [TESTING.md](TESTING.md).
+
+All user stories, acceptance criteria and development tasks are available in the [GitHub Issues](https://github.com/ShvetsViktor/koi-4-sale/issues?q=is%3Aissue), including completed and closed issues.
 
 The project used **MoSCoW prioritisation** to organise the implemented scope.
 

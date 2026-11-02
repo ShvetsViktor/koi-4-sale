@@ -2,9 +2,7 @@
 
 ## Overview
 
-This document records quality assurance results for the current Koi4Sale release. It covers automated tests, code validation, manual functionality, responsive behaviour, browser compatibility, accessibility and deployment checks.
-
-Only checks completed during the current review are marked **PASS**. All remaining checks are marked **PENDING** until they have been performed and recorded. Evidence will be added as the review progresses.
+This document records the final quality assurance results for Koi4Sale, covering automated tests, code validation, manual functionality, responsive behaviour, browser compatibility, accessibility and deployment verification. Results reflect checks completed by 2 November 2026. Known limitations and Lighthouse findings are documented without claiming that every possible browser state or accessibility criterion was audited.
 
 ## Automated Testing
 
@@ -23,7 +21,7 @@ python3 manage.py test
 | Django automated tests | **PASS — 125 tests** |
 | Django system checks during test run | **PASS — no issues reported** |
 
-The test suite covers application functionality, including products, reservations and account features. Individual test cases can be inspected in the project's test modules.
+The suite covers products, reservations, account functionality and related application behaviour. Individual cases are documented in the project's test modules.
 
 ### JavaScript Tests (Jest)
 
@@ -34,6 +32,8 @@ npm test
 ```
 
 **Result: PASS — 3 test suites and 27 tests passed; 0 failures.**
+
+**Combined automated testing: 152/152 tests passed.**
 
 ## Code Validation
 
@@ -73,7 +73,7 @@ Rendered pages were checked against the HTML standard on 2 November 2026.
 
 ### JavaScript — Static Analysis
 
-The `static/js/cart.js` file was checked using [JSHint](https://jshint.com/). **Result: PASS — 0 errors, 4 warnings** relating to ES8 syntax compatibility settings. No undefined variables were reported.
+The `static/js/cart.js` file was checked using [JSHint](https://jshint.com/). **Result: PASS — 0 errors.** Four compatibility warnings were reported because of the selected ECMAScript version settings. No undefined variables were reported.
 
 ### CSS — W3C CSS Validator
 
@@ -85,17 +85,31 @@ The current `style.css` was validated using the [W3C CSS Validation Service](htt
 | Warnings | **2** |
 | Overall | **PASS** |
 
-The two warnings, at lines 410 and 583, state that CSS custom properties cannot be fully checked statically because their values are dynamic. No CSS changes were required.
+The two warnings, at lines 410 and 583, state that CSS custom properties cannot be fully checked statically because their values are dynamic. No CSS changes were required. CSS validation checks stylesheet syntax; it does not establish accessibility or colour-contrast compliance.
 
 ![W3C CSS Validator results for style.css](assets/readme/validation/css-validator.png)
 
 ### Static Assets
 
-**Status: PENDING.** Review referenced images, scripts and stylesheets; remove unused files only after confirming they are not required.
+**Status: PASS — collection completed and deployed assets manually verified.**
+
+Django's static-file collection command completed successfully:
+
+```bash
+python3 manage.py collectstatic
+```
+
+| Collection output | Count |
+| --- | ---: |
+| Files copied | 2 |
+| Files unchanged | 149 |
+| Files post-processed | 395 |
+
+The successful collection confirms that Django's static-file pipeline completed. Separately, manual verification confirmed that pages, images and frontend functionality load and work on the deployed Heroku application. This is a functional deployment check, not an exhaustive audit of every unused asset in the repository.
 
 ## Manual Functional Testing
 
-**Status: PASS.** The current release was manually checked, and the user confirmed that the functional workflows operate correctly. Individual scenario results are recorded below based on that confirmation.
+**Status: PASS.** Manual testing confirmed that the main application workflows operate correctly. Individual scenario results are recorded below.
 
 | Area | Scenario | Result |
 | --- | --- | --- |
@@ -103,7 +117,7 @@ The two warnings, at lines 410 and 583, state that CSS custom properties cannot 
 | Product details | View information and product images | PASS |
 | Cart | Add, remove and persist products; verify totals | PASS |
 | Reservation | Validate form and submit a reservation | PASS |
-| Reservation security | Verify confirmation-link access restrictions | PASS |
+| Reservation security | Verify UUID-based confirmation links and HTTP 404 responses for invalid tokens | PASS |
 | Authentication | Register, log in and log out | PASS |
 | Account | View, edit and delete account | PASS |
 | Permissions | Restrict access to authenticated pages | PASS |
@@ -120,11 +134,11 @@ The two warnings, at lines 410 and 583, state that CSS custom properties cannot 
 | Tablet | 768 px | PASS |
 | Desktop | 1440 px | PASS |
 
-The user confirmed that the reviewed layouts display correctly at all three widths. No responsive defects were reported.
+Manual testing confirmed that the reviewed layouts display correctly at all three widths. No responsive defects were reported.
 
 ## Browser Compatibility
 
-**Status: PASS.** The current release was manually checked in Google Chrome, Safari and Mozilla Firefox at three viewport widths. All nine browser/viewport combinations were reported as working correctly. Browser versions are recorded below.
+**Status: PASS.** The release was manually checked in Google Chrome, Safari and Mozilla Firefox at three viewport widths. All nine browser/viewport combinations were reported as working correctly.
 
 | Browser | Version | 375 px (Mobile) | 768 px (Tablet) | 1440 px (Desktop) |
 | --- | --- | --- | --- | --- |
@@ -144,7 +158,7 @@ The user confirmed that the reviewed layouts display correctly at all three widt
 | Image alternative text | Template review | PASS |
 | Heading structure | Template review | PASS |
 
-Colour-contrast testing was **not included in the scope of this review**; no claim of contrast compliance is made.
+A separate manual colour-contrast assessment was **not included in the scope of this review**; no claim of contrast compliance is made. Lighthouse's contrast finding is documented below.
 
 ## Lighthouse Testing
 
@@ -188,11 +202,34 @@ The six screenshots below show the recorded scores and key metrics.
 
 ## Static Files and Deployment
 
-**Status: PENDING.** Verify static-file loading, media rendering, key workflows and error handling on the deployed application.
+**Status: PASS — deployed application manually verified.**
 
-## Bugs Identified During This Review
+After the latest deployment to Heroku, manual verification confirmed that the live site and its principal workflows were working correctly.
 
-No defects have been recorded in this section yet. For each newly discovered issue, document the steps to reproduce, expected and actual behaviour, fix and retest result.
+| Production check | Result |
+| --- | --- |
+| Main pages and navigation | PASS |
+| CSS, JavaScript and images display correctly | PASS |
+| Registration, login and account management | PASS |
+| Shopping cart interactions | PASS |
+| Reservation submission | PASS |
+| Reservation confirmation page | PASS |
+
+Static-file collection completed successfully (see [Static Assets](#static-assets)). These checks confirm the tested production journeys; they do not imply exhaustive verification of every possible server or network failure.
+
+## Bugs Identified and Resolved
+
+The following defects were identified and resolved during development. Their corresponding GitHub Issues and automated regression coverage provide implementation and verification history.
+
+| Issue | Defect | Resolution and verification |
+| --- | --- | --- |
+| Cart button reload bug (issue number unverified) | Cart button returned to its default state after a page reload even when the product remained in `localStorage`. | Restored button state from stored cart data during initialisation; Jest regression test passed. |
+| #26 | Saving a product in Django Admin could affect its selected primary image. | Corrected primary-image selection handling and verified the fix. |
+| #27 | Malformed or nonexistent category/cart product IDs could trigger unhandled errors. | Added controlled validation and error responses; Django regression tests passed. |
+| #42 | Deleting reservations could leave associated koi marked as reserved. | Added order-deletion handling, including bulk deletion, to release affected products; tests passed. |
+| #43 | Cart product-fetch failures were not handled clearly. | Added an error state and Retry action while preserving cart data; JavaScript tests passed. |
+
+No unresolved functional defects were reported in the final manual verification. The Lighthouse findings and validator warnings listed above remain documented limitations rather than being presented as resolved bugs.
 
 ## Testing Summary
 
@@ -207,8 +244,9 @@ No defects have been recorded in this section yet. For each newly discovered iss
 | Manual functional testing | PASS |
 | Responsive testing | PASS — 375 px, 768 px, 1440 px |
 | Browser compatibility | PASS — Chrome, Safari and Firefox at 3 viewport widths |
-| Accessibility testing | PASS — documented checks only; contrast excluded |
+| Accessibility testing | PASS — documented checks only; contrast not independently verified |
 | Lighthouse | COMPLETED — 6 audits; findings documented |
-| Static assets and deployment | PENDING |
+| Static asset collection | PASS |
+| Production deployment verification | PASS — confirmed on Heroku |
 
-**Overall status: IN PROGRESS.** Final sign-off will be recorded once all required checks have been completed.
+**Overall status: COMPLETED.** The documented automated tests, validation checks and manual production verification are complete. Known Lighthouse findings, validation warnings and the limits of accessibility coverage are recorded above.

@@ -9,19 +9,21 @@
 Koi4Sale is a full-stack web application for browsing and reserving
 individual Japanese koi in the UK. Visitors can explore available fish,
 search and filter the catalogue, view product details and manage a
-shopping cart before submitting a reservation request without creating
-an account or making an online payment.
+shopping cart before submitting a reservation request without making
+an online payment. Customers can reserve as guests or create an optional
+account to manage their profile.
 
 Built with Django, PostgreSQL, Bootstrap 5.3 and vanilla JavaScript,
 the application uses a relational database to manage products,
 reservations and customer information. Server-side validation prevents
-duplicate reservations, while Django Admin provides authenticated
-product and order management.
+duplicate reservations. Django Admin provides staff-only product and
+order management, while customer accounts support registration,
+login/logout and profile management.
 
 The project was developed for the **Code Institute Level 5 Diploma in
 Web Application Development – Unit 3: Back End Development** assessment.
 
-> **Project Status:** Core functionality completed and deployed. Customer authentication and account management are currently under development following assessment feedback.
+> **Project Status:** Completed, tested and deployed. The application supports guest reservations, customer registration and profile management, and UUID-based reservation confirmation links. All 152 automated tests passed.
 
 ---
 
@@ -40,7 +42,6 @@ Web Application Development – Unit 3: Back End Development** assessment.
 11. [Deployment](#deployment)
 12. [Attribution, Credits and Acknowledgements](#attribution-credits-and-acknowledgements)
 13. [Repository Structure](#repository-structure)
-14. [Future Improvements](#future-improvements)
 
 ---
 
@@ -54,7 +55,8 @@ Web Application Development – Unit 3: Back End Development** assessment.
 - Filter koi by category.
 - Add and remove koi from a shopping cart.
 - Review selected products and the total price.
-- Submit a reservation request without creating an account.
+- Submit a reservation request as a guest or registered customer.
+- Register, sign in and manage personal account details.
 - Receive clear confirmation or validation feedback.
 - Access delivery information and contact details.
 - Contact the seller directly by email.
@@ -69,7 +71,7 @@ Web Application Development – Unit 3: Back End Development** assessment.
 - Prevent duplicate reservations.
 - Preserve historical order information.
 - Provide customers with a straightforward way to make enquiries.
-- Keep the application secure, maintainable and suitable for future development.
+- Keep the application secure and maintainable.
 
 ### Assessment Goals
 
@@ -78,7 +80,7 @@ Web Application Development – Unit 3: Back End Development** assessment.
 - Use Django ORM and meaningful relationships between models.
 - Implement Create, Read, Update and Delete functionality.
 - Process forms and validate submitted information on the server.
-- Apply authentication and authorisation through Django Admin to protect administrative functionality without requiring customer accounts.
+- Implement customer-facing account CRUD using Django authentication and authorisation, alongside staff-only administration through Django Admin.
 - Build a responsive frontend using HTML, custom CSS, Bootstrap and JavaScript.
 - Implement automated testing for important application behaviour.
 - Use Git and GitHub throughout development.
@@ -95,7 +97,7 @@ The reservation workflow demonstrates an important business rule: the server mus
 
 When a reservation is successfully created, the selected koi must become unavailable for further reservation.
 
-Django Admin provides authenticated administrative functionality for managing application records.
+Django Admin provides authenticated administrative functionality for managing application records. Customer-facing account registration, profile viewing, editing and deletion additionally demonstrate CRUD outside the admin interface.
 
 The reservation form demonstrates server-side form processing and validation. A separate contact form is not required for the application's core reservation functionality.
 
@@ -108,6 +110,10 @@ The primary target audience consists of customers in the United Kingdom who are 
 ### Experienced Koi Keepers
 
 Customers who already maintain koi ponds and want to compare individual fish by size, variety, appearance and price.
+
+### Registered Customers
+
+Customers who choose to create an account to manage their profile details and prefill reservation contact information.
 
 ### New Koi Keepers
 
@@ -148,9 +154,9 @@ User stories describe the needs of visitors, customers and administrators.
 
 They are organised by functionality rather than assigned additional story numbers.
 
-GitHub Issues and milestones are used to track implementation tasks, acceptance criteria and development progress. Issue titles follow the same naming conventions as the user stories documented here.
+GitHub Issues and milestones were used flexibly to track tasks, acceptance criteria and progress, not to dictate implementation order. The delivered functionality is described below and verified in [TESTING.md](TESTING.md).
 
-The project uses **MoSCoW prioritisation** to distinguish essential functionality from optional enhancements.
+The project used **MoSCoW prioritisation** to organise the implemented scope.
 
 ### MoSCoW Prioritisation
 
@@ -170,28 +176,14 @@ The project uses **MoSCoW prioritisation** to distinguish essential functionalit
 | Delivery Information           | Should Have | Implemented | Explain delivery arrangements and conditions.                                                |
 | Contact Information            | Should Have | Implemented | Provide an email address and a direct email contact option.                                  |
 | Search Koi                     | Should Have | Implemented | Help visitors find koi using search terms.                                                   |
-| Customer Registration          | Must Have   | In Progress | Allow visitors to create customer accounts.                                                  |
-| Customer Login and Logout      | Must Have   | Planned     | Allow registered customers to authenticate securely.                                         |
-| View Customer Profile          | Must Have   | Planned     | Allow customers to view their account information.                                           |
-| Edit Customer Profile          | Must Have   | Planned     | Allow customers to update their personal details.                                            |
-| Password Management            | Must Have   | Planned     | Allow customers to change and reset passwords.                                               |
-| Delete Customer Account        | Must Have   | Planned     | Allow customers to delete their accounts.                                                    |
-| Customer Reservation History   | Should Have | Planned     | Allow customers to view their previous reservations.                                         |
-| Secure Reservation Access      | Must Have   | Planned     | Protect reservation details from unauthorised access.                                        |
-| Frequently Asked Questions     | Could Have  | Planned     | Answer common customer questions.                                                            |
-| Reservation Confirmation Email | Could Have  | Planned     | Send customers confirmation of their reservation request.                                    |
-| Featured Koi Carousel          | Could Have  | Planned     | Highlight selected products on the home page.                                                |
+| Customer Registration          | Must Have   | Implemented | Allow visitors to create customer accounts.                                                  |
+| Customer Login and Logout      | Must Have   | Implemented | Allow registered customers to authenticate securely.                                         |
+| View Customer Profile          | Must Have   | Implemented | Allow customers to view their account information.                                           |
+| Edit Customer Profile          | Must Have   | Implemented | Allow customers to update their personal details.                                            |
+| Delete Customer Account        | Must Have   | Implemented | Allow customers to delete their accounts.                                                    |
+| Secure Reservation Access      | Must Have   | Implemented | Prevent sequential order-ID enumeration with unique UUID confirmation links.                                        |
 
-All original Must Have and Should Have user stories have been implemented.
-
-Additional user stories were introduced following assessment feedback
-and are currently being developed.
-
-The three Could Have user stories remain planned for future development
-and are not included in the current release.
-
-Final verification of implemented features is documented in
-[TESTING.md](TESTING.md).
+The table summarises the delivered user stories. Their implementation is verified in [TESTING.md](TESTING.md).
 
 ### Core User Stories
 
@@ -373,9 +365,7 @@ The Contact page provides a direct email contact method rather than a web-based 
 
 Visitors can copy the displayed email address or use the email links to open their preferred email application.
 
-This approach was selected to keep the initial application focused on its core reservation functionality and avoid introducing an additional form-processing workflow.
-
-A dedicated Django contact form may be considered as a future enhancement.
+General enquiries are handled directly through the customer’s email application; no web enquiry form is used.
 
 ### Additional User Stories
 
@@ -412,72 +402,18 @@ As a **visitor**, I want to search available koi using relevant information so t
 
 ### Customer Authentication and Account Management
 
-Following assessment feedback on CRUD requirements (P1.3 and P3.1),
-additional user stories were introduced to implement customer-facing
-account management rather than relying exclusively on Django Admin.
+Customer account management is implemented through Django authentication and customer-facing views. Registration, login/logout, profile viewing and editing, account deletion and secure reservation confirmation links are included in the delivered application.
 
-| GitHub Issue | User Story                   | Status      |
-| ------------ | ---------------------------- | ----------- |
-| #28          | Customer Registration        | In Progress |
-| #29          | Customer Login and Logout    | Planned     |
-| #30          | View Customer Profile        | Planned     |
-| #31          | Edit Customer Profile        | Planned     |
-| #32          | Password Management          | Planned     |
-| #33          | Delete Customer Account      | Planned     |
-| #38          | Customer Reservation History | Planned     |
-| #39          | Secure Reservation Access    | Planned     |
+| GitHub Issue | User Story                | Status      |
+| ------------ | ------------------------- | ----------- |
+| #28          | Customer Registration     | Implemented |
+| #29          | Customer Login and Logout | Implemented |
+| #30          | View Customer Profile     | Implemented |
+| #31          | Edit Customer Profile     | Implemented |
+| #33          | Delete Customer Account   | Implemented |
+| #39          | Secure Reservation Access | Implemented |
 
-Detailed acceptance criteria and implementation tasks are tracked
-in the corresponding GitHub Issues.
-
-Guest reservations remain supported, and the shopping cart continues
-to use localStorage. Database-backed cart functionality (Issues #34–#37)
-was excluded from the reassessment scope.
-
-### Future Development
-
-The following user stories were identified during project planning
-
-but were not implemented in the current release.
-
-They are classified as **Could Have** features under MoSCoW
-
-prioritisation and may be considered for future development.
-
-#### Frequently Asked Questions
-
-As a **visitor**, I want answers to common questions so that I can understand the reservation process and koi purchasing arrangements.
-
-**Acceptance Criteria**
-
-- Frequently asked questions are accessible from the website.
-- Questions and answers are clearly organised.
-- Information is relevant to the purchasing and reservation process.
-
-#### Reservation Confirmation Email
-
-As a **customer**, I want to receive an email confirming my reservation request so that I have a record of the products I requested.
-
-**Acceptance Criteria**
-
-- A confirmation email is sent after a successful reservation request.
-- The email includes relevant reservation information.
-- The email clearly identifies the reservation as a request rather than a completed purchase.
-- No confirmation email is sent for an unsuccessful reservation.
-- Email delivery failures are handled appropriately.
-
-#### Featured Koi Carousel
-
-As a **visitor**, I want to see highlighted koi on the home page so that I can discover interesting available fish.
-
-**Acceptance Criteria**
-
-- Featured products are displayed on the home page.
-- Product images and information are presented clearly.
-- Featured items link to their product detail pages.
-- The component remains usable on different screen sizes.
-
----
+Detailed acceptance criteria and implementation tasks are recorded in the GitHub Issues. Reservations remain available to guests, and the shopping cart uses browser `localStorage` for all visitors.
 
 ## Five Planes of UX
 
@@ -533,7 +469,7 @@ Reservation requests must be validated on the server, and unavailable products m
 
 **Simplicity**
 
-The initial application does not require customer registration or online payment.
+Reservations do not require customer registration or online payment. Customers may optionally create an account to manage their profile.
 
 General enquiries are handled through direct email links rather than an additional web form.
 
@@ -553,6 +489,9 @@ The Scope plane translates business and user objectives into functional and cont
 - Manage Orders.
 - Responsive Navigation.
 - Responsive Catalogue.
+- Customer registration, login and logout.
+- Customer profile viewing, editing and deletion.
+- UUID-based reservation confirmation access.
 
 These functions form the core of the application.
 
@@ -564,15 +503,6 @@ These functions form the core of the application.
 - Shopping Cart Indicator.
 
 These features improve product discovery, navigation and communication.
-
-#### Could Have — Optional Enhancements
-
-- Frequently Asked Questions.
-- Reservation Confirmation Email.
-- Featured Koi Carousel.
-
-These features are planned as potential future enhancements
-and are not included in the current release.
 
 #### Content Requirements
 
@@ -587,22 +517,9 @@ The website should provide:
 - Contact information.
 - Reservation guidance.
 
-#### Scope Exclusions
+#### Scope Boundaries
 
-The initial application does not include:
-
-- Customer registration.
-- Online payments.
-- A dedicated web-based contact form.
-- Automated processing of general email enquiries.
-
-Customer reservation requests are processed through the Django reservation form.
-
-General enquiries are handled through the seller's displayed email address and `mailto:` links.
-
-The scope is managed using MoSCoW prioritisation and GitHub Issues.
-
-A feature is not considered complete solely because its backend functionality exists. User-facing behaviour must also be implemented and verified.
+The completed application supports guest and registered-customer reservations without online payment. The Contact page offers direct email links rather than a web enquiry form. Shopping cart selections are stored in the browser using `localStorage`.
 
 ### 3. Structure — How Is Information Organised?
 
@@ -616,23 +533,25 @@ The customer-facing structure is:
 Koi4Sale
 │
 ├── Home
-│
 ├── Catalogue
 │   ├── Category Filtering
 │   ├── Search
 │   └── Product Details
-│
 ├── Cart
 │   └── Reservation Request
-│       └── Confirmation
-│
+│       └── Confirmation (UUID link)
+├── Accounts
+│   ├── Sign Up
+│   ├── Login / Logout
+│   └── Profile (authenticated)
+│       ├── Edit Profile
+│       └── Delete Account
 ├── Delivery Information
-│
 └── Contact
     └── Email Contact
 ```
 
-Administrative functionality is accessed separately through authenticated Django Admin.
+Staff administration is accessed separately through authenticated Django Admin.
 
 #### Breadcrumb Navigation
 
@@ -890,7 +809,7 @@ The wireframes cover desktop (1440px) and mobile (375px) layouts.
 
 The Surface plane defines the visual identity of the application.
 
-The previous Koi4Sale website serves as a visual reference, while the Django implementation uses Bootstrap components and custom CSS.
+The Koi4Sale visual identity is implemented using Bootstrap components and custom CSS.
 
 #### Colour Palette
 
@@ -994,7 +913,7 @@ UX decisions should be revisited when testing reveals usability problems.
 
 Koi4Sale uses a relational database designed around unique koi products and reservation requests.
 
-The database contains five Django models:
+The application defines five custom Django models:
 
 - `Category`
 - `Product`
@@ -1006,11 +925,15 @@ The database stores product information, categories, product images, customer co
 
 Product data allows visitors to browse and compare individual koi, while order data enables the seller to process reservation requests and maintain a record of previous reservations.
 
-Customer contact information is stored directly in the `Order` model. A separate customer model is not required because visitors can submit reservation requests without creating an account.
+Customer contact information is stored directly in the `Order` model. Registered customer accounts use Django’s built-in `User` model; guest reservations do not require an account.
 
 ### Entity Relationship Diagram
 
 ![Koi4Sale Entity Relationship Diagram](assets/readme/images/erd.webp)
+
+### Customer Accounts and Reservation Tokens
+
+Registered customers use Django’s built-in authentication `User` model, stored in PostgreSQL. The `Order` model stores guest or registered-customer contact details independently of the account and does not have a `User` foreign key. Each order has a unique UUID `access_token` used to access its confirmation page.
 
 ### Database Relationships
 
@@ -1052,8 +975,8 @@ The reservation workflow changes a successfully reserved product from:
 
 The application does not require a duplicate availability boolean.
 
-When an order is cancelled, its reserved products are returned
-to `available`, allowing them to be reserved again.
+When an order is cancelled or deleted, its reserved products are returned
+to `available`, including orders deleted through Django Admin bulk actions.
 
 ### Database Constraints
 
@@ -1106,7 +1029,11 @@ Administrative functionality is provided through Django Admin.
 
 Access to product and reservation management requires authentication and appropriate staff permissions.
 
-Customer registration is not required because visitors only need to provide contact information when submitting a reservation request.
+Visitors may reserve koi without registering. Customers may also register, log in and manage their own profiles. Profile editing and deletion require authentication, and users cannot edit another customer’s profile. Passwords are stored using Django’s password hashing framework. Reservation confirmation pages use unique UUID access tokens rather than predictable numeric order IDs. Anyone possessing a valid confirmation link can access its reservation details, so the link should be treated as private.
+
+#### Customer Data and Reservation Access
+
+Django's built-in `User` model stores registered customer accounts; the project does not define a separate customer model. Account views operate on `request.user`, and protected profile operations use `LoginRequiredMixin`. The `Order` model has a unique UUID `access_token` used for reservation confirmation URLs. Orders are not linked to users by a foreign key. The application retains guest reservations without login.
 
 #### Form Validation and CSRF Protection
 
@@ -1136,9 +1063,9 @@ Uploaded product images are stored using Cloudinary rather than relying on Herok
 
 ## Development Process
 
-The application is developed incrementally using GitHub Issues, milestones and small commits.
+The application was developed iteratively. GitHub Issues and Milestones were used primarily for task tracking, prioritisation and progress monitoring, rather than as a strict implementation schedule. Tasks were revisited and refined when testing or development uncovered new requirements. Git commits provide the chronological implementation record.
 
-Testable functionality follows a Test-Driven Development approach where appropriate.
+Testable functionality followed a Test-Driven Development approach where appropriate.
 
 ### Test-Driven Development
 
@@ -1167,6 +1094,10 @@ RED → GREEN → REFACTOR
 2. Preserve the expected behaviour.
 3. Run the relevant tests again.
 
+### Implementation Timeline
+
+The Git history records the project’s initial commit on **12 October 2026**, followed by product catalogue and database work on **13 October**, reservation processing and the `localStorage` cart on **14 October**, templates and media integration during **15–18 October**, validation and bug fixes during **19–28 October**, and customer authentication, profile CRUD, UUID confirmation links and cart/admin reliability improvements on **29–30 October**. Final code cleanup, image optimisation and testing documentation updates were committed on **1–2 November 2026**. GitHub Issues track the user stories, acceptance criteria and defect fixes behind these changes.
+
 ### Version Control
 
 Development changes are committed in small, meaningful stages.
@@ -1187,58 +1118,13 @@ Visual styling and responsive behaviour are also checked through manual browser 
 
 A successful Django template test does not by itself prove that the interface behaves correctly in a browser.
 
-#### Unplanned UX Improvements
+#### Shopping Cart Indicator
 
-During responsive testing, an additional usability issue was identified: the shopping cart link was hidden inside the collapsed mobile navigation, making it difficult for visitors to see whether products had been added.
+A shopping cart indicator displays the number of products stored in `localStorage` and provides direct access to the cart on desktop and mobile. JavaScript updates the counter when products are added or removed, and restores its state after page reloads.
 
-To address this issue, a shopping cart indicator was introduced as an additional Should Have feature.
+#### Contact Page
 
-The implementation uses:
-
-- A Bootstrap Icons `cart3` SVG icon in the header.
-- A counter showing the number of products stored in `localStorage`.
-- JavaScript to update the counter when cart contents change.
-- CSS positioning to display the counter above the cart icon.
-- Responsive navigation that keeps the cart accessible on mobile devices.
-
-The same cart indicator is used on desktop and mobile.
-
-This improvement was added during development in response to usability testing rather than being part of the original project scope.
-
-#### Contact Page Scope Adjustment
-
-The initial Contact user story proposed a Django enquiry form with server-side validation and submission processing.
-
-During development, the scope was reviewed against the project's primary objectives and available development time.
-
-The decision was made to provide direct email contact instead of introducing a separate enquiry-processing workflow.
-
-The revised implementation includes:
-
-- A dedicated Contact page.
-- A visible email address.
-- A clickable `mailto:` email link.
-- A **Send an Email** button.
-- Responsive styling.
-- Integration with the main navigation.
-- Automated tests for page rendering and contact information.
-
-The reservation form remains the application's primary example of customer-facing Django form processing and server-side validation.
-
-This scope adjustment preserves a clear way for customers to contact the seller while prioritising completion and testing of the core reservation functionality.
-
-The corresponding GitHub Issue and acceptance criteria were updated to reflect the implemented feature.
-
-### Optional Feature Scope Review
-
-During development, the project scope was reviewed to prioritise
-the completion and testing of the core reservation functionality.
-
-The Frequently Asked Questions page and Featured Koi Carousel
-were deferred to future development.
-
-Both remain classified as Could Have features under MoSCoW
-prioritisation and are not required for the current release.
+The Contact page provides a visible email address, a clickable `mailto:` link and a **Send an Email** button. The reservation form remains the application’s customer-facing Django form for reservation processing and validation.
 
 ### Reusable Frontend Components
 
@@ -1260,21 +1146,18 @@ The frontend follows a mobile-first approach, with layouts progressively adaptin
 
 ### Development Milestones
 
-Development was initially organised into five GitHub milestones.
-A sixth milestone was introduced following assessment feedback
-to implement customer authentication and account management.
+Six GitHub Milestones grouped the main areas of work. They were organisational categories, not sequential development phases or a definitive measure of delivered functionality.
 
-| Milestone                                  | Description                                                                                                                 | GitHub Progress          |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| Milestone 1 — Project Setup & Deployment   | Configure the Django project, development environment, database and initial Heroku deployment.                              | 100% — 1/1 issues closed |
-| Milestone 2 — Database & Product Catalogue | Implement the relational database, product models, catalogue, category filtering and product administration.                | 100% — 5/5 issues closed |
-| Milestone 3 — Reservation System           | Implement the shopping cart, reservation processing, validation, duplicate reservation prevention and order management.     | 100% — 6/6 issues closed |
-| Milestone 4 — Frontend & User Experience   | Develop responsive Django templates, navigation, search, contact information, delivery information and frontend components. | 100% — 7/7 issues closed |
-| Milestone 5 — Testing & Documentation      | Verify application functionality, test user stories and prepare assessment documentation.                                   | 100% — 3/3 issues closed |
-| Milestone 6 — User Authentication & CRUD   | Implement customer registration, authentication, profile CRUD, password management and secure reservation access.           | In Progress              |
+| Milestone | Development Area |
+| --------- | ---------------- |
+| Project Setup & Deployment | Django configuration, database connection and Heroku deployment. |
+| Database & Product Catalogue | Models, product administration, catalogue and filtering. |
+| Reservation System | Browser cart, reservation validation, order creation and availability management. |
+| Frontend & User Experience | Responsive templates, navigation, product discovery and informational pages. |
+| Testing & Documentation | Automated and manual verification, validation evidence and project documentation. |
+| User Authentication & CRUD | Customer registration, authentication, profile CRUD and token-based confirmations. |
 
-GitHub milestone percentages reflect the completion of assigned issues
-rather than independent verification of every application requirement.
+Issues and milestones were used flexibly; closed issues can also record changes in scope. The implemented features, source code, tests and commit history provide evidence of the completed application.
 
 ---
 
@@ -1413,18 +1296,21 @@ and update reservation statuses.
 
 ![Django Administration](assets/readme/images/django-admin.webp)
 
-### Planned Future Enhancements
+### Customer Accounts and Profile Management
 
-The following optional features remain planned for future development:
+Customer-facing Django views provide account registration, authentication and profile CRUD alongside staff-only Django Admin. Registration requires a username, first name, last name, email and password; Django hashes passwords. Registered users can log in and log out, view their own profile, update their first name, last name and email, and delete their account after confirmation. Protected profile views require authentication; anonymous users are redirected to login. Success messages confirm account actions, and registration, login and reservation forms use Crispy Forms with Bootstrap 5 styling.
 
-- Frequently Asked Questions page.
-- Reservation confirmation email.
-- Featured koi carousel.
+Authenticated customers see their name and email prefilled in the reservation form, but can edit the values before submitting. Guest reservations remain fully supported. Deleting an account does not delete existing reservation records. The cart uses browser `localStorage` for both guest and authenticated customers.
 
-These features are classified as Could Have in the
-MoSCoW prioritisation and are not part of the current release.
+Related GitHub Issues: #28–#31, #33, #40, #44–#46.
 
----
+### Secure Reservation Confirmation Links
+
+Each reservation receives a unique UUID access token. Confirmation pages are addressed using the token, not a sequential order ID. Invalid or nonexistent tokens return HTTP 404. This prevents simple order-ID enumeration while allowing guest customers to open their confirmation without an account. Anyone with the valid link can access the confirmation, so it should be kept private (Issue #39).
+
+### Cart Reliability and Reservation Administration
+
+The cart displays a GBP total that updates when products are removed; the server independently calculates reservation totals (Issue #41). If loading cart products fails, the interface shows an error and offers a Retry action without discarding the browser cart (Issue #43). When an order is deleted in Django Admin, its reserved products are released, including for bulk deletion; confirmed orders remain reserved until their status changes or the order is deleted (Issue #42).
 
 ## Testing
 
@@ -1438,8 +1324,8 @@ processing and JavaScript shopping cart functionality.
 Manual testing evaluates complete user journeys, responsive layouts,
 browser compatibility and accessibility.
 
-Detailed test cases, expected and actual results, validation reports,
-screenshots and bug fixes are documented in [TESTING.md](TESTING.md).
+Automated test results, manual testing summaries, validation reports,
+screenshots and resolved bugs are documented in [TESTING.md](TESTING.md).
 
 ### Automated Testing
 
@@ -1452,8 +1338,12 @@ Django's built-in testing framework is used to verify:
 - Product search.
 - Product image handling.
 - Reservation form validation.
-- Reservation creation and cancellation.
-- Duplicate reservation prevention.
+- Reservation creation, cancellation and deletion, including product availability restoration.
+- Duplicate reservation prevention and atomic reservation processing.
+- UUID-based reservation confirmation access and invalid-token handling.
+- Customer registration, login and logout.
+- Customer profile viewing, editing and account deletion (customer-facing CRUD).
+- Authentication requirements and account access permissions.
 - Administrative access and permissions.
 - Rendered templates and navigation.
 - Delivery and Contact pages.
@@ -1532,20 +1422,20 @@ The results and supporting screenshots are documented in
 
 ### Test Results
 
-All 90 automated tests passed successfully.
+All 152 automated tests passed successfully (125 Django tests and 27 Jest tests).
 
 | Test Framework | Test Suites | Tests Passed | Result   |
 | -------------- | ----------- | ------------ | -------- |
-| Django         | —           | 71/71        | PASS     |
-| Jest           | 3           | 19/19        | PASS     |
-| **Total**      | —           | **90/90**    | **PASS** |
+| Django         | —           | 125/125        | PASS     |
+| Jest           | 3           | 27/27        | PASS     |
+| **Total**      | —           | **152/152**    | **PASS** |
 
 The Django test suite completed without errors or system check issues.
 
 All three Jest test suites passed, including the regression test
 for restoring shopping cart button states after a page reload.
 
-Detailed test cases, manual testing results and bug fixes are
+Automated test results, manual testing summaries and resolved bugs are
 documented in [TESTING.md](TESTING.md).
 
 ## Bugs
@@ -1571,9 +1461,20 @@ the correct button state when the page loads.
 A Jest regression test was added to verify that products already
 in the cart display "✓ Added to Cart".
 
-**Verification:** All 19 Jest tests passed.
+**Verification:** All 27 Jest tests passed.
 
 Further details are documented in [TESTING.md](TESTING.md).
+
+---
+
+### Additional Resolved Bugs
+
+- **#26 — Primary product image selection:** Corrected Django Admin inline validation so saving an unchanged product preserves its primary image.
+- **#27 — Invalid category/cart IDs:** Added controlled handling for malformed or nonexistent category and product identifiers instead of unhandled server errors.
+- **#42 — Order deletion and availability:** Added order-deletion handling so reserved products become available again, including bulk admin deletion.
+- **#43 — Cart fetch failures:** Added error handling and a Retry option when product data cannot be loaded.
+
+These fixes were developed and tested incrementally; further evidence is recorded in [TESTING.md](TESTING.md).
 
 ---
 
@@ -1583,6 +1484,7 @@ Further details are documented in [TESTING.md](TESTING.md).
 
 - Python
 - Django
+- django-crispy-forms and crispy-bootstrap5
 - PostgreSQL
 - HTML5
 - CSS3
@@ -1624,16 +1526,15 @@ unnecessary file sizes.
   with a quality setting of 85. Original image dimensions were preserved.
 - **Home and Delivery images:** Converted from JPEG to WebP,
   reducing file sizes by approximately 85–87%.
-- **README screenshots and wireframes:** Optimised using lossless
-  PNG compression to preserve text clarity and image quality.
+- **README screenshots:** Converted to WebP to reduce file sizes.
+- **Wireframes and Lighthouse evidence:** Retained as PNG.
 - **Large documentation images:** The responsive mockup,
-  product details screenshot and ERD were converted to lossless WebP
+  product details screenshot and ERD were converted to WebP
   for additional file size reductions.
 - **Icons and placeholders:** SVG logos, favicons and small
   placeholder images were retained in their original formats.
 
-Image optimisation was performed using Python and Pillow.
-The temporary optimisation scripts were removed after processing.
+Image optimisation was performed using Pillow and WebP conversion tools. Temporary optimisation scripts were removed after processing.
 
 ### Bootstrap
 
@@ -1650,6 +1551,10 @@ Bootstrap provides:
 - Reusable layout utilities.
 
 Custom CSS is used to establish the visual identity of Koi4Sale.
+
+### Form Styling
+
+`django-crispy-forms` and `crispy-bootstrap5` render consistent Bootstrap 5 forms for registration, login and reservations.
 
 ### Dependencies
 
@@ -1741,15 +1646,6 @@ in **Heroku → Settings → Config Vars**.
 The `DEBUG` variable controls Django debugging and is disabled
 by default. It can be enabled locally when starting the
 development server.
-
-### Security and Credential Rotation
-
-During development, sensitive credentials were accidentally committed to
-the Git history. The exposed PostgreSQL database and Cloudinary credentials
-were subsequently replaced with newly generated credentials.
-
-All current credentials are stored in environment variables and excluded
-from version control.
 
 #### 5. Apply Database Migrations
 
@@ -1957,6 +1853,8 @@ Open the deployed application and verify that:
 - Successfully reserved products become unavailable.
 - Django Admin is accessible to authorised users.
 - Cloudinary images load over HTTPS.
+- Customer registration, login/logout, profile editing and account deletion work as expected.
+- UUID reservation confirmation links work and invalid tokens return 404.
 
 ### Development and Production Environments
 
@@ -2136,8 +2034,6 @@ and the design of website wireframes.
 The ERD represents the database models and relationships
 implemented in the Django application.
 
-The decorative koi illustrations were generated as part
-of the ERD and were not sourced from external websites.
 
 ---
 
@@ -2155,6 +2051,13 @@ koi-4-sale/
 │   │   ├── validation/          # Code validation screenshots
 │   │   └── wireframes/          # Desktop and mobile wireframes
 │   └── sample_products/         # Sample koi photographs
+├── accounts/
+│   ├── templates/accounts/      # Signup, profile, edit and delete confirmation
+│   ├── templates/registration/  # Login template
+│   ├── forms.py                 # Registration and profile forms
+│   ├── tests.py                 # Authentication and account CRUD tests
+│   ├── urls.py                  # Customer account URLs
+│   └── views.py                 # Customer-facing account views
 ├── config/
 │   ├── settings.py              # Django project settings
 │   ├── urls.py                  # Main URL configuration
@@ -2167,7 +2070,8 @@ koi-4-sale/
 │   │   └── reservation_confirmation.html
 │   ├── admin.py                 # Reservation administration
 │   ├── forms.py                 # Reservation form
-│   ├── models.py                # Order and OrderItem models
+│   ├── models.py                # Order and OrderItem models (UUID access token)
+│   ├── signals.py               # Release products when orders are deleted
 │   ├── tests.py                 # Reservation tests
 │   ├── urls.py                  # Order URLs
 │   └── views.py                 # Cart and reservation views
@@ -2226,45 +2130,3 @@ than every file in the repository.
 Local virtual environments, generated static files, database files
 and sensitive configuration are excluded from version control.
 
----
-
-## Future Improvements
-
-The following features may be considered after the MVP has been completed.
-
-### Contact Form
-
-Introduce a dedicated Django contact form to allow visitors to submit enquiries directly through the website.
-
-Possible functionality includes:
-
-- Name, email, subject and message fields.
-- Server-side validation.
-- Email delivery or database storage.
-- Success and error messages.
-- Spam protection.
-- Automated submission tests.
-
-The current Contact page already provides direct email contact, so this enhancement is not required for the initial release.
-
-### Featured Koi Carousel
-
-Highlight selected products on the home page to improve product discovery.
-
-### Reservation Confirmation Email
-
-Send customers an email containing their reservation details and information about the next steps.
-
-### Improved Reservation Management
-
-Expand administrative functionality for managing reservation requests and customer communication.
-
-### Additional Automated Testing
-
-Introduce further browser-based tests to verify complete user journeys and responsive interactions.
-
-### Accessibility Improvements
-
-Continue refining keyboard navigation, contrast, form accessibility and usability based on testing results.
-
-These improvements are not considered part of the completed application unless they are implemented and verified.

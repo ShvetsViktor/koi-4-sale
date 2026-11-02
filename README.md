@@ -206,7 +206,7 @@ As a **visitor**, I want to browse currently available koi so that I can see whi
 - Each product provides a link to its detail page.
 - An empty catalogue displays a useful message.
 
-![Browse Available Koi](assets/readme/screenshots/us01-browse-koi.png)
+![Browse Available Koi](assets/readme/screenshots/us01-browse-koi.webp)
 
 #### View Koi Details
 
@@ -234,7 +234,7 @@ As a **visitor**, I want to filter koi by category so that I can browse fish bel
 - Visitors can return to the complete available catalogue.
 - An appropriate message is displayed when a category contains no available products.
 
-![Filter Koi by Category](assets/readme/screenshots/us03-filter-koi.png)
+![Filter Koi by Category](assets/readme/screenshots/us03-filter-koi.webp)
 
 #### Manage Shopping Cart
 
@@ -249,7 +249,7 @@ As a **visitor**, I want to add and remove koi from my shopping cart so that I c
 - The total price is calculated and displayed.
 - Products can be removed without creating an account.
 
-![Manage Shopping Cart](assets/readme/screenshots/us06-shopping-cart.png)
+![Manage Shopping Cart](assets/readme/screenshots/us06-shopping-cart.webp)
 
 #### Submit a Reservation Request
 
@@ -265,7 +265,7 @@ As a **customer**, I want to submit my contact details and selected koi so that 
 - Successfully reserved products change from `available` to `reserved`.
 - Confirmation explains that a reservation request has been received.
 
-![Submit a Reservation Request](assets/readme/screenshots/us08-reservation.png)
+![Submit a Reservation Request](assets/readme/screenshots/us08-reservation.webp)
 
 #### Prevent Duplicate Reservations
 
@@ -278,7 +278,7 @@ As a **customer**, I want unavailable koi to be rejected during submission so th
 - Failed validation does not leave partially created reservation records.
 - The customer receives a clear error message.
 
-![Prevent Duplicate Reservations](assets/readme/screenshots/us09-duplicate-reservation.png)
+![Prevent Duplicate Reservations](assets/readme/screenshots/us09-duplicate-reservation.webp)
 
 #### Manage Products
 
@@ -293,7 +293,7 @@ As an **authorised administrator**, I want to manage koi records so that the cat
 - Product images and related information can be managed.
 - Product availability can be changed.
 
-![Manage Products](assets/readme/screenshots/us10-manage-products.png)
+![Manage Products](assets/readme/screenshots/us10-manage-products.webp)
 
 #### Manage Orders
 
@@ -307,7 +307,7 @@ As an **authorised administrator**, I want to manage reservation requests so tha
 - Order status can be updated.
 - Cancelling an order restores its reserved products to `available`.
 
-![Manage Orders](assets/readme/screenshots/us11-manage-orders.png)
+![Manage Orders](assets/readme/screenshots/us11-manage-orders.webp)
 
 #### Responsive Navigation
 
@@ -322,7 +322,7 @@ As a **visitor**, I want navigation that adapts to my device so that I can easil
 - The current page is visually identifiable.
 - Navigation supports keyboard interaction.
 
-![Responsive Navigation](assets/readme/screenshots/us12-responsive-navigation.png)
+![Responsive Navigation](assets/readme/screenshots/us12-responsive-navigation.webp)
 
 #### Responsive Catalogue
 
@@ -336,7 +336,7 @@ As a **visitor**, I want the product catalogue to adapt to my screen size so tha
 - Important actions remain accessible.
 - The catalogue does not introduce unnecessary horizontal scrolling.
 
-![Responsive Catalogue](assets/readme/screenshots/us05-responsive-catalogue.png)
+![Responsive Catalogue](assets/readme/screenshots/us05-responsive-catalogue.webp)
 
 #### Delivery Information
 
@@ -350,7 +350,7 @@ As a **visitor**, I want to understand the delivery arrangements so that I can d
 - Visitors can navigate to the Delivery page from the main navigation.
 - The page is responsive on mobile and desktop devices.
 
-![Delivery Information](assets/readme/screenshots/us13-delivery.png)
+![Delivery Information](assets/readme/screenshots/us13-delivery.webp)
 
 #### Contact Information
 
@@ -365,7 +365,7 @@ As a **visitor**, I want to find the seller's contact details so that I can ask 
 - The Contact page is accessible through the main navigation.
 - The page displays correctly on mobile, tablet and desktop devices.
 
-![Contact Information](assets/readme/screenshots/us14-contact.png)
+![Contact Information](assets/readme/screenshots/us14-contact.webp)
 
 **Implementation Notes**
 
@@ -394,7 +394,7 @@ As a **visitor**, I want to see how many koi are in my shopping cart without ope
 - The indicator remains accurate after reloading the page.
 - The cart indicator is accessible on mobile and desktop devices.
 
-![Shopping Cart Indicator](assets/readme/screenshots/us07-cart-indicator.png)
+![Shopping Cart Indicator](assets/readme/screenshots/us07-cart-indicator.webp)
 
 #### Search Koi
 
@@ -408,7 +408,7 @@ As a **visitor**, I want to search available koi using relevant information so t
 - An appropriate message is displayed when no products match.
 - Visitors can return to the complete available catalogue.
 
-![Search Koi](assets/readme/screenshots/us04-search-koi.png)
+![Search Koi](assets/readme/screenshots/us04-search-koi.webp)
 
 ### Customer Authentication and Account Management
 
@@ -1387,7 +1387,7 @@ that no online payment has been taken.
 
 **Related User Stories:** Submit a Reservation Request.
 
-![Reservation Confirmation](assets/readme/images/reservation-confirmation.png)
+![Reservation Confirmation](assets/readme/images/reservation-confirmation.webp)
 
 ### Custom 404 Page
 
@@ -1397,7 +1397,7 @@ that does not exist.
 The page follows the website's design and provides a
 Back to Home button to help visitors return to the homepage.
 
-![Custom 404 Page](assets/readme/images/404.png)
+![Custom 404 Page](assets/readme/images/404.webp)
 
 ### Django Administration
 
@@ -1411,7 +1411,7 @@ and update reservation statuses.
 
 **Related User Stories:** Manage Products, Manage Orders.
 
-![Django Administration](assets/readme/images/django-admin.png)
+![Django Administration](assets/readme/images/django-admin.webp)
 
 ### Planned Future Enhancements
 

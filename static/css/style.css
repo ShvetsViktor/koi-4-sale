@@ -283,8 +283,9 @@ main {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: contain;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: center;
   background-color: var(--koi-surface);
 }
 
@@ -330,13 +331,6 @@ main {
 .product-detail-description p {
   color: var(--koi-text-muted);
   line-height: 1.7;
-}
-
-.product-image {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  object-position: center;
 }
 
 /* Shopping cart */
@@ -403,7 +397,6 @@ main {
 }
 
 /* Delivery steps */
-
 .delivery-step {
   padding: 1.5rem;
   background-color: var(--koi-surface);
@@ -543,16 +536,12 @@ main {
   }
 }
 
-/* Large screens */
-
 /* Align desktop cart icon with the bottom of navigation text */
 @media (min-width: 992px) {
   .desktop-cart svg {
     transform: translateY(-12px);
   }
-}
 
-@media (min-width: 992px) {
   .hero {
     padding-top: 50px;
   }

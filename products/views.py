@@ -1,16 +1,18 @@
 from django.db.models import Prefetch, Q
-from django.views.generic import ListView, DetailView, TemplateView
-from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.shortcuts import get_object_or_404
+from django.views.generic import DetailView, ListView, TemplateView
 
-from .models import Product, ProductImage, Category
+from .models import Category, Product, ProductImage
 
 
 class ProductList(ListView):
+    """Display available koi with search and category filtering."""
     template_name = "products/product_list.html"
     context_object_name = "products"
 
     def get_queryset(self):
+        """Return available koi filtered by category and search query."""
         queryset = Product.objects.filter(
             status=Product.ProductStatus.AVAILABLE
         ).prefetch_related(
@@ -43,7 +45,7 @@ class ProductList(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        # Extend the default template context with categories for filtering.
+        """Add product categories to the template context."""
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
         return context

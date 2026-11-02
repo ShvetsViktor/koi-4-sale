@@ -1,14 +1,15 @@
-from pathlib import Path
 import os
-import dj_database_url
-if os.path.isfile('env.py'):
+from pathlib import Path
+
+if os.path.isfile("env.py"):
     import env
+
 import cloudinary
+import dj_database_url
 
 # Ensure Cloudinary generates HTTPS URLs to prevent mixed content warnings.
 cloudinary.config(secure=True)
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 MEDIA_URL = "/media/"
@@ -31,15 +32,11 @@ STORAGES = {
 }
 
 
-# Use an environment variable to control debugging without changing settings.py
-# between development and production environments.
-# Debugging is disabled by default.
-# To enable debugging locally, run: DEBUG=True python manage.py runserver
+# Disable debugging by default unless explicitly enabled.
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1',]
+ALLOWED_HOSTS = [".herokuapp.com", "127.0.0.1"]
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -97,9 +94,6 @@ DATABASES = {
     'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': (
@@ -127,9 +121,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -137,8 +128,5 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

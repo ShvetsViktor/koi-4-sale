@@ -1,11 +1,11 @@
+from django.contrib import messages
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.db import transaction
+from django.db.models import Prefetch
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import DetailView, TemplateView
-from django.db.models import Prefetch
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.contrib import messages
 
 from products.models import Product, ProductImage
 
@@ -17,6 +17,7 @@ class ReservationCreate(View):
     """Handle customer reservation requests."""
 
     def post(self, request):
+        """Validate selected koi and create a reservation."""
         form = ReservationForm(request.POST)
 
         if not form.is_valid():

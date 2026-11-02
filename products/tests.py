@@ -1,11 +1,12 @@
+from cloudinary import CloudinaryImage
+
+from django.contrib.auth import get_user_model
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.db import IntegrityError, transaction
 from django.test import TestCase, override_settings
 from django.urls import reverse
-from django.contrib.auth import get_user_model
-from cloudinary import CloudinaryImage
-from django.db import IntegrityError, transaction
-from django.contrib.staticfiles.storage import staticfiles_storage
 
-from .models import Product, ProductImage, Category
+from .models import Category, Product, ProductImage
 
 
 class Custom404PageTests(TestCase):
@@ -159,9 +160,6 @@ class ProductCatalogueTests(TestCase):
 
         self.assertContains(response, self.available_product.name)
         self.assertContains(response, "250.00")
-
-        # Image and relevant-detail assertions will be added
-        # once we finalise the corresponding model fields.
 
     def test_catalogue_excludes_unavailable_products(self):
         """

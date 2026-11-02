@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
 from django.utils.html import format_html
 
-from .models import Product, Category, ProductImage
+from .models import Category, Product, ProductImage
 
 
 class ProductImageInlineFormSet(BaseInlineFormSet):
@@ -55,12 +55,14 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    """Configure category management in Django Admin."""
     list_display = ("name",)
     search_fields = ("name",)
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    """Configure product management and image administration."""
     list_display = (
         "name",
         "category",

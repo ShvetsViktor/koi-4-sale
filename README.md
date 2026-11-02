@@ -1742,6 +1742,15 @@ The `DEBUG` variable controls Django debugging and is disabled
 by default. It can be enabled locally when starting the
 development server.
 
+### Security and Credential Rotation
+
+During development, sensitive credentials were accidentally committed to
+the Git history. The exposed PostgreSQL database and Cloudinary credentials
+were subsequently replaced with newly generated credentials.
+
+All current credentials are stored in environment variables and excluded
+from version control.
+
 #### 5. Apply Database Migrations
 
 ```bash

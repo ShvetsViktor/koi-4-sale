@@ -24,7 +24,10 @@ class DeliveryPageTests(TestCase):
         """Delivery page should display its hero image."""
         response = self.client.get(reverse("delivery"))
 
-        self.assertContains(response, 'alt="Delivery worker standing beside a van with packages"')
+        self.assertContains(
+            response,
+            'alt="Delivery worker standing beside a van with packages"',
+        )
         self.assertContains(response, "/static/images/delivery.")
 
     def test_delivery_page_displays_delivery_steps(self):

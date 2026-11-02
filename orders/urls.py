@@ -1,10 +1,10 @@
 from django.urls import path
 
 from .views import (
-    ReservationCreate,
-    ReservationConfirmation,
-    CartView,
     CartProductsView,
+    CartView,
+    ReservationConfirmation,
+    ReservationCreate,
 )
 
 urlpatterns = [

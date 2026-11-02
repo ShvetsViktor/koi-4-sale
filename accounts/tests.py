@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+
 from orders.models import Order
 
 
@@ -491,7 +492,6 @@ class UserProfileUpdateTests(TestCase):
             },
         )
 
-        # Reload the user from the database to verify that changes were saved.
         self.user.refresh_from_db()
 
         self.assertEqual(response.status_code, 302)
@@ -512,7 +512,6 @@ class UserProfileUpdateTests(TestCase):
             },
         )
 
-        # Reload the user from the database to verify that changes were saved.
         self.user.refresh_from_db()
 
         self.assertEqual(response.status_code, 200)
@@ -619,7 +618,6 @@ class UserAccountDeletionTests(TestCase):
         self.assertFalse(
             User.objects.filter(pk=self.user.pk).exists()
         )
-        # Verify that the user is logged out after account deletion.
         self.assertNotIn("_auth_user_id", self.client.session)
 
     def test_get_request_does_not_delete_account(self):

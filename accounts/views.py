@@ -1,12 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import logout
 from django.contrib import messages
+from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LogoutView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, UpdateView, DeleteView
-from django.contrib.auth.views import LogoutView
-
+from django.views.generic import DeleteView, TemplateView, UpdateView
 
 from .forms import ProfileUpdateForm, SignUpForm
 

@@ -1,5 +1,5 @@
-from django.db import models
 from cloudinary.models import CloudinaryField
+from django.db import models
 
 
 class Category(models.Model):
@@ -13,7 +13,6 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-
     class ProductStatus(models.TextChoices):
         AVAILABLE = "available", "Available"
         RESERVED = "reserved", "Reserved"
@@ -21,9 +20,11 @@ class Product(models.Model):
         UNAVAILABLE = "unavailable", "Unavailable"
 
     name = models.CharField(max_length=100)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT,
-                                 related_name="products",
-                                 )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.PROTECT,
+        related_name="products",
+    )
     price = models.DecimalField(max_digits=10, decimal_places=2)
     size = models.PositiveIntegerField()
     age = models.PositiveIntegerField()

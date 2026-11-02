@@ -1,7 +1,8 @@
 from django.contrib import admin
 
-from .models import Order, OrderItem
 from products.models import Product
+
+from .models import Order, OrderItem
 
 
 class OrderItemInline(admin.TabularInline):
@@ -13,6 +14,7 @@ class OrderItemInline(admin.TabularInline):
     can_delete = False
 
     def has_add_permission(self, request, obj=None):
+        """Prevent adding order items through Django Admin."""
         return False
 
 

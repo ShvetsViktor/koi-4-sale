@@ -1,11 +1,11 @@
 from decimal import Decimal
 
+from cloudinary import CloudinaryImage
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.test import TestCase
 from django.urls import reverse
-from cloudinary import CloudinaryImage
 
 from products.models import Category, Product, ProductImage
 
@@ -328,10 +328,8 @@ class ReservationViewTests(TestCase):
 
         self.assertRedirects(response, reverse("cart"))
 
-        # No order should be created.
         self.assertEqual(Order.objects.count(), 0)
 
-        # The available product must remain available.
         self.product_two.refresh_from_db()
 
         self.assertEqual(
@@ -349,7 +347,6 @@ class ReservationViewTests(TestCase):
             "product_ids": [str(self.product_one.pk)],
         }
 
-        # First reservation should succeed.
         first_response = self.client.post(
             reverse("reservation_create"),
             reservation_data,
@@ -357,7 +354,6 @@ class ReservationViewTests(TestCase):
 
         self.assertEqual(first_response.status_code, 302)
 
-        # Second reservation should be rejected.
         second_response = self.client.post(
             reverse("reservation_create"),
             {
@@ -369,7 +365,6 @@ class ReservationViewTests(TestCase):
 
         self.assertRedirects(second_response, reverse("cart"))
 
-        # Only the first reservation should exist.
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderItem.objects.count(), 1)
 
@@ -525,7 +520,6 @@ class ReservationViewTests(TestCase):
             "product_ids": [str(self.product_one.pk)],
         }
 
-        # First submission contains an invalid email.
         response = self.client.post(
             reverse("reservation_create"),
             data,
@@ -534,7 +528,6 @@ class ReservationViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Order.objects.count(), 0)
 
-        # Customer corrects the email and submits again.
         data["email"] = "john@example.com"
 
         response = self.client.post(

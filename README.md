@@ -1094,10 +1094,6 @@ RED → GREEN → REFACTOR
 2. Preserve the expected behaviour.
 3. Run the relevant tests again.
 
-### Implementation Timeline
-
-The Git history records the project’s initial commit on **12 October 2026**, followed by product catalogue and database work on **13 October**, reservation processing and the `localStorage` cart on **14 October**, templates and media integration during **15–18 October**, validation and bug fixes during **19–28 October**, and customer authentication, profile CRUD, UUID confirmation links and cart/admin reliability improvements on **29–30 October**. Final code cleanup, image optimisation and testing documentation updates were committed on **1–2 November 2026**. GitHub Issues track the user stories, acceptance criteria and defect fixes behind these changes.
-
 ### Version Control
 
 Development changes are committed in small, meaningful stages.

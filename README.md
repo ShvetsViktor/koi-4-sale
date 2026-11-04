@@ -2017,10 +2017,6 @@ and development tools are acknowledged in the sections below.
 - **Unsplash** — source of koi photographs and images used
   on the Home and Delivery pages.
 
-### Graphics
-
-- [Photopea](https://www.photopea.com/) — used to edit SVG graphics.
-
 ### AI-Assisted Content
 
 ChatGPT (OpenAI) was used to assist with the creation and
@@ -2030,6 +2026,7 @@ and the design of website wireframes.
 The ERD represents the database models and relationships
 implemented in the Django application.
 
+The Koi4Sale logo was generated using OpenAI ChatGPT and customised to match the website's branding.
 
 ---
 

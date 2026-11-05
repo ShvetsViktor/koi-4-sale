@@ -2,7 +2,8 @@
 
 ## Overview
 
-This document records the final quality assurance results for Koi4Sale, covering automated tests, code validation, manual functionality, responsive behaviour, browser compatibility, accessibility and deployment verification. Results reflect checks completed by 2 November 2026. Known limitations and Lighthouse findings are documented without claiming that every possible browser state or accessibility criterion was audited.
+This document records the final quality assurance results for Koi4Sale, covering automated tests, code validation, manual functionality, responsive behaviour, browser compatibility, accessibility and deployment verification. The main results reflect checks completed by 2 November 2026, with additional branding and HTML verification documented separately.
+Known limitations and Lighthouse findings are documented without claiming that every possible browser state or accessibility criterion was audited.
 
 ## Automated Testing
 
@@ -71,6 +72,25 @@ Rendered pages were checked against the HTML standard on 2 November 2026.
 
 **Result: PASS — no HTML validation errors reported for the checked pages.** This does not imply that every possible form-error or dynamic state was separately checked.
 
+#### Additional HTML Validation
+
+Five representative deployed pages were checked again using the
+W3C Nu HTML Checker. For each page, the browser's **View Page Source** output was
+copied and submitted to the validator, ensuring that the check covered
+rendered HTML rather than unprocessed Django template syntax.
+
+| Rechecked page | Result |
+| --- | --- |
+| Home | PASS — no errors |
+| Product catalogue | PASS — no errors |
+| Product details | PASS — no errors |
+| Shopping cart | PASS — no errors |
+| Reservation page | PASS — no errors |
+
+This additional check supplements the wider HTML validation results
+recorded above; it does not replace them or imply that every dynamic
+page state was revalidated.
+
 ### JavaScript — Static Analysis
 
 The `static/js/cart.js` file was checked using [JSHint](https://jshint.com/). **Result: PASS — 0 errors.** Four compatibility warnings were reported because of the selected ECMAScript version settings. No undefined variables were reported.
@@ -123,6 +143,48 @@ The successful collection confirms that Django's static-file pipeline completed.
 | Permissions | Restrict access to authenticated pages | PASS |
 | Administration | Manage products, images and orders | PASS |
 | Navigation | Verify links, menus and custom 404 page | PASS |
+
+### Branding and Static Image Verification
+
+**Status: PASS**
+
+The original SVG logo was replaced with a newly generated and
+optimised PNG logo.
+
+The logo references in the shared header and footer templates
+were updated from `.svg` to `.png`.
+
+The new koi illustration was also used to generate matching
+favicons and the default product placeholder.
+
+#### Verification Results
+
+| Check | Result |
+| --- | --- |
+| PNG logo displays correctly in the header | PASS |
+| PNG logo displays correctly in the footer | PASS |
+| Updated logo references use `.png` | PASS |
+| Logo proportions are preserved | PASS |
+| PNG transparency is preserved | PASS |
+| Browser favicons display correctly | PASS |
+| Default product placeholder displays correctly | PASS |
+| Updated branding displays correctly on the deployed website | PASS |
+
+#### Default Product Image — Visual Verification
+
+The product catalogue was manually checked to verify that the
+new default product image is displayed when a product has no
+uploaded photograph.
+
+The Nagiri product displays the new orange koi placeholder,
+while neighbouring products display their uploaded photographs.
+
+The placeholder maintains the same image dimensions as regular
+product photographs without affecting the catalogue layout.
+
+**Result: PASS — The default image fallback displays correctly.**
+
+![Default product image fallback in the catalogue](assets/readme/validation/default-image-fallback.webp)
 
 ## Responsive Testing
 

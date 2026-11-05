@@ -1114,11 +1114,100 @@ Visual styling and responsive behaviour are also checked through manual browser 
 
 A successful Django template test does not by itself prove that the interface behaves correctly in a browser.
 
-#### Shopping Cart Indicator
+### Branding Update and Asset Optimisation
+
+The original source and licensing information for the existing
+Koi4Sale logo could not be established.
+
+To avoid using branding assets with uncertain provenance, the
+original logo was replaced with a newly generated design.
+
+The branding update included replacing the website logo, favicons
+and default product placeholder to establish a consistent visual
+identity across the application.
+
+#### New Logo Design
+
+A new orange koi logo featuring the Koi4Sale name was generated using
+OpenAI ChatGPT.
+
+The design was selected to maintain consistency with the website's
+existing orange accent colour (`#fe5a08`) and dark visual theme.
+
+The generated logo was reviewed, resized and optimised using Pillow
+before being integrated into the application.
+
+The final logo was reduced from approximately 609 KB to 12 KB using
+image resizing, PNG compression and colour quantisation.
+
+The replacement logo is stored at:
+
+`static/images/logo.png`
+
+The previous SVG-based branding was replaced with the optimised PNG
+logo. The shared header and footer branding references were updated to
+use the replacement image, maintaining consistent navigation and footer
+presentation across the site.
+
+#### Favicon and Placeholder Replacement
+
+To maintain consistent branding throughout the application, the koi
+illustration was extracted from the new logo and used to replace
+the previous image assets.
+
+The following files were updated:
+
+- `static/favicon/favicon.ico`
+- `static/favicon/favicon-16x16.png`
+- `static/favicon/favicon-32x32.png`
+- `static/favicon/apple-touch-icon.png`
+- `static/favicon/android-chrome-192x192.png`
+- `static/favicon/android-chrome-512x512.png`
+- `static/images/default.png`
+
+Pillow was used to resize the extracted illustration while preserving
+its proportions and transparent background.
+
+Different image sizes required different spacing adjustments:
+
+- **16×16 and 32×32 favicons:** Approximately 2% horizontal spacing
+  was targeted to maximise visibility at small sizes.
+- **Apple and Android icons:** Approximately 10% horizontal spacing
+  was used to prevent the illustration from touching the boundaries.
+- **Default product placeholder:** A square 800×800 PNG was generated
+  with approximately 10% horizontal spacing.
+
+The ICO file was regenerated with embedded 16×16, 32×32 and 48×48 images.
+
+Temporary image-processing files were removed after the final assets
+were verified.
+
+#### Verification
+
+The updated branding assets were reviewed locally and in the deployed
+application. The logo was checked in both the shared header and footer,
+including its appearance at different viewport widths.
+
+The following checks were performed:
+
+- Confirmed that the new logo displayed correctly in the website
+  header and footer.
+- Verified that the koi illustration retained its proportions.
+- Checked that the generated PNG images preserved transparency.
+- Confirmed that the updated favicon images displayed correctly
+  in the browser.
+- Verified that the replacement product placeholder used the new
+  koi illustration.
+- Confirmed that the ICO file contained 16×16, 32×32 and 48×48 images.
+
+The branding update removed reliance on the previous logo of uncertain
+origin and established a consistent visual identity across the website.
+
+### Shopping Cart Indicator
 
 A shopping cart indicator displays the number of products stored in `localStorage` and provides direct access to the cart on desktop and mobile. JavaScript updates the counter when products are added or removed, and restores its state after page reloads.
 
-#### Contact Page
+### Contact Page
 
 The Contact page provides a visible email address, a clickable `mailto:` link and a **Send an Email** button. The reservation form remains the application’s customer-facing Django form for reservation processing and validation.
 
@@ -1511,7 +1600,6 @@ These fixes were developed and tested incrementally; further evidence is recorde
 - GitHub
 - GitHub Issues
 - GitHub Milestones
-- Photopea — SVG image editing.
 
 ### Image Optimisation
 
@@ -1527,8 +1615,11 @@ unnecessary file sizes.
 - **Large documentation images:** The responsive mockup,
   product details screenshot and ERD were converted to WebP
   for additional file size reductions.
-- **Icons and placeholders:** SVG logos, favicons and small
-  placeholder images were retained in their original formats.
+- **Branding assets:** The original logo was replaced with a new
+  AI-generated orange koi design. The PNG logo was resized and
+  compressed from approximately 609 KB to 12 KB. Matching favicons
+  and a default product placeholder were generated using Pillow,
+  with transparency and aspect ratios preserved.
 
 Image optimisation was performed using Pillow and WebP conversion tools. Temporary optimisation scripts were removed after processing.
 
@@ -2026,7 +2117,16 @@ and the design of website wireframes.
 The ERD represents the database models and relationships
 implemented in the Django application.
 
-The Koi4Sale logo was generated using OpenAI ChatGPT and customised to match the website's branding.
+The Koi4Sale logo was generated using OpenAI ChatGPT after the
+original branding asset's source and licensing information could
+not be established.
+
+The generated illustration was subsequently resized, compressed
+and adapted using Pillow to create matching website favicons
+and a default product placeholder.
+
+The resulting assets were reviewed and integrated into the
+application to maintain consistent branding.
 
 ---
 
